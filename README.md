@@ -5,7 +5,7 @@ a warm *washi-paper* background, sakura-pink accents, colour-coded callout
 boxes, hand-drawn cherry blossoms, part banners, and a matching `pgfplots`
 style for figures. Light (paper) and dark (sumi-ink) modes included.
 
-![preview](https://raw.githubusercontent.com/Tchniber1/sakura-notes/main/docs/preview.png)
+![preview](https://raw.githubusercontent.com/Tchniber1/Latex-templates/refs/heads/main/preview.png)
 
 > I'm **Taha Chniber**, doing a BSc in Applied Mathematics at **SASE, Mohammed VI
 > Polytechnic University (UM6P)**. I write my course notes in LaTeX. One set of
