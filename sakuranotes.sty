@@ -1,0 +1,268 @@
+% =====================================================================
+%  sakuranotes.sty  —  a washi-paper + sakura theme for study notes
+%  v1.0  (2026)  ·  MIT License
+%
+%  A drop-in LaTeX theme: warm "washi paper" background, sakura-pink
+%  accents, colour-coded callout boxes, hand-drawn cherry blossoms,
+%  part banners, and a matching pgfplots style.
+%
+%  ENGINE:  XeLaTeX or LuaLaTeX (it uses fontspec).  Not pdfLaTeX.
+%  FONTS :  Latin Modern (ships with TeX Live) and, for the optional
+%           kanji accents, "Noto Serif CJK JP" (falls back gracefully).
+%
+%  USAGE :  \usepackage[light]{sakuranotes}   % default, washi paper
+%           \usepackage[dark]{sakuranotes}    % sumi-ink night mode
+%
+%  See README.md for the full reference.
+% =====================================================================
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{sakuranotes}[2026/06/20 v1.0 Sakura washi study-notes theme]
+
+% ---------------------------------------------------------------------
+%  Options:  light (default) / dark
+% ---------------------------------------------------------------------
+\newif\ifsn@dark \sn@darkfalse
+\DeclareOption{light}{\sn@darkfalse}
+\DeclareOption{dark}{\sn@darktrue}
+\DeclareOption*{\PackageWarning{sakuranotes}{Unknown option '\CurrentOption'}}
+\ProcessOptions\relax
+
+% ---------------------------------------------------------------------
+%  Dependencies
+% ---------------------------------------------------------------------
+\RequirePackage{fontspec}
+\RequirePackage{amsmath,amssymb,mathtools}
+\RequirePackage{xcolor}
+\RequirePackage[most]{tcolorbox}
+\RequirePackage{tikz}
+\usetikzlibrary{calc,arrows.meta,decorations.pathreplacing}
+\RequirePackage{pgfplots}
+\pgfplotsset{compat=1.18}
+\RequirePackage{enumitem}
+\RequirePackage{titlesec}
+\RequirePackage{setspace}
+\RequirePackage{microtype}
+\RequirePackage{array}
+\RequirePackage{tabularx}
+\RequirePackage{colortbl}
+\RequirePackage{fancyhdr}
+\RequirePackage{geometry}
+\geometry{a4paper,margin=2.3cm,top=2.4cm,bottom=2.4cm}
+
+% ---------------------------------------------------------------------
+%  Palette  (named colours are exposed; override after \usepackage)
+% ---------------------------------------------------------------------
+\ifsn@dark
+  % ---- sumi-ink night mode ----
+  \definecolor{pagebg}{HTML}{15141B}
+  \definecolor{boxbg}{HTML}{1F1E29}
+  \definecolor{boxbg2}{HTML}{26242F}
+  \definecolor{ink}{HTML}{ECEAE6}
+  \definecolor{inkdim}{HTML}{A7A4B3}
+  \definecolor{rule}{HTML}{343243}
+  \definecolor{sakura}{HTML}{F6A6BB}
+  \definecolor{sakuradeep}{HTML}{EA8AA0}
+  \definecolor{sakurapale}{HTML}{F9CBD6}
+  \definecolor{matcha}{HTML}{A7C9A0}
+  \definecolor{kin}{HTML}{E6C27A}
+  \definecolor{ai}{HTML}{C6A2CE}      % soft plum — definitions
+  \def\sn@petalop{0.16}
+\else
+  % ---- washi paper day mode (default) ----
+  \definecolor{pagebg}{HTML}{FBF6F3}
+  \definecolor{boxbg}{HTML}{F7EDF0}
+  \definecolor{boxbg2}{HTML}{F1E3E9}
+  \definecolor{ink}{HTML}{2C2731}
+  \definecolor{inkdim}{HTML}{6A6370}
+  \definecolor{rule}{HTML}{E2D3DA}
+  \definecolor{sakura}{HTML}{C85C80}
+  \definecolor{sakuradeep}{HTML}{B0466A}
+  \definecolor{sakurapale}{HTML}{F2D2DC}
+  \definecolor{matcha}{HTML}{43814F}
+  \definecolor{kin}{HTML}{9C6B1C}
+  \definecolor{ai}{HTML}{7A4B68}      % warm plum — definitions
+  \def\sn@petalop{0.30}
+\fi
+
+% ---------------------------------------------------------------------
+%  Fonts  (Latin Modern body; Noto Serif CJK JP for kanji, optional)
+% ---------------------------------------------------------------------
+\setmainfont{Latin Modern Roman}
+\setsansfont{Latin Modern Sans}
+\setmonofont{Latin Modern Mono}
+\IfFontExistsTF{Noto Serif CJK JP}
+  {\newfontfamily\jpfont{Noto Serif CJK JP}}
+  {\let\jpfont\relax
+   \PackageWarning{sakuranotes}{Font 'Noto Serif CJK JP' not found;
+     \string\jp\space and kanji accents will use the main font.}}
+\newcommand{\jp}[1]{{\ifx\jpfont\relax\else\jpfont\fi #1}}
+
+\AtBeginDocument{\pagecolor{pagebg}\color{ink}}
+\setstretch{1.12}
+
+% ---------------------------------------------------------------------
+%  Sakura art  (TikZ)
+%     \sakuraflower{<scale>}{<colour>}   five-petal blossom
+%     \petal{<scale>}{<colour>}          a single petal
+% ---------------------------------------------------------------------
+\newcommand{\sakuraflower}[2]{%
+  \begin{scope}[scale=#1]
+    \foreach \a in {0,72,...,288}{
+      \fill[#2,rotate=\a]
+        (0,0) .. controls (-0.30,0.45) and (-0.13,0.92) .. (-0.02,1.04)
+        .. controls (0,1.0) and (0,1.0) .. (0.02,1.04)
+        .. controls (0.13,0.92) and (0.30,0.45) .. (0,0);
+    }
+    \fill[#2!55] (0,0) circle (0.11);
+  \end{scope}}
+\newcommand{\petal}[2]{%
+  \begin{scope}[scale=#1]
+    \fill[#2] (0,0) .. controls (-0.30,0.45) and (-0.13,0.92) .. (0,1.04)
+                     .. controls (0.13,0.92) and (0.30,0.45) .. (0,0);
+  \end{scope}}
+
+% small tracked-caps label used by the boxes
+\newcommand{\bl}[1]{{\addfontfeatures{LetterSpace=14.0}\footnotesize\MakeUppercase{#1}}}
+
+% ---------------------------------------------------------------------
+%  Callout boxes
+%     \begin{defn}[title] ... \end{defn}        plum   — definitions
+%     \begin{thm}[title]  ... \end{thm}          rose   — theorems
+%     \begin{ex}[title]   ... \end{ex}           green  — worked examples
+%     \begin{intuition}[t]... \end{intuition}    gold   — the "why"
+%     \begin{props}[title]... \end{props}        pink   — rule lists
+%     \begin{note}[title] ... \end{note}         grey   — asides
+%     \begin{key} ... \end{key}                  centred boxed formula
+%  Build your own:  \begin{snote}{<colour>}{<title>} ... \end{snote}
+% ---------------------------------------------------------------------
+\newtcolorbox{snote}[2]{%
+  enhanced, breakable, sharp corners,
+  colback=boxbg, boxrule=0pt, frame hidden,
+  borderline west={3pt}{0pt}{#1},
+  left=14pt, right=12pt, top=9pt, bottom=10pt,
+  fonttitle=\sffamily\bfseries\color{#1},
+  title={#2},
+  attach title to upper,
+  after title={\par\vskip3pt{\color{#1!45}\hrule height0.5pt}\vskip7pt},
+}
+\newenvironment{defn}[1][]{\begin{snote}{ai}{\bl{Definition}\hspace{0.7em}\textmd{\normalsize #1}}}{\end{snote}}
+\newenvironment{thm}[1][]{\begin{snote}{sakuradeep}{\bl{Theorem}\hspace{0.7em}\textmd{\normalsize #1}}}{\end{snote}}
+\newenvironment{ex}[1][]{\begin{snote}{matcha}{\bl{Worked Example}\hspace{0.7em}\textmd{\normalsize #1}}}{\end{snote}}
+\newenvironment{intuition}[1][]{\begin{snote}{kin}{\bl{Intuition}\hspace{0.7em}\textmd{\normalsize #1}}}{\end{snote}}
+\newenvironment{props}[1][Properties]{\begin{snote}{sakura}{\bl{#1}}}{\end{snote}}
+\newenvironment{note}[1][Note]{\begin{snote}{inkdim}{\bl{#1}}}{\end{snote}}
+
+\newtcolorbox{key}{%
+  enhanced, breakable, sharp corners,
+  colback=sakura!12, colframe=sakura, boxrule=0.8pt,
+  arc=2pt, left=10pt,right=10pt,top=10pt,bottom=10pt, halign=center,
+}
+
+% ---------------------------------------------------------------------
+%  Lists
+% ---------------------------------------------------------------------
+\setlist[itemize]{leftmargin=1.4em, itemsep=2pt, topsep=3pt,
+  label=\textcolor{sakura}{\raisebox{0.15ex}{\scriptsize$\blacklozenge$}}}
+\setlist[enumerate]{leftmargin=1.7em, itemsep=2pt, topsep=3pt,
+  label=\textcolor{sakuradeep}{\sffamily\bfseries\arabic*.}}
+
+% ---------------------------------------------------------------------
+%  Headings
+% ---------------------------------------------------------------------
+\titleformat{\section}
+  {\Large\sffamily\bfseries\color{sakura}}
+  {\textcolor{sakuradeep}{\thesection}}{0.7em}{}
+  [{\vskip2pt\color{sakura!50}\titlerule[0.9pt]}]
+\titlespacing*{\section}{0pt}{22pt}{10pt}
+\titleformat{\subsection}
+  {\large\sffamily\bfseries\color{sakuradeep}}
+  {\textcolor{sakuradeep}{\thesubsection}}{0.6em}{}
+\titlespacing*{\subsection}{0pt}{14pt}{5pt}
+
+% ---------------------------------------------------------------------
+%  Part banner:  \notespart{<numeral>}{<title>}{<kanji>}
+% ---------------------------------------------------------------------
+\newcommand{\notespart}[3]{%
+  \begingroup
+  \begin{tcolorbox}[enhanced, sharp corners, boxrule=0pt,
+      colback=boxbg2, left=20pt,right=20pt,top=18pt,bottom=18pt,
+      overlay={
+        \begin{tcbclipinterior}
+        \node[anchor=east,opacity=0.20] at ([xshift=-6pt]frame.east){\tikz{\sakuraflower{1.8}{sakura}}};
+        \node[anchor=east,opacity=0.14] at ([xshift=-78pt,yshift=15pt]frame.east){\tikz{\sakuraflower{1.05}{sakuradeep}}};
+        \end{tcbclipinterior}}]
+    {\sffamily\bfseries\color{inkdim}\large PART~#1}\\[2pt]
+    {\sffamily\bfseries\color{sakura}\fontsize{26}{30}\selectfont #2}\quad
+    {\ifx\jpfont\relax\else\jpfont\fi\color{sakuradeep!90}\Large #3}
+  \end{tcolorbox}
+  \endgroup\vspace{4pt}}
+
+% ---------------------------------------------------------------------
+%  Title page:  \sakuratitle{<title>}{<kanji>}{<tagline>}
+%  (title may contain \\ for line breaks; kanji/tagline may be empty)
+% ---------------------------------------------------------------------
+\newcommand{\sakuratitle}[3]{%
+  \thispagestyle{empty}
+  \begin{tikzpicture}[remember picture, overlay]
+    \node[opacity=\sn@petalop] at ($(current page.north west)+(3.5,-3.2)$){\tikz{\petal{0.95}{sakura}}};
+    \node[opacity=\sn@petalop] at ($(current page.north east)+(-2.6,-5.1)$){\tikz[rotate=40]{\petal{0.7}{sakuradeep}}};
+    \node[opacity=\sn@petalop] at ($(current page.south west)+(2.2,4.3)$){\tikz[rotate=-25]{\petal{0.6}{sakura}}};
+    \node[opacity=\sn@petalop] at ($(current page.south east)+(-3.4,3.0)$){\tikz[rotate=70]{\petal{0.85}{sakuradeep}}};
+  \end{tikzpicture}
+  \vspace*{2.4cm}
+  \begin{center}
+    {\tikz{\sakuraflower{1.5}{sakura}}}\\[16pt]
+    {\sffamily\bfseries\color{sakura}\fontsize{34}{40}\selectfont #1}\\[12pt]
+    {\jp{#2}\ifx\relax#2\relax\else\\[18pt]\fi}%
+    {\color{sakura!45}\rule{0.5\textwidth}{0.6pt}}\\[18pt]
+    {\sffamily\color{inkdim}\large #3}
+  \end{center}
+  \vfill\clearpage}
+
+% ---------------------------------------------------------------------
+%  Header / footer  (override the two head macros in your document)
+% ---------------------------------------------------------------------
+\newcommand{\sakuraheadL}{}
+\newcommand{\sakuraheadR}{}
+\pagestyle{fancy}\fancyhf{}
+\renewcommand{\headrulewidth}{0pt}
+\fancyhead[L]{\sffamily\footnotesize\color{inkdim}\sakuraheadL}
+\fancyhead[R]{\sffamily\footnotesize\color{inkdim}\sakuraheadR}
+\fancyfoot[C]{\sffamily\footnotesize\color{sakura}— \thepage\ —}
+
+% ---------------------------------------------------------------------
+%  Hyperlinks
+% ---------------------------------------------------------------------
+\RequirePackage{hyperref}
+\hypersetup{colorlinks=true, linkcolor=sakura, urlcolor=sakura, citecolor=sakuradeep}
+
+% ---------------------------------------------------------------------
+%  Convenience: math shortcuts + table column types + plot style
+%  (opinionated; \Re and \Im are redefined as upright operators)
+% ---------------------------------------------------------------------
+\newcommand{\dd}{\,\mathrm{d}}
+\newcommand{\ii}{\mathrm{i}}
+\renewcommand{\Re}{\operatorname{Re}}
+\renewcommand{\Im}{\operatorname{Im}}
+\newcommand{\Arg}{\operatorname{Arg}}
+\DeclareMathOperator{\sinc}{sinc}
+\newcommand{\Ft}{\mathcal{F}}
+\newcommand{\Lap}{\mathcal{L}}
+
+\newcolumntype{Y}{>{\raggedright\arraybackslash}X}
+\newcolumntype{C}{>{$}c<{$}}
+
+\pgfplotsset{
+  sakuraxis/.style={
+    width=0.86\linewidth, height=5cm,
+    axis lines=middle,
+    axis line style={inkdim, line width=0.6pt, -{Stealth[length=2.2mm]}},
+    tick align=outside, tick style={inkdim, line width=0.5pt},
+    every tick label/.append style={inkdim, font=\scriptsize},
+    label style={inkdim, font=\footnotesize},
+    every axis plot/.append style={line width=1.1pt},
+    clip=false,
+  },
+}
+
+\endinput

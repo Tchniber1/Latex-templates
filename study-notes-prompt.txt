@@ -1,0 +1,101 @@
+================================================================================
+  SAKURA STUDY-NOTES  —  a prompt for generating your own themed notes
+================================================================================
+
+WHAT THIS IS
+  Paste the prompt below into a capable AI assistant (one that can write and,
+  ideally, compile LaTeX), then attach your own material — lecture slides, a
+  textbook chapter, your messy notes, photos of a whiteboard, anything. You'll
+  get back a polished study-notes PDF in the same washi-paper + sakura theme as
+  this repo.
+
+BEFORE YOU START
+  • Have the theme file `sakuranotes.sty` from this repo to hand (the assistant
+    should `\usepackage[light]{sakuranotes}` or `[dark]`). If your assistant
+    can't use external files, tell it to paste the theme preamble inline.
+  • The document compiles with XeLaTeX or LuaLaTeX (NOT pdfLaTeX), and looks
+    best with the "Noto Serif CJK JP" font installed for the kanji accents.
+  • Fill in the [BRACKETED] parts before sending.
+
+--------------------------------------------------------------------------------
+  >>> COPY EVERYTHING BELOW THIS LINE <<<
+--------------------------------------------------------------------------------
+
+ROLE
+You are helping me turn the attached material into a beautiful, rigorous set of
+study notes as a LaTeX PDF. Accuracy comes first; the aesthetic comes a very
+close second.
+
+SUBJECT / SCOPE
+  • Topic(s): [e.g. "Lectures 3–4: Fourier & Laplace transforms"]
+  • Audience / level: [e.g. "2nd-year engineering undergrad"]
+  • Source material: [describe what you attached]
+  • Length target: [e.g. "as long as it needs to be" or "~15 pages"]
+
+THEME (do not restyle — match it exactly)
+Use the `sakuranotes` theme (washi-paper background, sakura-pink accents,
+colour-coded callout boxes). Load it with `\usepackage[light]{sakuranotes}`
+(or `[dark]` if I say so). The theme already provides everything below — use
+these, don't reinvent them:
+  • Boxes:  \begin{defn}[title]…  (plum, definitions)
+            \begin{thm}[title]…   (rose, theorems/results)
+            \begin{ex}[n · title]…(green, worked examples — show ALL steps)
+            \begin{intuition}[t]… (gold, the "why" in plain words)
+            \begin{props}[title]… (pink, lists of rules/properties)
+            \begin{note}[title]…  (grey, caveats/asides)
+            \begin{key} … \end{key} (centred boxed formula worth memorising)
+  • Part banners:  \notespart{<numeral>}{<title>}{<kanji>}
+  • Title page:    \sakuratitle{<title>}{<kanji, optional>}{<tagline>}
+  • Headers:       \renewcommand{\sakuraheadL}{…}  \renewcommand{\sakuraheadR}{…}
+  • Plots:         pgfplots with the `sakuraxis` style; curves in \sakuradeep
+                   (primary) and \matcha (secondary, dashed). Captions in
+                   \footnotesize \color{inkdim}\itshape under each figure.
+  • Maths helpers: \ii (imaginary unit), \dd (upright d), \Ft, \Lap, \sinc.
+
+CONTENT RULES
+  1. Rebuild the material from the ground up. Include EVERY definition, theorem,
+     property, formula and worked example from the source — none skipped.
+  2. Work every example in full, line by line. Don't just state results.
+  3. Add a short \begin{intuition} box wherever the idea behind a formula is
+     worth a plain-language sentence. This is what makes notes feel "taught".
+  4. Put memorable results in a \begin{key} box.
+  5. Add diagrams. For every plottable object (waveforms, spectra, transforms,
+     geometric pictures), draw a TikZ/pgfplots figure in the theme colours,
+     with a one-line italic caption. Recreate any graphs that appear in my
+     source. Add stem plots for discrete spectra, and flip-and-slide style
+     sketches for things like convolution.
+  6. Give genuinely important sub-topics their due (e.g. convolution, symmetry,
+     decay/convergence) — a full section, not a footnote.
+  7. Open with a one-page "how to read these notes" legend explaining the box
+     colours, and a short map of how the topics fit together.
+  8. If something in my source is unreadable, obscured, or looks wrong, say so
+     in a \begin{note} box and reconstruct it correctly from first principles —
+     never silently invent content or fudge a derivation.
+  9. Use real maths in real maths mode. Verify each non-trivial result.
+
+STRUCTURE
+  • \documentclass[11pt]{article}, then \usepackage[light]{sakuranotes}.
+  • \sakuratitle{…}{…}{…} for the cover.
+  • One \section per topic; \notespart{…}{…}{…} between major parts.
+  • Plain ASCII filenames for all outputs (avoids download/encoding problems).
+
+DELIVERABLES
+  • The full .tex source.
+  • The compiled PDF (build with XeLaTeX, run twice for references).
+  • Tell me which fonts/packages I need if anything is unusual.
+
+WORKING STYLE
+  • Read all my attached material carefully before writing.
+  • If a choice is genuinely ambiguous (light vs dark, ordering, depth), make a
+    sensible default and note it — don't stall to ask unless it's important.
+  • After building, sanity-check a few rendered pages and fix any overflow,
+    missing glyphs, or broken maths before sending.
+
+--------------------------------------------------------------------------------
+  >>> END OF PROMPT <<<
+--------------------------------------------------------------------------------
+
+TIP
+  If your assistant can't compile LaTeX, ask it for the .tex only, then build it
+  yourself with:  xelatex yourfile.tex  (twice).  Overleaf works too — set the
+  compiler to XeLaTeX in Menu, and upload sakuranotes.sty alongside your file.
