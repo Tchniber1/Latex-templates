@@ -5,15 +5,14 @@ a warm *washi-paper* background, sakura-pink accents, colour-coded callout
 boxes, hand-drawn cherry blossoms, part banners, and a matching `pgfplots`
 style for figures. Light (paper) and dark (sumi-ink) modes included.
 
-![preview](https://raw.githubusercontent.com/Tchniber1/Latex-templates/refs/heads/main/preview.png)
+![preview](preview.png)
 
 > I'm **Taha Chniber**, doing a BSc in Applied Mathematics at **SASE, Mohammed VI
 > Polytechnic University (UM6P)**. I write my course notes in LaTeX. One set of
 > them ended up on Reddit and pulled close to 10k views, and the question I kept
 > getting was about the *look*, not the maths — so I pulled the styling out of my
 > notes and turned it into a package anyone can drop in. This is it. The notes
-> that started it all are in [`showcase/`](showcase/), as a worked example of the
-> theme in action.
+> that started it all are in [`ASE203-notes.pdf`](ASE203-notes.pdf).
 
 ---
 
@@ -40,6 +39,8 @@ style for figures. Light (paper) and dark (sumi-ink) modes included.
 
 ## 🚀 Quick start
 
+Grab `sakuranotes.sty` from this repo, drop it next to your `.tex`, then:
+
 ```latex
 \documentclass[11pt]{article}
 \usepackage[light]{sakuranotes}   % or [dark] for sumi-ink night mode
@@ -61,7 +62,7 @@ $e^{i\theta} = \cos\theta + i\sin\theta$
 \end{document}
 ```
 
-Build it with **XeLaTeX, run twice** (so the headers and references settle):
+Build it with **XeLaTeX, run twice** (so headers and references settle):
 
 ```bash
 xelatex main.tex
@@ -104,50 +105,51 @@ definition after loading the package:
 % \sakuradeep, \matcha, … are exposed too
 ```
 
-## 📁 What's in the repo
+## 📁 What's in this repo
 
 ```
-sakura-notes/
-├── sakuranotes.sty                ← the theme, as a one-line package
-├── examples/template.tex          ← minimal starter file
-├── showcase/ASE203-notes.tex      ← the full 33-page notes, built on the theme
-├── prompt/study-notes-prompt.txt  ← a fill-in-the-blanks prompt to make your own
-├── docs/preview.png
-├── Makefile
-├── LICENSE                        ← MIT
+.
+├── sakuranotes.sty          ← the theme (the one file you actually need)
+├── ASE203-notes.pdf         ← the full 33-page notes, built on the theme
+├── template.pdf             ← a minimal example, rendered
+├── study-notes-prompt.txt   ← a fill-in-the-blanks prompt to make your own
+├── preview.png
+├── sakura-notes.zip         ← full bundle: .tex sources + Makefile + LICENSE
 └── README.md
 ```
 
 ## 📚 The showcase
 
-[`showcase/ASE203-notes.tex`](showcase/) is the real thing the theme came from:
+[`ASE203-notes.pdf`](ASE203-notes.pdf) is the real thing the theme came from:
 my notes for **ASE203 — Mathematical Methods for Engineering** (Prof. Faouzi
 Lakrad), covering complex numbers & phasors, Fourier series, the Fourier
 transform, and the Laplace transform (with ODE solving). It's the best reference
-for how every box, banner, and plot style is meant to be used.
+for how every box, banner, and plot style is meant to be used. The editable
+`.tex` source lives inside [`sakura-notes.zip`](sakura-notes.zip).
 
 ## 🤖 Make your own notes
 
-[`prompt/study-notes-prompt.txt`](prompt/) is a copy-paste prompt for a capable
-AI assistant. Attach your own material — lecture slides, a textbook chapter,
-photos of a whiteboard — fill in the bracketed fields, and you get back a set of
-notes in this exact theme: faithful content, full worked examples, intuition
-boxes, and matching diagrams. It's how I turn raw slides into something polished
-without rebuilding the formatting every time.
+[`study-notes-prompt.txt`](study-notes-prompt.txt) is a copy-paste prompt for a
+capable AI assistant. Attach your own material — lecture slides, a textbook
+chapter, photos of a whiteboard — fill in the bracketed fields, and you get back
+a set of notes in this exact theme: faithful content, full worked examples,
+intuition boxes, and matching diagrams. It's how I turn raw slides into something
+polished without rebuilding the formatting every time.
 
-## 🔨 Building
+## 🔨 Building from source
+
+The `.tex` sources and a `Makefile` are inside `sakura-notes.zip`. Unzip it, then:
 
 ```bash
 make          # builds the template and the showcase PDFs
-make clean    # removes the LaTeX aux files
+# or compile any .tex directly:
+xelatex main.tex   # run twice
 ```
-
-(Or just compile any `.tex` with XeLaTeX, run twice.)
 
 ## 📄 License
 
-MIT — see [LICENSE](LICENSE). © Taha Chniber. Use it, change it, ship it; a
-credit is appreciated but not required.
+MIT. © Taha Chniber. Use it, change it, ship it; a credit is appreciated but not
+required. The full licence text ships inside `sakura-notes.zip`.
 
 ---
 
