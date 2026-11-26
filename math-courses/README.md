@@ -30,26 +30,23 @@ finished PDF next to it.
 
 ```mermaid
 flowchart LR
-    L1["Lecture I<br/>domains, limits,<br/>differentiability"]:::lec
-    L2["Lecture II<br/>chain rule, gradient"]:::lec
-    L3["Lecture III<br/>higher derivatives, Taylor"]:::lec
-    L4["Lecture IV<br/>extrema, Lagrange"]:::lec
-    L5["Lecture V<br/>mappings, inverse<br/>and implicit functions"]:::lec
-    L67["Lectures VI and VII<br/>multiple integrals,<br/>change of variables"]:::lec
-
-    C["01 Companion booklet"]:::doc
+    A["AMATH301 lectures<br/>I to VII"]:::lec
+    MX["The mock exam<br/>Lectures I to III"]:::lec
+    C["01 Companion booklet<br/>Lectures I to V"]:::doc
     V["02 Lecture I in Motion"]:::anim
-    G["03 Revision guide"]:::doc
+    G["03 Revision guide<br/>Lectures I to VII"]:::doc
     M["04 Mock exam explained"]:::exam
     S["05 Midterm sheet"]:::exam
     R["06 Midterm recipes"]:::exam
     K["AMATH302 kit"]:::kit
+    P["Revision guide prompt"]:::kit
 
-    L1 --> V
-    L1 & L2 & L3 & L4 & L5 --> C
-    L1 & L2 & L3 & L4 & L5 & L67 --> G
-    L1 & L2 & L3 --> M --> S --> R
+    A --> C
+    A --> V
+    A --> G
+    A --> MX --> M --> S --> R
     C -. same design, new palette .-> K
+    G -. reusable for any course .-> P
 
     classDef lec fill:#E9F8FB,stroke:#1F7F92,color:#145F6E
     classDef doc fill:#64CADE,stroke:#145F6E,color:#0E1E24
