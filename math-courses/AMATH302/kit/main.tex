@@ -1,0 +1,16 @@
+\documentclass[11pt,oneside,openany]{book}
+\input{style}
+\begin{document}
+\input{cover}
+\showmargintrue
+\frontmatter
+\tableofcontents
+\input{front}
+\mainmatter
+\input{ch-template}
+% \input{ch2} ... one file per lecture
+\appendix
+\renewcommand{\bannernum}{\thechapter}\renewcommand{\tabindex}{\numexpr\value{chapter}+5\relax}
+\input{solutions}
+\input{formulas}
+\end{document}

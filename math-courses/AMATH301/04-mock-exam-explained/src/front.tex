@@ -1,0 +1,121 @@
+% ============================== FRONT MATTER =========================
+\chapter{Before You Start}
+
+This booklet takes the AMATH301 mock exam (three problems, two hours, 20 points) and goes through
+it one question at a time. For every question you get the statement word for word, the idea from
+the course that the question is really about, how to get started when you are sitting in front of
+it, the answer written the way you would write it on your copy, and the mistakes that cost marks.
+Every number in it was checked by computer.
+
+You do not need anything else open while you read. When a question uses a theorem, the theorem is
+stated right there, with its conditions.
+
+\section{How each question is laid out}
+
+{\renewcommand{\thequ}{\unskip}
+\begin{question}{Problem 1 \;·\; 8 pts}
+The exam question, copied exactly as it appears on the paper.
+\end{question}}\setcounter{qu}{0}
+
+\begin{lesson}
+The idea from the lectures that the question tests, explained from zero. If you only have time
+to reread one box per question, reread this one.
+\end{lesson}
+
+\begin{howto}
+The first two or three things to write down. This is what gets you moving when your head goes blank.
+\end{howto}
+
+\begin{answer}
+The full answer, written the way you would write it on the copy, with every justification the
+marker looks for.
+\end{answer}
+
+\begin{trap}
+A mistake that looks right and loses marks.
+\end{trap}
+
+\begin{intuition}
+A picture or an analogy for the same idea, when it helps.
+\end{intuition}
+
+\section{What this mock is really testing}
+
+The three problems look different, but each one is built around a single lesson of the course.
+
+\begin{center}
+\begin{tikzpicture}[
+   lec/.style={draw=tealD, fill=ice!30, rounded corners=2mm, text width=3.6cm, align=left,
+     font=\sffamily\scriptsize, inner sep=5pt, line width=0.7pt},
+   pb/.style={draw=coralD, fill=blush!28, rounded corners=2mm, text width=4.6cm, align=left,
+     font=\sffamily\scriptsize, inner sep=5pt, line width=0.7pt},
+   arr/.style={-{Stealth[length=2mm]}, tealD, line width=0.8pt}]
+  \node[lec] (L1) at (0,0) {\textbf{\color{tealDD}Lecture I}\\ domains, open and closed sets,
+     level sets, partial derivatives, differentiability, $C^1$};
+  \node[lec] (L2) at (0,-2.4) {\textbf{\color{tealDD}Lecture II}\\ chain rule, tangent planes,
+     directional derivatives, gradient};
+  \node[lec] (L3) at (0,-4.6) {\textbf{\color{tealDD}Lecture III}\\ second derivatives, the
+     Laplacian (TD 3)};
+  \node[pb] (P1) at (6.3,0.3) {\textbf{\color{coralD}Problem 1} \;(8 pts)\\ One function,
+     $\sqrt{2y-x^2}$, and every tool of Lectures I and II applied to it. \emph{Lesson: the gradient
+     tells you everything near a point.}};
+  \node[pb] (P2) at (6.3,-2.4) {\textbf{\color{coralD}Problem 2} \;(7 pts)\\ The classic
+     counterexample $\frac{xy^2}{x^2+y^2}$. \emph{Lesson: having derivatives in every direction is not
+     the same as being differentiable.}};
+  \node[pb] (P3) at (6.3,-4.9) {\textbf{\color{coralD}Problem 3} \;(5 pts)\\ Radial functions
+     $\varphi(r)$ and the Laplacian. \emph{Lesson: the chain rule, used twice, turns a PDE into an ODE.}};
+  \draw[arr] (L1.east) -- (P1.west);
+  \draw[arr] (L2.east) -- (P1.west);
+  \draw[arr] (L1.east) -- (P2.west);
+  \draw[arr] (L2.east) -- (P2.west);
+  \draw[arr] (L2.east) -- (P3.west);
+  \draw[arr] (L3.east) -- (P3.west);
+\end{tikzpicture}
+\end{center}
+
+So the whole paper rests on four things you must be able to write from memory: the definition of
+differentiability, the $C^1$ theorem, the chain rule, and the formula $D_uf=\grad f\cdot u$ for a
+unit vector $u$. Each of them is stated in full when it first comes up.
+
+\section{Your two hours}
+
+Twenty points in 120 minutes is six minutes per point. That gives a plan you can decide now, so
+you do not have to decide it in the room.
+
+\begin{center}
+\begin{tikzpicture}[x=0.105cm]
+  \foreach \a/\b/\c/\t in {0/5/ice/Read,5/50/aqua/Problem 1 \;·\; 45 min,
+                           50/90/sky/Problem 2 \;·\; 40 min,90/112/coral/Problem 3 \;·\; 22 min,
+                           112/120/blush/Check}{
+    \fill[\c, rounded corners=1pt] (\a,0) rectangle (\b,0.8);
+    \node[font=\sffamily\bfseries\tiny, text=tealDD, align=center] at ({(\a+\b)/2},0.4) {\t};}
+  \foreach \m in {0,30,60,90,120}{\draw[tealDD] (\m,0) -- (\m,-0.15)
+    node[below, font=\sffamily\tiny, text=tealDD] {\m'};}
+\end{tikzpicture}
+\end{center}
+
+Problem 3 is the shortest in points but its Part B is almost free once Part A is done: every
+question in it says ``deduce''. Do not leave it for the last ten minutes.
+
+\section{Making the first sitting feel like the second}
+
+You tend to do better the second time you face an exam than the first. That is not about
+knowing more the second time; it is that nothing on the paper is a surprise any more. You can
+get most of that effect before the real exam:
+
+\begin{enumerate}
+  \item \textbf{Sit the mock once, timed, from blank paper,} before reading the answers here. Mark
+  it yourself with this booklet.
+  \item \textbf{Read the booklet,} one problem per evening. Read the ``lesson'' boxes twice.
+  \item \textbf{Two days later, sit it again} from blank paper, without the booklet. This second
+  sitting is the one that counts: it is your resit, done before the exam.
+  \item \textbf{Learn the opening routine of each problem type} (the ``How to start'' boxes). In the
+  real exam the first line you write is the one you rehearsed, and the rest follows from it.
+\end{enumerate}
+
+\begin{remember}[title={When you blank in the room}]
+Write the definition. For a differentiability question, write the definition of differentiability.
+For a tangent plane, write the formula. For a radial function, write $r=\sqrt{x^2+y^2}$ and
+$r_x=x/r$. Definitions are worth marks on their own, and writing one almost always shows you the
+next line.
+\end{remember}

@@ -14,6 +14,13 @@ style for figures. Light (paper) and dark (sumi-ink) modes included.
 > notes and turned it into a package anyone can drop in. This is it. The notes
 > that started it all are in [`ASE203-notes.pdf`](ASE203-notes.pdf).
 
+## 📚 Also in this repo: my math course material
+
+The [`math-courses/`](math-courses) folder holds everything I made for my applied maths courses
+at SASE: the AMATH301 (Multivariate Calculus) companion booklet, a full revision guide, mock exam
+walkthroughs, a midterm sheet, an animated lecture, and the AMATH302 template kit. All LaTeX
+source, ready to rebuild. Start with [`math-courses/README.md`](math-courses/README.md).
+
 ---
 
 ## ✨ Features

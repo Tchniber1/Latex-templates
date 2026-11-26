@@ -1,0 +1,1010 @@
+% ============================== CHAPTER 1 ============================
+\setlecture{Lecture I}\renewcommand{\tabname}{I}
+\chapter{Functions of Several Variables}
+
+In first-year calculus a function eats one number and returns one number. In real
+problems almost nothing depends on a single quantity. The temperature in a room depends
+on three coordinates $(x,y,z)$, the price of a phone depends on its storage, its camera
+and its brand, the loss of a neural network depends on millions of weights. This chapter
+sets up the language for such functions and builds the first tools to study them:
+pictures (graphs and level curves), partial derivatives, the gradient, and the precise
+meaning of \emph{differentiable}.
+
+\section{Functions on sets of points}
+
+\mnote{A point of $\R^n$ is a list $X=(x_1,\dots,x_n)$. The same list can be read as a
+point (a position) or as a vector (an arrow from the origin). We use both readings.}
+
+\begin{definition}{Functions on sets of points}
+Let $S$ be a set of points in $n$-space. A \emph{function defined on $S$} associates to
+each point of $S$ a number:
+\[
+ f : S\subset \R^n \longrightarrow \R, \qquad X\longmapsto f(X).
+\]
+The set $S$ is called the \emph{domain of definition} of $f$.
+\end{definition}
+
+In practice the domain is often not written: it is understood to be the largest set of
+points where the formula makes sense. Finding it means listing every operation in the
+formula and asking where it is allowed.
+
+\begin{recipe}
+To find the natural domain of a formula, check each of these:
+\begin{itemize}
+  \item \textbf{Division}: the denominator must not be $0$.
+  \item \textbf{Even roots} $\sqrt{\;\cdot\;}$: the inside must be $\ge 0$.
+  \item \textbf{Logarithms} $\ln(\cdot)$: the inside must be $>0$.
+  \item \textbf{$\arcsin$, $\arccos$}: the inside must be in $[-1,1]$.
+\end{itemize}
+Then intersect all the conditions and \emph{draw} the resulting region.
+\end{recipe}
+
+\begin{example}{distance from the origin}
+Let $f(x,y)=x^2+y^2$. Every point of the plane is allowed, so $\Dom(f)=\R^2$.
+Geometrically,
+\[ f(x,y)=\norm{(x,y)}^2, \]
+the square of the distance from $(x,y)$ to the origin. For instance $f(3,4)=25$, and
+indeed $(3,4)$ is at distance $5$ from $O$.
+\end{example}
+
+\begin{example}{a function not defined at the origin}
+Let
+\[ f(x,y)=\frac{x^2-y^2}{x^2+y^2}. \]
+The denominator vanishes only when $x=y=0$. Hence the origin is removed:
+\[ \Dom(f)=\R^2\setminus\{(0,0)\}. \]
+We will see in Section~\ref{sec:level} that this innocent-looking function behaves
+very strangely near the missing point.
+\end{example}
+
+\begin{example}{three variables}
+In $3$-space, $f(x,y,z)=x^2-\sin(xyz)+yz^3$ is defined everywhere. Writing
+$X=(x,y,z)$ we simply write $f(X)$. For example
+$f(1,0,2)=1-\sin 0+0=1$.
+\end{example}
+
+\begin{example}{finding a domain}
+Find the domain of $f(x,y)=\sqrt{4-x^2-y^2}$.
+
+\textbf{Step 1.} The only restriction comes from the square root: we need
+$4-x^2-y^2\ge 0$.
+
+\textbf{Step 2.} Rearranging, $x^2+y^2\le 4$, so
+\[ \Dom(f)=\{(x,y)\in\R^2 : x^2+y^2\le 4\}. \]
+
+\textbf{Step 3.} This is the \emph{closed disc} of radius $2$ centred at the origin. Its
+boundary is the circle $x^2+y^2=4$, and the boundary is included because of the
+``$\ge$''.
+
+\begin{center}
+\begin{tikzpicture}
+\begin{axis}[bp, width=6.2cm, height=6.2cm, xmin=-3, xmax=3, ymin=-3, ymax=3,
+   xtick={-2,2}, ytick={-2,2}, xlabel=$x$, ylabel=$y$, axis equal image]
+  \addplot[domain=0:360, samples=90, draw=plum, fill=plum, fill opacity=0.18]
+     ({2*cos(x)},{2*sin(x)}) -- cycle;
+  \node[font=\small, text=plum] at (axis cs:0.9,0.8) {$x^2+y^2\le 4$};
+\end{axis}
+\end{tikzpicture}
+\end{center}
+\end{example}
+
+\begin{example}{a half-plane and a hole}
+Find the domain of $g(x,y)=\dfrac{\ln(x-y)}{\sqrt{x}}$.
+
+The logarithm needs $x-y>0$, that is $y<x$. The root in the denominator needs $x\ge 0$
+and, being in a denominator, $x\neq 0$; together, $x>0$. So
+\[ \Dom(g)=\{(x,y): x>0,\ y<x\}, \]
+the part of the right half-plane lying strictly below the line $y=x$. Neither boundary
+line is included.
+\end{example}
+
+\begin{reallife}{cost functions}
+A factory's weekly cost might be $C(L,K)=40L+90K+\sqrt{LK}$, where $L$ is hours of labour
+and $K$ hours of machine time. The formula makes sense for all $L,K\ge 0$, but the
+\emph{physical} domain is smaller: a week has at most $168$ hours of machine time. Real
+problems often restrict the domain further than the formula does.
+\end{reallife}
+
+\section{Graphs of functions}
+
+\begin{definition}{Graph}
+For a function of $n$ variables $f(x_1,\dots,x_n)$, the \emph{graph} of $f$ is the set of
+points in $(n+1)$-space of the form
+\[ \big(x_1,\dots,x_n,\,f(x_1,\dots,x_n)\big). \]
+\end{definition}
+
+\begin{itemize}
+  \item $n=1$: the graph is a curve in the plane, points $(x,f(x))$.
+  \item $n=2$: the graph is a \emph{surface} in $3$-space, points $(x,y,f(x,y))$. Think
+  of $f(x,y)$ as the height of a landscape above the point $(x,y)$ on the floor.
+  \item $n=3$: the graph lives in $4$-space, which we cannot draw. We need another tool:
+  level sets.
+\end{itemize}
+
+\begin{center}
+\begin{tikzpicture}
+\begin{axis}[bp3d, width=10.5cm, height=9cm, xlabel=$x$, ylabel=$y$, zlabel=$z$,
+   xmin=-2.2, xmax=2.2, ymin=-2.2, ymax=2.2, zmin=0, zmax=8.5]
+  \addplot3[plumsurf, domain=0:2, y domain=0:360, samples=16, samples y=36,
+     z buffer=sort] ({x*cos(y)},{x*sin(y)},{x^2});
+  \addplot3[only marks, mark=*, coral, mark size=2.2pt] coordinates {(1,1,0)};
+  \addplot3[coral, dashed, line width=0.9pt] coordinates {(1,1,0) (1,1,2)};
+  \addplot3[only marks, mark=*, coral, mark size=2.2pt] coordinates {(1,1,2)};
+  \node[font=\scriptsize, text=coraldark, anchor=north] at (axis cs:1,1,0) {$(x,y)$};
+  \node[font=\scriptsize, text=coraldark, anchor=west] at (axis cs:1.05,1,2.1) {$(x,y,f(x,y))$};
+\end{axis}
+\end{tikzpicture}
+
+{\small\color{navy} The graph of $f(x,y)=x^2+y^2$ is a paraboloid: above each point
+$(x,y)$ of the floor sits the point at height $f(x,y)$.}
+\end{center}
+
+\section{Level curves and level surfaces}\label{sec:level}
+
+\begin{intuition}
+A hiking map is flat, yet it shows mountains. It does so with \emph{contour lines}:
+each line joins points at the same altitude. A level curve is exactly a contour line of
+the landscape $z=f(x,y)$. You slice the surface horizontally at height $c$ and look
+straight down at the cut.
+\end{intuition}
+
+\begin{definition}{Level curves}
+For a function $f(x,y)$ and a number $c$, the \emph{level curve of $f$ at level $c$} is
+the set of points $(x,y)$ where $f$ takes the value $c$:
+\[ \{(x,y) : f(x,y)=c\}. \]
+\end{definition}
+
+\begin{itemize}
+  \item A graph records the height above the plane.
+  \item A level curve records where the height is constant.
+  \item Drawing several level curves together gives a \emph{contour map}.
+\end{itemize}
+
+\subsection{The paraboloid $f(x,y)=x^2+y^2$}
+
+\begin{example}{level curves of $x^2+y^2$}
+The level curves are $x^2+y^2=c$.
+\begin{itemize}
+  \item If $c<0$: no point satisfies it (a sum of squares is never negative). The level
+  set is empty.
+  \item If $c=0$: only the origin.
+  \item If $c>0$: the circle of radius $\sqrt c$.
+\end{itemize}
+Notice that the radii $1,\sqrt2,\sqrt3,2$ for $c=1,2,3,4$ get \emph{closer together} as
+$c$ grows: the paraboloid becomes steeper as we move away from the origin.
+\end{example}
+
+\begin{center}
+\begin{tikzpicture}
+\begin{axis}[bp, width=5.7cm, height=5.7cm, xmin=-2.6, xmax=2.6, ymin=-2.6, ymax=2.6,
+   xtick={-2,-1,1,2}, ytick={-2,-1,1,2}, xlabel=$x$, ylabel=$y$, axis equal image]
+  \foreach \c [evaluate=\c as \r using sqrt(\c)] in {1,2,3,4} {
+    \edef\tmp{\noexpand\addplot[domain=0:360, samples=80,
+       draw=plum!\the\numexpr 40+15*\c\relax!coral] ({\r*cos(x)},{\r*sin(x)});}\tmp }
+  \node[font=\scriptsize, text=plum, fill=white, inner sep=1pt] at (axis cs:0.72,0.72) {$c{=}1$};
+  \node[font=\scriptsize, text=plum, fill=white, inner sep=1pt] at (axis cs:1.42,1.42) {$c{=}4$};
+\end{axis}
+\end{tikzpicture}\hspace{0.3cm}
+\begin{tikzpicture}
+\begin{axis}[bp3d, width=7.4cm, height=7cm, xlabel=$x$, ylabel=$y$, zlabel=$z$,
+   xmin=-2.3, xmax=2.3, ymin=-2.3, ymax=2.3, zmin=0, zmax=5.2]
+  \addplot3[plumsurf, opacity=0.55, fill opacity=0.55, domain=0:2.1, y domain=0:360,
+    samples=12, samples y=32, z buffer=sort] ({x*cos(y)},{x*sin(y)},{x^2});
+  \foreach \c [evaluate=\c as \r using sqrt(\c)] in {1,2,3,4} {
+    \edef\tmp{\noexpand\addplot3[cyanbp, line width=1.1pt, domain=0:360, samples=60, samples y=1]
+       ({\r*cos(x)},{\r*sin(x)},\c);
+     \noexpand\addplot3[cyanbp!60, line width=0.6pt, dashed, domain=0:360, samples=60, samples y=1]
+       ({\r*cos(x)},{\r*sin(x)},0);}\tmp }
+\end{axis}
+\end{tikzpicture}
+
+{\small\color{navy} Left: the contour map. Right: the same circles as horizontal slices
+of the surface (solid) and their shadows on the floor (dashed).}
+\end{center}
+
+\subsection{The saddle $f(x,y)=x^2-y^2$}
+
+\begin{example}{level curves of $x^2-y^2$}
+The level curves are $x^2-y^2=c$.
+\begin{itemize}
+  \item $c>0$: hyperbolas opening left and right (they cross the $x$-axis at $\pm\sqrt c$).
+  \item $c<0$: hyperbolas opening up and down (they cross the $y$-axis at $\pm\sqrt{-c}$).
+  \item $c=0$: $x^2=y^2$, that is the two lines $y=x$ and $y=-x$.
+\end{itemize}
+The graph is a \emph{saddle} (a horse saddle, or a Pringles chip): going along the
+$x$-axis you climb, going along the $y$-axis you descend.
+\end{example}
+
+\begin{center}
+\begin{tikzpicture}
+\begin{axis}[bp, width=5.7cm, height=5.7cm, xmin=-2.5, xmax=2.5, ymin=-2.5, ymax=2.5,
+   xtick={-2,-1,1,2}, ytick={-2,-1,1,2}, xlabel=$x$, ylabel=$y$, axis equal image]
+  \foreach \c/\T in {0.5/1.75, 1.5/1.15, 3/0.62} {
+    \edef\tmp{%
+    \noexpand\addplot[plum, domain=-\T:\T, samples=40] ({sqrt(\c)*cosh(x)},{sqrt(\c)*sinh(x)});
+    \noexpand\addplot[plum, domain=-\T:\T, samples=40] ({-sqrt(\c)*cosh(x)},{sqrt(\c)*sinh(x)});
+    \noexpand\addplot[coral, domain=-\T:\T, samples=40] ({sqrt(\c)*sinh(x)},{sqrt(\c)*cosh(x)});
+    \noexpand\addplot[coral, domain=-\T:\T, samples=40] ({sqrt(\c)*sinh(x)},{-sqrt(\c)*cosh(x)});}\tmp }
+  \addplot[navy, dashed, domain=-2.5:2.5] {x};
+  \addplot[navy, dashed, domain=-2.5:2.5] {-x};
+  \node[font=\scriptsize, text=plum, fill=white, inner sep=1pt] at (axis cs:2.05,0.25) {$c>0$};
+  \node[font=\scriptsize, text=coraldark, fill=white, inner sep=1pt] at (axis cs:0.25,2.1) {$c<0$};
+\end{axis}
+\end{tikzpicture}\hspace{0.3cm}
+\begin{tikzpicture}
+\begin{axis}[bp3d, width=7.4cm, height=7cm, xlabel=$x$, ylabel=$y$, zlabel=$z$,
+   xmin=-1.8, xmax=1.8, ymin=-1.8, ymax=1.8, zmin=-3, zmax=3, view={-30}{24}]
+  \addplot3[plumsurf, domain=-1.5:1.5, y domain=-1.5:1.5, samples=22] {x^2-y^2};
+\end{axis}
+\end{tikzpicture}
+\end{center}
+
+\subsection{A function whose level curves are lines}
+
+\begin{example}{level curves of $\frac{x^2-y^2}{x^2+y^2}$}
+Let $f(x,y)=\dfrac{x^2-y^2}{x^2+y^2}$ for $(x,y)\neq(0,0)$.
+
+\textbf{Step 1: write the level equation.} $f(x,y)=c$ means
+$x^2-y^2=c(x^2+y^2)$.
+
+\textbf{Step 2: collect the $x$ and $y$ terms.}
+\[ x^2-cx^2 = y^2+cy^2 \quad\Longleftrightarrow\quad x^2(1-c)=y^2(1+c). \]
+
+\textbf{Step 3: solve.} For $x\neq 0$ and $c\neq -1$,
+\[ \frac{y^2}{x^2}=\frac{1-c}{1+c}, \qquad\text{so}\qquad
+   y=\pm a x,\quad a=\sqrt{\frac{1-c}{1+c}} . \]
+This requires $\frac{1-c}{1+c}\ge0$, that is $-1<c\le 1$.
+
+\textbf{Step 4: special values.}
+\begin{itemize}
+  \item $c=1$: $a=0$, the level curve is the $x$-axis (without $O$).
+  \item $c=0$: $a=1$, the lines $y=\pm x$.
+  \item $c=-1$: the equation becomes $2x^2=0$, so $x=0$: the $y$-axis (without $O$).
+  \item $\abs c>1$: empty. Indeed $\abs{x^2-y^2}\le x^2+y^2$, so $-1\le f\le 1$ always.
+\end{itemize}
+So \emph{every} level curve is a pair of lines through the origin, with the origin
+removed. All the values between $-1$ and $1$ crowd into every neighbourhood of $O$. This
+is the first sign that $f$ cannot be extended continuously to the origin.
+\end{example}
+
+\begin{center}
+\begin{tikzpicture}
+\begin{axis}[bp, width=6.3cm, height=6.3cm, xmin=-2.2, xmax=2.2, ymin=-2.2, ymax=2.2,
+   xtick={-1,1}, ytick={-1,1}, xlabel=$x$, ylabel=$y$, axis equal image]
+  \addplot[coral, domain=-2.2:2.2, line width=1.6pt] {0};
+  \addplot[coral!70!plum, domain=-2.2:2.2] {0.4142*x};
+  \addplot[coral!70!plum, domain=-2.2:2.2] {-0.4142*x};
+  \addplot[plummid, domain=-2.2:2.2] {x};
+  \addplot[plummid, domain=-2.2:2.2] {-x};
+  \addplot[plum, domain=-0.9:0.9] {2.414*x};
+  \addplot[plum, domain=-0.9:0.9] {-2.414*x};
+  \addplot[plumdark, line width=1.6pt] coordinates {(0,-2.2) (0,2.2)};
+  \node[odot] at (axis cs:0,0) {};
+  \node[font=\scriptsize, fill=white, inner sep=1pt, text=coraldark] at (axis cs:1.9,0.22) {$c{=}1$};
+  \node[font=\scriptsize, fill=white, inner sep=1pt, text=plummid] at (axis cs:1.75,1.45) {$c{=}0$};
+  \node[font=\scriptsize, fill=white, inner sep=1pt, text=plumdark] at (axis cs:0.42,2.0) {$c{=}{-}1$};
+\end{axis}
+\end{tikzpicture}
+
+{\small\color{navy} The rays from the origin are level curves: $c=1$ on the $x$-axis,
+$c=\tfrac{1}{\sqrt2}$ on $y=\pm(\sqrt2-1)x$, $c=0$ on the diagonals, $c=-1$ on the $y$-axis.}
+\end{center}
+
+\subsection{Reading a contour map}
+
+\begin{center}
+\begin{tikzpicture}[scale=0.9]
+  \draw[bpgrid, step=0.5] (-3,-2.3) grid (3,2.3);
+  \foreach \s/\c in {2.6/40, 1.9/60, 1.35/80, 0.9/100} {
+    \draw[plum!\c!coral, line width=1.1pt, xscale=1.25]
+      plot[smooth cycle, tension=0.8] coordinates {(-\s,0) (-0.6*\s,0.75*\s) (0.5*\s,0.7*\s) (\s*0.95,0.1*\s) (0.45*\s,-0.65*\s) (-0.55*\s,-0.62*\s)};}
+  \node[font=\scriptsize, text=plum] at (-3.0,0.25) {1};
+  \node[font=\scriptsize, text=plum] at (-2.15,0.25) {2};
+  \node[font=\scriptsize, text=plum] at (-1.45,0.25) {3};
+  \node[font=\scriptsize, text=plum] at (-0.85,0.25) {4};
+  \draw[vecc] (1.0,-0.1) -- (2.9,-0.1) node[right, font=\scriptsize]{gentle};
+  \draw[vec] (0.0,0.75) -- (0,1.95) node[above, font=\scriptsize]{steep};
+\end{tikzpicture}
+\end{center}
+
+Suppose these are level curves of $f$ for the values $1,2,3,4$.
+\begin{itemize}
+  \item Moving inward, $f$ increases: this is a hill with its top inside the smallest curve.
+  \item Each curve contains points with the same value.
+  \item \textbf{Where is the graph steepest?} Where the curves are \emph{closest together}.
+  Between two consecutive curves $f$ changes by $1$; if they are close, this change
+  happens over a short distance, so the slope is large.
+\end{itemize}
+
+\begin{reallife}{weather maps and topography}
+On a weather map the level curves of pressure are called \emph{isobars}. Where isobars
+are packed together the pressure changes fast, and the wind is strong. On a hiking map,
+packed contour lines warn you of a cliff. The same reading applies to any contour plot,
+including the loss landscapes plotted in machine learning.
+\end{reallife}
+
+\subsection{Level surfaces}
+
+For a function of three variables we cannot draw the graph, but we can draw where
+the function is constant.
+
+\begin{definition}{Level surface}
+For $f(x,y,z)$ and a number $c$, the \emph{level surface} at level $c$ is the set
+$\{(x,y,z): f(x,y,z)=c\}$.
+\end{definition}
+
+\mfig{\begin{tikzpicture}[scale=0.62]
+  \foreach \r/\o in {1/1, 1.6/0.7, 2.2/0.45} {
+   \shade[ball color=plum!40!white, opacity=\o] (0,0) circle (\r);
+   \draw[plum, line width=0.5pt] (0,0) circle (\r);
+   \draw[plum, line width=0.4pt, dashed] (-\r,0) arc (180:0:\r cm and 0.3*\r cm);
+   \draw[plum, line width=0.5pt] (-\r,0) arc (180:360:\r cm and 0.3*\r cm);}
+  \node[font=\scriptsize, text=navy, align=center] at (0,-2.75) {$x^2+y^2+z^2=c$\\nested spheres};
+\end{tikzpicture}}
+
+For $f(x,y,z)=x^2+y^2+z^2$ the level surfaces are spheres of radius $\sqrt c$ centred at
+the origin, nested like the layers of an onion.
+
+\begin{reallife}{equipotentials and isotherms}
+If $f$ is an electric potential, its level surfaces are the \emph{equipotential surfaces};
+moving a charge along one of them costs no work. If $f$ is temperature, the level
+surfaces are \emph{isothermal surfaces}. In both cases we describe the field by the
+places where it takes a fixed value.
+\end{reallife}
+
+\section{Open sets: room around every point}
+
+\begin{intuition}
+To differentiate $f$ at $x$ in one variable you compute $f(x+h)$ for small $h$ on both
+sides. So $f$ must be defined on a little interval around $x$. In several variables
+you want to move a little in \emph{every} direction, so you need a little disc (or ball)
+around the point. Sets where every point has such a ball are called \emph{open}.
+\end{intuition}
+
+\begin{definition}{Balls and spheres}
+Let $P\in\R^n$ and $a>0$.
+\[
+\text{open ball: } \norm{X-P}<a,\qquad
+\text{closed ball: } \norm{X-P}\le a,
+\]
+\[ \text{sphere: } \norm{X-P}=a. \]
+\end{definition}
+
+\begin{itemize}
+  \item In $\R$: an open ball is an open interval $(P-a,P+a)$.
+  \item In $\R^2$: an open ball is an open disc and the sphere is a circle.
+  \item In $\R^3$: the words mean what they usually mean.
+\end{itemize}
+
+\textbf{Scaling.} If $S_1$ is the unit sphere centred at $O$ and $X\in S_1$, then for
+$a>0$, $\norm{aX}=a\norm X=a$. Multiplying by $a$ stretches the unit sphere onto the sphere of
+radius $a$. The same holds for balls.
+
+\begin{definition}{Open set}
+A set $U\subset\R^n$ is \emph{open} if for every $P\in U$ there exists $a>0$ such that
+the open ball centred at $P$ of radius $a$ is contained in $U$.
+\end{definition}
+
+\begin{center}
+\begin{tikzpicture}[scale=0.8]
+  \begin{scope}
+   \draw[bpgrid, step=0.5] (-2.6,-2.6) grid (2.6,2.6);
+   \fill[plum, opacity=0.15] (0,0) circle (2);
+   \draw[plum, line width=1.2pt, dashed] (0,0) circle (2);
+   \node[pdot] (p) at (1.25,0.8) {};
+   \fill[coral, opacity=0.3] (p) circle (0.5);
+   \draw[coral, line width=0.9pt] (p) circle (0.5);
+   \node[font=\scriptsize, text=plumdark, above left] at (p) {$P$};
+   \node[font=\small, text=navy] at (0,-3.0) {open disc $x^2+y^2<4$};
+   \node[font=\scriptsize, text=navy] at (0,-3.5) {every $P$ has room around it};
+  \end{scope}
+  \begin{scope}[xshift=6.5cm]
+   \draw[bpgrid, step=0.5] (-2.6,-2.6) grid (2.6,2.6);
+   \fill[plum, opacity=0.15] (0,0) circle (2);
+   \draw[plum, line width=1.4pt] (0,0) circle (2);
+   \node[pdot] (p) at (45:2) {};
+   \fill[coral, opacity=0.3] (p) circle (0.5);
+   \draw[coral, line width=0.9pt] (p) circle (0.5);
+   \node[font=\scriptsize, text=plumdark, above right] at (p) {$P$};
+   \node[font=\small, text=navy] at (0,-3.0) {closed disc $x^2+y^2\le 4$};
+   \node[font=\scriptsize, text=navy] at (0,-3.5) {at a boundary point every ball escapes};
+  \end{scope}
+\end{tikzpicture}
+\end{center}
+
+\begin{example}{which sets are open}
+\begin{itemize}
+  \item The first quadrant without the axes, $\{x>0,\ y>0\}$, is open in $\R^2$: around
+  $(x,y)$ take the ball of radius $\min(x,y)$.
+  \item The $x$-axis is \emph{not} open as a subset of $\R^2$: any disc around a point of
+  the axis contains points with $y\neq0$.
+  \item The same axis, viewed as the whole space $\R$, \emph{is} open.
+  \item The interval $(-1,1)$ is open in $\R$, but not as a subset of $\R^2$.
+\end{itemize}
+\end{example}
+
+\begin{trap}
+``Open'' is not a property of a set alone; it depends on the \emph{ambient space}. Always
+ask: open as a subset of which $\R^n$? Also, ``not open'' does not mean ``closed'':
+a half-open interval $[0,1)$ is neither.
+\end{trap}
+
+\begin{theorem}{An open ball is open}
+Let $a>0$. The open ball $U=\{X:\norm X<a\}$ is an open set.
+\end{theorem}
+
+\begin{intuition}
+If $P$ is at distance $b$ from the centre, it is at distance $a-b$ from the edge.
+A ball of radius $a-b$ around $P$ therefore cannot reach the edge. The triangle
+inequality turns this picture into a proof.
+\begin{center}
+\begin{tikzpicture}[scale=0.55]
+  \draw[plum, dashed, line width=0.9pt] (0,0) circle (2.5);
+  \fill[plum, opacity=0.08] (0,0) circle (2.5);
+  \node[pdot] (o) at (0,0) {};
+  \node[dot] (p) at (1.4,0.6) {};
+  \draw[navy, line width=0.6pt] (o) -- node[below, font=\tiny]{$b$} (p);
+  \fill[coral, opacity=0.25] (p) circle ({2.5-1.523});
+  \draw[coral] (p) circle ({2.5-1.523});
+  \draw[coral, line width=0.6pt] (p) -- ++(23.2:{2.5-1.523}) node[midway, above, font=\tiny]{$c$};
+  \node[font=\tiny, below left] at (o) {$O$};
+  \node[font=\tiny, above] at (p) {$P$};
+  \node[font=\scriptsize, text=navy] at (0,-3.0) {$c=a-b$};
+\end{tikzpicture}
+\end{center}
+\end{intuition}
+
+
+
+\begin{proof}
+Take $P\in U$ and put $b=\norm P$; then $b<a$. Choose $c=a-b>0$. Let $X$ be any point
+with $\norm{X-P}<c$. By the triangle inequality,
+\[
+ \norm X=\norm{(X-P)+P}\le\norm{X-P}+\norm P<(a-b)+b=a .
+\]
+So $X\in U$. Thus the ball of radius $c$ around $P$ lies in $U$, and $U$ is open.
+\end{proof}
+
+The point of all this: if $X\in U$ and $U$ is open, then the nearby points $X+H$ with
+$\norm H$ small are also in $U$. In particular we can change \emph{one} coordinate a
+little and stay in $U$. That is exactly what partial derivatives need.
+
+\section{Partial derivatives}
+
+\begin{intuition}
+Standing on a hillside at $(x_0,y_0)$, you can ask: if I walk due east, how steep is it?
+If I walk due north, how steep? Each question freezes one coordinate and moves the
+other, so it is an ordinary one-variable derivative. These two slopes are the partial
+derivatives $\partial f/\partial x$ and $\partial f/\partial y$.
+\end{intuition}
+
+\begin{definition}{The $i$-th partial derivative}
+Let $f$ be defined on an open set $U\subset\R^n$ and $X=(x_1,\dots,x_n)\in U$. If the
+limit exists, the $i$-th partial derivative of $f$ at $X$ is
+\[
+ D_if(X)=\pd{f}{x_i}(X)=\lim_{h\to0}\frac{f(x_1,\dots,x_i+h,\dots,x_n)-f(x_1,\dots,x_n)}{h}.
+\]
+\end{definition}
+
+\begin{itemize}
+  \item Only the variable $x_i$ changes; all the others are kept fixed.
+  \item For two variables:
+  \[
+  \pd fx=\lim_{h\to0}\frac{f(x+h,y)-f(x,y)}{h},\qquad
+  \pd fy=\lim_{k\to0}\frac{f(x,y+k)-f(x,y)}{k}.
+  \]
+\end{itemize}
+
+\subsection{Partial derivatives as slices}
+
+To compute $\pd fx(x_0,y_0)$: freeze $y=y_0$, get the one-variable function
+$\varphi(x)=f(x,y_0)$, and differentiate: $\varphi'(x_0)=\pd fx(x_0,y_0)$. Similarly
+$\psi(y)=f(x_0,y)$ gives $\psi'(y_0)=\pd fy(x_0,y_0)$.
+
+\begin{center}
+\begin{tikzpicture}
+\begin{axis}[bp3d, width=11cm, height=9.2cm, xlabel=$x$, ylabel=$y$, zlabel=$z$,
+   xmin=-0.2, xmax=2.3, ymin=-0.2, ymax=2.3, zmin=0, zmax=6.5, view={-40}{25}]
+  \addplot3[plumsurf, opacity=0.6, fill opacity=0.6, domain=0:2, y domain=0:2, samples=16]
+     {4-0.5*(x-1)^2-0.75*(y-1)^2+0.6*x};
+  % slice y = 1
+  \addplot3[cyanbp, line width=1.8pt, domain=0:2, samples=40, samples y=1]
+     (x,1,{4-0.5*(x-1)^2+0.6*x});
+  % slice x = 1
+  \addplot3[coral, line width=1.8pt, domain=0:2, samples=40, samples y=1]
+     (1,x,{4.6-0.75*(x-1)^2});
+  \addplot3[only marks, mark=*, mark size=2.6pt, white, mark options={draw=plumdark, line width=1pt}]
+     coordinates {(1,1,4.6)};
+  % tangent along x : slope 0.6
+  \addplot3[cyanbp, dashed, line width=1pt, domain=0.4:1.6, samples=2, samples y=1]
+     (x,1,{4.6+0.6*(x-1)});
+  % footprints
+  \addplot3[cyanbp!50, line width=0.6pt, dashed, domain=0:2, samples=2, samples y=1] (x,1,0);
+  \addplot3[coral!50, line width=0.6pt, dashed, domain=0:2, samples=2, samples y=1] (1,x,0);
+  \node[font=\scriptsize, text=cyanbp, anchor=west] at (axis cs:2,1,5.1) {$y=y_0$ fixed};
+  \node[font=\scriptsize, text=coraldark, anchor=south] at (axis cs:1,2.1,4.0) {$x=x_0$ fixed};
+\end{axis}
+\end{tikzpicture}
+
+{\small\color{navy} The blue curve is the slice $y=y_0$; its slope at the marked point
+is $\partial f/\partial x$ (dashed tangent). The coral curve is the slice $x=x_0$; its
+slope gives $\partial f/\partial y$.}
+\end{center}
+
+\begin{example}{computing partials}
+Let $f(x,y)=x^2y^3$.
+\begin{itemize}
+  \item For $\pd fx$, treat $y$ as a constant: $y^3$ is a constant factor, so
+  $\pd fx=2x\,y^3$.
+  \item For $\pd fy$, treat $x$ as a constant: $\pd fy=3x^2y^2$.
+\end{itemize}
+The partial derivatives are themselves functions of $(x,y)$.
+\end{example}
+
+\begin{trap}
+$D_if(P)$ means: first compute the \emph{function} $D_if$, then evaluate it at $P$.
+It does \emph{not} mean $D_i\big(f(P)\big)$: $f(P)$ is a number and its derivative is $0$.
+For example with $f=x^2y^3$ and $P=(1,2)$: $D_1f(P)=2\cdot1\cdot 8=16$, while
+``$D_1(f(1,2))$'' $=D_1(8)=0$.
+\end{trap}
+
+\begin{example}{evaluating a partial derivative}
+Let $f(x,y)=\sin(xy)$. Find $D_2f(1,\pi)$ and $D_2f(3,\pi/4)$.
+
+\textbf{Step 1.} Differentiate in $y$, with $x$ fixed (chain rule, inner function $xy$,
+whose $y$-derivative is $x$):
+\[ D_2f(x,y)=x\cos(xy). \]
+\textbf{Step 2.} Evaluate:
+\[
+D_2f(1,\pi)=1\cdot\cos\pi=-1,\qquad
+D_2f\!\left(3,\tfrac\pi4\right)=3\cos\tfrac{3\pi}{4}=-\tfrac{3}{\sqrt2}.
+\]
+\end{example}
+
+\begin{example}{a quotient}
+Let $f(x,y)=\dfrac{x}{x^2+y^2}$. With $y$ fixed, the quotient rule gives
+\begin{align*}
+\pd fx&=\frac{(x^2+y^2)\cdot1-x\cdot2x}{(x^2+y^2)^2}=\frac{y^2-x^2}{(x^2+y^2)^2},\\
+\pd fy&=x\cdot\frac{-2y}{(x^2+y^2)^2}=\frac{-2xy}{(x^2+y^2)^2}.
+\end{align*}
+\end{example}
+
+\begin{example}{using the limit definition}
+Let $f(x,y)=\sqrt[3]{x^3+y^3}$. Find $D_1f(0,0)$.
+
+The formula obtained by differentiating, $\frac{x^2}{(x^3+y^3)^{2/3}}$, is undefined at
+the origin, so we go back to the definition:
+\[
+D_1f(0,0)=\lim_{h\to0}\frac{f(h,0)-f(0,0)}{h}=\lim_{h\to0}\frac{\sqrt[3]{h^3}}{h}
+=\lim_{h\to0}\frac hh=1 .
+\]
+Lesson: when the derivative formula breaks down at a point, use the definition.
+\end{example}
+
+\section{The gradient}
+
+\begin{definition}{Gradient}
+Assume the partial derivatives of $f$ exist at $X$. The \emph{gradient} of $f$ at $X$ is
+the vector of partial derivatives:
+\[
+\operatorname{grad} f(X)=\grad f(X)=\big(D_1f(X),\dots,D_nf(X)\big).
+\]
+For two variables $\grad f(x,y)=\left(\pd fx,\pd fy\right)$; for three,
+$\grad f=\left(\pd fx,\pd fy,\pd fz\right)$.
+\end{definition}
+
+The gradient assigns a \emph{vector} to each point. We read $\grad f(X)$ as
+$(\grad f)(X)$: compute the gradient function, then evaluate.
+
+\begin{example}{a gradient}
+For $f(x,y)=x^2y^3$, $\grad f(x,y)=(2xy^3,\;3x^2y^2)$, so
+$\grad f(1,2)=(2\cdot8,\;3\cdot4)=(16,12)$.
+\end{example}
+
+\begin{example}{a first picture}
+For $f(x,y)=x^2+y^2$, $\grad f(x,y)=(2x,2y)=2(x,y)$. At every point the gradient points
+straight away from the origin, and its length $2\norm{(x,y)}$ grows as we go out.
+Compare with the level curves: the gradient is \emph{perpendicular} to them and
+points towards higher values.
+\end{example}
+
+\begin{center}
+\begin{tikzpicture}
+\begin{axis}[bp, width=6.8cm, height=6.8cm, xmin=-2.4, xmax=2.4, ymin=-2.4, ymax=2.4,
+   xtick={-2,-1,1,2}, ytick={-2,-1,1,2}, xlabel=$x$, ylabel=$y$, axis equal image]
+  \foreach \r in {0.7,1.4,2.1}
+     {\edef\tmp{\noexpand\addplot[plum!70, domain=0:360, samples=70] ({\r*cos(x)},{\r*sin(x)});}\tmp}
+  \foreach \xx in {-1.8,-1.2,...,1.9} { \foreach \yy in {-1.8,-1.2,...,1.9} {
+     \edef\tmp{\noexpand\draw[coral, -{Stealth[length=1.6mm]}, line width=0.9pt]
+       (axis cs:\xx,\yy) -- (axis cs:{\xx+0.3*\xx},{\yy+0.3*\yy});}\tmp }}
+\end{axis}
+\end{tikzpicture}
+\end{center}
+
+In Chapter~\ref{ch:chain} we will prove that this is no accident: $\grad f$ always points
+in the direction of fastest increase and is always perpendicular to level curves.
+
+\begin{theorem}{Linearity of the gradient}
+Let $f,g$ be defined on an open set $U$ with all partial derivatives existing on $U$.
+For any number $c$,
+\[
+\grad(f+g)=\grad f+\grad g,\qquad \grad(cf)=c\,\grad f .
+\]
+\end{theorem}
+
+\begin{proof}
+Each component of the gradient is a partial derivative, which is an ordinary
+one-variable derivative with the other variables frozen. One-variable derivatives
+satisfy $(f+g)'=f'+g'$ and $(cf)'=cf'$. So for every $i$,
+$D_i(f+g)=D_if+D_ig$ and $D_i(cf)=cD_if$. Putting the components together gives the
+two vector identities.
+\end{proof}
+
+\begin{extra}
+The same componentwise argument gives a product rule:
+$\grad(fg)=g\,\grad f+f\,\grad g$. For example with $f=x$, $g=y^2$:
+$\grad(xy^2)=(y^2,2xy)=y^2(1,0)+x(0,2y)$. This is used constantly in exercises.
+\end{extra}
+
+\section{Differentiability}
+
+\subsection{What replaces the Newton quotient?}
+
+Let $f$ be defined on an open set $U$ and $X\in U$. For small $H\neq O$, the point
+$X+H$ is in $U$. But the expression
+\[ \frac{f(X+H)-f(X)}{H} \]
+is meaningless: \textbf{we cannot divide by a vector}. We need a way to say
+``$f$ has a derivative'' with no division at all.
+
+\subsection{The one-variable reformulation}
+
+\begin{intuition}
+In one variable, being differentiable means the graph looks more and more like a
+straight line when you zoom in. Algebraically: the change $f(x+h)-f(x)$ equals a
+linear term $f'(x)h$ plus an error that is small \emph{even compared with $h$}. This
+statement contains no division, so it can be copied to several variables.
+\end{intuition}
+
+In one variable, $f'(x)=\lim_{h\to0}\frac{f(x+h)-f(x)}{h}$. Equivalently,
+\[
+ f(x+h)-f(x)=f'(x)\,h+\abs h\,g(h),\qquad g(h)\to0 .
+\]
+\begin{itemize}
+  \item Main term: the linear approximation $f'(x)h$.
+  \item Error term: $\abs h g(h)$, which is $o(\abs h)$ (smaller than any multiple of $\abs h$).
+\end{itemize}
+
+\begin{proposition}{The two forms agree}
+If $f(x+h)-f(x)=ah+\abs h g(h)$ with $g(h)\to0$, then $f$ is differentiable at $x$ and
+$f'(x)=a$. Conversely, if $f'(x)$ exists, such a $g$ exists with $a=f'(x)$.
+\end{proposition}
+
+\begin{proof}
+Suppose the formula holds. For $h\neq0$,
+\[
+\frac{f(x+h)-f(x)}{h}=a+\frac{\abs h}{h}\,g(h).
+\]
+Since $\abs{\abs h/h}=1$ and $g(h)\to0$, the last term tends to $0$, so the quotient tends
+to $a$. Conversely, if $f'(x)$ exists, define for $h\neq0$
+\[
+g(h)=\frac{1}{\abs h}\big(f(x+h)-f(x)-f'(x)h\big)=\frac{h}{\abs h}\left(\frac{f(x+h)-f(x)}{h}-f'(x)\right),
+\]
+and $g(0)=0$. The bracket tends to $0$ and $h/\abs h$ has absolute value $1$, so $g(h)\to0$.
+\end{proof}
+
+\begin{keyidea}
+Differentiability means: \textbf{linear part plus an error of smaller order}.
+\end{keyidea}
+
+\subsection{The definition in several variables}
+
+Write $X=(x_1,\dots,x_n)$ and $H=(h_1,\dots,h_n)$, so $X+H=(x_1+h_1,\dots,x_n+h_n)$. In
+two variables, $X=(x,y)$, $H=(h,k)$ and $X+H=(x+h,y+k)$.
+\begin{itemize}
+  \item \emph{Continuity} asks whether $f(X+H)-f(X)\to0$ as $H\to O$.
+  \item \emph{Differentiability} asks for a good linear approximation of this difference.
+\end{itemize}
+
+\begin{definition}{Differentiability}
+$f$ is \emph{differentiable at $X$} if the partial derivatives exist and there is a
+function $g(H)$ with $g(H)\to0$ as $H\to O$ such that
+\[
+ f(X+H)-f(X)=D_1f(X)h_1+\dots+D_nf(X)h_n+\norm H g(H).
+\]
+Using the gradient:
+\[
+ \boxed{\,f(X+H)-f(X)=\grad f(X)\cdot H+\norm H\,g(H)\,}
+\]
+$f$ is \emph{differentiable on $U$} if it is differentiable at every point of $U$.
+\end{definition}
+
+In two variables this reads
+\[
+ f(x+h,y+k)-f(x,y)=\pd fx h+\pd fy k+\norm H g(H),
+\]
+and the linear part is $\pd fx h+\pd fy k=\grad f(x,y)\cdot(h,k)$.
+
+\begin{center}
+\begin{tikzpicture}
+\begin{axis}[bp3d, width=10.5cm, height=8.6cm, xlabel=$x$, ylabel=$y$, zlabel=$z$,
+   xmin=-0.3, xmax=2.4, ymin=-0.3, ymax=2.4, zmin=0, zmax=8.5, view={-50}{22}]
+  \addplot3[plumsurf, opacity=0.75, fill opacity=0.75, domain=0:2, y domain=0:2, samples=16] {x^2+y^2};
+  \addplot3[surf, shader=flat, draw=cyanbp, fill=cyanbp, fill opacity=0.3, draw opacity=0.7,
+     domain=0.45:1.55, y domain=0.45:1.55, samples=4] {2*x+2*y-2};
+  \addplot3[only marks, mark=*, mark size=2.5pt, coral] coordinates {(1,1,2)};
+  \node[font=\scriptsize, text=cyanbp, anchor=west] at (axis cs:1.8,0.2,3.0) {linear part};
+\end{axis}
+\end{tikzpicture}
+
+{\small\color{navy} Near $P=(1,1)$ the surface $z=x^2+y^2$ is almost the plane
+$z=2+2(x-1)+2(y-1)$. Differentiability says the gap is $o(\norm H)$.}
+\end{center}
+
+\begin{trap}
+Read $\grad f(X)$ as $(\grad f)(X)$, never as $\grad\big(f(X)\big)$. The second is the
+gradient of a constant, which is $O$.
+\end{trap}
+
+\begin{example}{a differentiable function}
+Show that $f(x,y)=x^2+y^2$ is differentiable everywhere.
+
+\textbf{Step 1: expand the increment.} With $X=(x,y)$, $H=(h,k)$:
+\[
+f(X+H)-f(X)=(x+h)^2+(y+k)^2-x^2-y^2=2xh+2yk+h^2+k^2 .
+\]
+\textbf{Step 2: spot the linear part.} $\grad f(X)=(2x,2y)$, so
+$2xh+2yk=\grad f(X)\cdot H$. What is left is $h^2+k^2=\norm H^2$:
+\[
+f(X+H)-f(X)=\underbrace{\grad f(X)\cdot H}_{\text{linear part}}+\underbrace{\norm H^2}_{\text{error}} .
+\]
+\textbf{Step 3: check the error is $o(\norm H)$.} Write $\norm H^2=\norm H g(H)$ with
+$g(H)=\norm H\to0$. Hence $f$ is differentiable at every point.
+\end{example}
+
+\begin{example}{a product}
+Show that $f(x,y)=xy$ is differentiable everywhere.
+
+$f(x+h,y+k)-f(x,y)=(x+h)(y+k)-xy=yh+xk+hk$. Since $\grad f=(y,x)$, the linear part is
+$yh+xk$ and the error is $hk$. Now $\abs{hk}\le\norm H\cdot\norm H$, so
+$g(H)=hk/\norm H$ (with $g(O)=0$) satisfies $\abs{g(H)}\le\norm H\to0$.
+\end{example}
+
+\subsection{Partial derivatives inside differentiability}
+
+Look in the direction of the $i$-th coordinate vector $E_i$, that is $H=hE_i=(0,\dots,h,\dots,0)$.
+Then $\grad f(X)\cdot H=D_if(X)h$ and $\norm H=\abs h$, so the definition becomes
+\[ f(X+hE_i)=f(X)+\pd f{x_i}(X)\,h+\abs h\,g(hE_i). \]
+\begin{itemize}
+  \item Along coordinate directions, differentiability gives back the partial derivatives.
+  \item Partial derivatives are \emph{necessary} for differentiability.
+  \item They are \emph{not sufficient} without extra hypotheses (Section~\ref{sec:counter}).
+\end{itemize}
+
+\subsection{Tools for estimating remainders}
+
+With $H=(h,k)$, $\norm H=\sqrt{h^2+k^2}$, so
+\[ \abs h\le\norm H,\qquad \abs k\le\norm H . \]
+Combined with the triangle inequality $\abs{a+b}\le\abs a+\abs b$, this controls most
+error terms. For instance
+\[ \abs{h^2+hk}\le\abs h^2+\abs h\abs k\le 2\norm H^2 , \]
+so $h^2+hk=\norm H g(H)$ with $\abs{g(H)}\le 2\norm H\to0$.
+
+\begin{proposition}{A useful remainder pattern}
+If $g_1(H)\to0$ and $g_2(H)\to0$ as $H\to O$, then
+$hg_1(H)+kg_2(H)=\norm H g(H)$ for some $g(H)\to 0$.
+\end{proposition}
+
+\begin{proof}
+For $H\neq O$ factor out $\norm H$:
+\[
+hg_1(H)+kg_2(H)=\norm H\left(\frac{h}{\norm H}g_1(H)+\frac{k}{\norm H}g_2(H)\right).
+\]
+Since $\abs{h/\norm H}\le1$ and $\abs{k/\norm H}\le1$, the bracket has absolute value at most
+$\abs{g_1(H)}+\abs{g_2(H)}\to0$. Call the bracket $g(H)$.
+\end{proof}
+
+\subsection{A sufficient condition}
+
+\begin{theorem}[label=thm:C1]{$C^1$ implies differentiable}
+Let $f$ be defined on an open set $U$. Assume that all first partial derivatives exist on
+$U$ and are continuous. Then $f$ is differentiable on $U$.
+\end{theorem}
+
+\begin{intuition}
+To go from $(x,y)$ to $(x+h,y+k)$, walk in an L-shape: first horizontally, then
+vertically. Each leg changes only one variable, so the one-variable mean value theorem
+turns each change into ``partial derivative times step''. The partial derivatives are
+evaluated at slightly wrong points, but continuity says that the mistake tends to $0$.
+That mistake is exactly the remainder.
+\begin{center}
+\begin{tikzpicture}[scale=0.8]
+  \draw[bpgrid, step=0.4] (-0.3,-0.3) grid (3.1,2.5);
+  \node[pdot, label={[font=\tiny]below:$(x,y)$}] (a) at (0,0) {};
+  \node[pdot, label={[font=\tiny]above:$(x,y{+}k)$}] (b) at (0,2) {};
+  \node[dot, label={[font=\tiny]above:$(x{+}h,y{+}k)$}] (c) at (2.6,2) {};
+  \draw[vecc] (a) -- node[left, font=\tiny]{2nd} (b);
+  \draw[vec] (b) -- node[below, font=\tiny]{1st} (c);
+  \node[font=\tiny, text=navy] at (1.3,-0.6) {split the increment};
+\end{tikzpicture}
+\end{center}
+\end{intuition}
+
+
+
+\begin{proof}
+We work in two variables; the general case is the same with more terms. Fix $(x,y)\in U$
+and let $H=(h,k)$ be small enough that the whole rectangle with corners $(x,y)$ and
+$(x+h,y+k)$ lies in $U$.
+
+\textbf{Step 1: split the increment.} Add and subtract $f(x,y+k)$:
+\begin{align*}
+f(x+h,y+k)-f(x,y)&=\big[f(x+h,y+k)-f(x,y+k)\big]\\&\quad+\big[f(x,y+k)-f(x,y)\big].
+\end{align*}
+In the first bracket only $x$ changes ($y+k$ is fixed); in the second only $y$ changes.
+
+\textbf{Step 2: mean value theorem.} Apply the one-variable mean value theorem to
+$t\mapsto f(t,y+k)$ on $[x,x+h]$ and to $t\mapsto f(x,t)$ on $[y,y+k]$. There are
+numbers $s$ between $x$ and $x+h$, and $t$ between $y$ and $y+k$, with
+\begin{align*}
+f(x+h,y+k)-f(x,y+k)&=D_1f(s,y+k)\,h,\\ f(x,y+k)-f(x,y)&=D_2f(x,t)\,k .
+\end{align*}
+
+\textbf{Step 3: use continuity.} As $H\to O$, $(s,y+k)\to(x,y)$ and $(x,t)\to(x,y)$.
+Since $D_1f$ and $D_2f$ are continuous,
+\[
+D_1f(s,y+k)=D_1f(x,y)+g_1(H),\qquad D_2f(x,t)=D_2f(x,y)+g_2(H),
+\]
+where $g_1(H)\to0$ and $g_2(H)\to0$.
+
+\textbf{Step 4: collect.} Substituting,
+\[
+f(x+h,y+k)-f(x,y)=D_1f(x,y)h+D_2f(x,y)k+hg_1(H)+kg_2(H).
+\]
+The first two terms are $\grad f(x,y)\cdot(h,k)$. By the remainder pattern above, the
+last two terms equal $\norm Hg(H)$ with $g(H)\to0$. Therefore
+$f(X+H)-f(X)=\grad f(X)\cdot H+\norm Hg(H)$: $f$ is differentiable at $X$.
+\end{proof}
+
+\begin{extra}
+\textbf{$n$ variables.} Write $f(X+H)-f(X)$ as a telescoping sum, changing one coordinate
+at a time:
+\begin{align*}
+ &\big[f(x_1+h_1,x_2+h_2,\dots,x_n+h_n)-f(x_1,x_2+h_2,\dots,x_n+h_n)\big]\\
+ +\,&\big[f(x_1,x_2+h_2,\dots,x_n+h_n)-f(x_1,x_2,x_3+h_3,\dots,x_n+h_n)\big]\\
+ +\,&\cdots+\big[f(x_1,\dots,x_{n-1},x_n+h_n)-f(x_1,\dots,x_n)\big].
+\end{align*}
+Apply the mean value theorem to each bracket and sum the estimates.
+
+\textbf{In practice.} Polynomials, $\sin$, $\cos$, $\exp$, and their sums, products,
+quotients (where the denominator is nonzero) and compositions have continuous partial
+derivatives, so they are differentiable on their domains. This theorem is how you justify
+differentiability in an exam in one line.
+\end{extra}
+
+\subsection{Warning: partial derivatives alone are not enough}\label{sec:counter}
+
+\begin{example}{the classic counterexample}
+Let
+\[
+f(x,y)=\frac{xy}{x^2+y^2}\ \text{ if }(x,y)\neq(0,0),\qquad f(0,0)=0 .
+\]
+\textbf{The partials exist at the origin.} On the $x$-axis $f(h,0)=0$, so
+\[ D_1f(0,0)=\lim_{h\to0}\frac{f(h,0)-f(0,0)}{h}=\lim_{h\to0}\frac{0-0}{h}=0, \]
+and similarly $D_2f(0,0)=0$.
+
+\textbf{But $f$ is not continuous at the origin.} Approach along lines:
+\begin{align*}
+\text{along }y=x&:\quad f(x,x)=\frac{x^2}{2x^2}=\frac12,\\
+\text{along }y=-x&:\quad f(x,-x)=\frac{-x^2}{2x^2}=-\frac12 .
+\end{align*}
+Two different limits, so $\lim_{(x,y)\to(0,0)}f(x,y)$ does not exist. Since a differentiable
+function is continuous (box below), $f$ is not differentiable at $O$.
+\end{example}
+
+\begin{center}
+\begin{tikzpicture}
+\begin{axis}[bp3d, width=10cm, height=8.4cm, xlabel=$x$, ylabel=$y$, zlabel=$z$,
+   xmin=-1.3, xmax=1.3, ymin=-1.3, ymax=1.3, zmin=-0.8, zmax=0.8, view={-30}{30}]
+  \addplot3[plumsurf, domain=0.04:1, y domain=0:360, samples=10, samples y=48, z buffer=sort]
+    ({x*cos(y)},{x*sin(y)},{0.5*sin(2*y)});
+  \addplot3[cyanbp, line width=1.6pt, samples=2, samples y=1, domain=0:1] ({x*0.7071},{x*0.7071},0.5);
+  \addplot3[coral, line width=1.6pt, samples=2, samples y=1, domain=0:1] ({x*0.7071},{-x*0.7071},-0.5);
+\end{axis}
+\end{tikzpicture}
+
+{\small\color{navy} In polar form $f=\tfrac12\sin 2\theta$: the height depends only on the
+angle. Along $y=x$ the surface sits at $\tfrac12$ (blue), along $y=-x$ at $-\tfrac12$
+(coral), all the way to the origin.}
+\end{center}
+
+\begin{extra}
+\textbf{Differentiable implies continuous.} If $f(X+H)-f(X)=\grad f(X)\cdot H+\norm H g(H)$,
+then by Cauchy-Schwarz $\abs{\grad f(X)\cdot H}\le\norm{\grad f(X)}\norm H\to0$, and
+$\norm H g(H)\to0$. So $f(X+H)\to f(X)$.
+
+\medskip
+\textbf{The hierarchy to remember:}
+\begin{center}
+\begin{tikzpicture}[node distance=0.5cm and 0.9cm,
+   b/.style={draw=plum, line width=0.8pt, fill=plumtint, font=\small, inner sep=5pt, align=center}]
+ \node[b] (c1) {partials exist\\ and are continuous};
+ \node[b, right=of c1] (d) {differentiable};
+ \node[b, right=of d, yshift=0.6cm] (c) {continuous};
+ \node[b, right=of d, yshift=-0.6cm] (p) {partials exist};
+ \draw[vec] (c1) -- (d);
+ \draw[vec] (d) -- (c.west);
+ \draw[vec] (d) -- (p.west);
+\end{tikzpicture}
+\end{center}
+None of the arrows can be reversed. The counterexample above shows that ``partials exist''
+does not even give ``continuous''.
+\end{extra}
+
+\begin{reallife}{why engineers care}
+Linear approximation is how every simulation code works. To predict how the stress in a
+beam changes when two dimensions are changed by small amounts $h$ and $k$, an engineer
+uses $\Delta\sigma\approx\pd\sigma xh+\pd\sigma yk$. Differentiability is the guarantee that this
+prediction gets better and better as the changes get smaller, in every direction at once.
+\end{reallife}
+
+\section{Summary}
+
+\begin{keyidea}
+\begin{itemize}
+  \item A function of several variables maps points of $\R^n$ to numbers. Its natural
+  domain is where the formula makes sense.
+  \item Graphs work for two variables; level curves and level surfaces work in general.
+  \item Open sets give room around each point, so we can move in every direction.
+  \item Partial derivatives are one-variable derivatives along coordinate directions.
+  \item The gradient collects them: $\grad f=(D_1f,\dots,D_nf)$.
+  \item Differentiable means $f(X+H)-f(X)=\grad f(X)\cdot H+o(\norm H)$.
+  \item Continuous partial derivatives imply differentiability; existing partials alone do not.
+\end{itemize}
+\end{keyidea}
+
+\section{Exam-style questions}
+
+\begin{exercise}[1]
+Find and sketch the domain of $f(x,y)=\dfrac{\sqrt{9-x^2-y^2}}{\ln(x^2+y^2)}$.
+\end{exercise}
+
+\begin{exercise}[1]
+Describe the level curves of $f(x,y)=y-x^2$ for $c=-1,0,1,2$ and sketch the contour map.
+What does the graph look like?
+\end{exercise}
+
+\begin{exercise}[1]
+Compute $\grad f$ for $f(x,y,z)=x e^{yz}+z\ln(1+x^2)$, then evaluate it at $(1,0,2)$.
+\end{exercise}
+
+\begin{exercise}[2]
+Let $f(x,y)=x^3-3xy^2$. Show directly from the definition (expanding $f(X+H)-f(X)$) that $f$
+is differentiable at $X=(1,1)$, identifying the linear part and checking the error is
+$o(\norm H)$.
+\end{exercise}
+
+\begin{exercise}[2]
+Is the set $U=\{(x,y): 1<x^2+y^2<4\}$ open in $\R^2$? Justify by giving, for a point
+$P\in U$ with $\norm P=b$, an explicit radius $c$ such that the ball of radius $c$ around $P$
+lies in $U$.
+\end{exercise}
+
+\begin{exercise}[2]
+Let $f(x,y)=\dfrac{x^2y}{x^4+y^2}$ for $(x,y)\neq(0,0)$ and $f(0,0)=0$.
+\begin{enumerate}[label=(\alph*)]
+  \item Compute $D_1f(0,0)$ and $D_2f(0,0)$ from the definition.
+  \item Show that $f\to0$ along every straight line through the origin.
+  \item Show that $f$ is nevertheless not continuous at $O$ (try the parabola $y=x^2$).
+\end{enumerate}
+\end{exercise}
+
+\begin{exercise}[3]
+Let $f(x,y)=\sqrt{\abs{xy}}$. Show that $D_1f(0,0)=D_2f(0,0)=0$ but that $f$ is not
+differentiable at the origin. (Hint: if it were, the remainder $f(h,k)$ would have to be
+$o(\norm H)$. Test $h=k$.)
+\end{exercise}
+
+\begin{exercise}[3]
+Let $f(x,y)=(x^2+y^2)\sin\!\dfrac{1}{\sqrt{x^2+y^2}}$ for $(x,y)\neq O$ and $f(O)=0$.
+Show that $f$ is differentiable at $O$ with $\grad f(O)=O$, although $D_1f$ is not
+continuous at $O$. What does this say about the converse of Theorem~\ref{thm:C1}
+\end{exercise}

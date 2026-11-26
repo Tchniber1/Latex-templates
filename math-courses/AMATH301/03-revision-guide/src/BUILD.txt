@@ -1,0 +1,24 @@
+AMATH301 Exam Revision Guide - build instructions
+
+Requirements: TeX Live 2023 or newer with XeLaTeX (tcolorbox, pgfplots, tikz, scrlayer-scrpage,
+fontspec, mathpazo, TeX Gyre Pagella). Montserrat is bundled in fonts/, no install needed.
+
+Build (run from this folder, three passes for the table of contents and references):
+
+    xelatex main.tex
+    xelatex main.tex
+    xelatex main.tex
+
+Files
+  main.tex        master file (cover, structure, order of chapters)
+  style.tex       palette, fonts, boxes, thumb tabs, figure styles, macros
+  front.tex       How to use this guide, course map, answer templates
+  ch1.tex..ch5.tex  Lectures I to V: theory, TD problems solved, exam-style problems, quick checks
+  toolkit.tex     theorems table, proofs, strategy, traps, MCQ drill
+  mock.tex        Mock Exam A and Mock Exam B with marked solutions
+  annexe.tex      Lectures VI and VII
+  formulas.tex    formula sheet
+  beautybook.cls, stys/, cncolours.sty   template (Overleaf beautybook) and stubs
+  inner_pics/, figs/   chapter mark and logo (PDF) with their TikZ sources
+
+Palette: #64CADE #6DD2E7 #95E1F1 #F19381 #FFB1A1, text shades #1F7F92 #145F6E #C95A46.

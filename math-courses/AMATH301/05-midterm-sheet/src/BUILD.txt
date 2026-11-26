@@ -1,0 +1,3 @@
+AMATH301 Midterm Sheet - build: run "xelatex main.tex" three times in this folder.
+Files: main.tex, style.tex, c0.tex (proof sentences), c1-c3.tex (Problems 1-3), c4.tex (what to remember),
+beautybook.cls + stys/ + cncolours.sty, fonts/, inner_pics/, figs/.

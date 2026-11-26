@@ -1,0 +1,59 @@
+% ============================== FORMULA SHEET ========================
+\settab{REMEMBER}{5}
+\renewcommand{\chapribbontext}{Last look}
+\chapter{What to Remember}\label{ch:remember}
+
+\newtcolorbox{fsheet}[1]{enhanced, unbreakable, arc=1.5mm, colback=mist, colframe=sky, boxrule=0.6pt,
+  left=2.5mm, right=2mm, top=1.5mm, bottom=1.5mm, fontupper=\small\raggedright,
+  title={#1}, fonttitle=\sffamily\bfseries\scriptsize, colbacktitle=tealD, coltitle=white,
+  toptitle=0.6mm, bottomtitle=0.6mm}
+\begin{tcbraster}[raster columns=2, raster equal height=rows, raster column skip=3mm, raster row skip=3mm]
+\begin{fsheet}{Domains and sets}
+$\sqrt u$: $u\ge0$ \quad $\log u$: $u>0$ \quad $\frac uv$: $v\ne0$\\
+$\{g\ge0\}$, $\{g=0\}$: closed\\
+$\{g>0\}$, $\{g\ne0\}$: open\\
+Not open: a point on the edge.
+\end{fsheet}
+\begin{fsheet}{Gradient and linear approximation}
+$\grad f=(f_x,f_y)$\\
+$L=f(P)+f_x(P)(x-a)+f_y(P)(y-b)$\\
+$(\sqrt g)'=\dfrac{g'}{2\sqrt g}$
+\end{fsheet}
+\begin{fsheet}{Tangent plane}
+$z=L(x,y)$\\
+normal $(f_x,\,f_y,\,-1)$\\
+normal line: point $+\,s\,(f_x,f_y,-1)$
+\end{fsheet}
+\begin{fsheet}{Chain rule}
+$\dfrac{d}{dt}f(X(t))=\grad f(X(t))\cdot X'(t)$\\
+check first that $X(t)$ stays where $f$ is differentiable
+\end{fsheet}
+\begin{fsheet}{Directional derivative}
+$u=\dfrac v{\norm v}$ \ (unit!), \quad $D_uf=\grad f\cdot u$\\
+$=0$ $\Rightarrow$ $u$ tangent to the level curve
+\end{fsheet}
+\begin{fsheet}{Steepest}
+up: $\dfrac{\grad f}{\norm{\grad f}}$, rate $\norm{\grad f}$\\
+down: $-\dfrac{\grad f}{\norm{\grad f}}$, rate $-\norm{\grad f}$
+\end{fsheet}
+\begin{fsheet}{Differentiability}
+$C^1$ on an open set $\Rightarrow$ differentiable\\
+differentiable $\Rightarrow$ continuous and $D_vf=\grad f\cdot v$\\
+not differentiable at $O$: $\dfrac{f(h,k)}{\sqrt{h^2+k^2}}\not\to0$ on $h=k$
+\end{fsheet}
+\begin{fsheet}{At the origin (by cases)}
+partials: $\lim\frac{f(h,0)-f(0,0)}{h}$\\
+continuity: $|f|\le\ldots\to0$ \ ($\frac{y^2}{x^2+y^2}\le1$, $|x|\le\sqrt{x^2+y^2}$)\\
+direction: $\lim\frac{f(ta,tb)-f(0,0)}{t}$, never $\grad f\cdot v$
+\end{fsheet}
+\begin{fsheet}{Polar trick (scrap paper)}
+$f=r^n\cdot(\text{angle part})$:\\
+$n=0$ not continuous; $n=1$ continuous, not differentiable; $n\ge2$ differentiable
+\end{fsheet}
+\begin{fsheet}{Radial functions}
+$r_x=\frac xr$, \ $r_y=\frac yr$, \ $\frac{\partial}{\partial x}\big(\frac xr\big)=\frac{y^2}{r^3}$\\
+$\Delta\varphi(r)=\varphi''+\frac1r\varphi'$\\
+harmonic: $u=A\ln r+B$; finite at $O$ iff $A=0$
+\end{fsheet}
+\end{tcbraster}
+

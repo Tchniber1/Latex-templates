@@ -1,0 +1,223 @@
+\documentclass[11pt]{article}
+\usepackage[a4paper, margin=1.6cm, top=1.5cm, bottom=1.6cm]{geometry}
+\usepackage{amsmath, amssymb, mathpazo}
+\usepackage[no-math]{fontspec}
+\setmainfont{TeX Gyre Pagella}
+\newfontfamily\mont{Montserrat}[Path=fonts/, Extension=.ttf, UprightFont=*-Regular,
+  BoldFont=*-Bold, ItalicFont=*-Italic, FontFace={sb}{n}{*-SemiBold}]
+\usepackage{xcolor, tcolorbox, enumitem, array, tabularx, booktabs}
+\tcbuselibrary{skins, raster}
+\definecolor{aqua}{HTML}{64CADE}\definecolor{sky}{HTML}{6DD2E7}\definecolor{ice}{HTML}{95E1F1}
+\definecolor{coral}{HTML}{F19381}\definecolor{blush}{HTML}{FFB1A1}
+\definecolor{tealD}{HTML}{1F7F92}\definecolor{tealDD}{HTML}{145F6E}\definecolor{coralD}{HTML}{C95A46}
+\definecolor{mist}{HTML}{F2FBFD}
+\pagestyle{empty}
+\setlength{\parindent}{0pt}\setlength{\parskip}{3pt}
+\setlist{nosep, leftmargin=1.3em}
+\linespread{1.04}
+\newcommand{\R}{\mathbb R}\newcommand{\norm}[1]{\lVert #1\rVert}
+\newcommand{\grad}{\nabla}
+
+% a recipe card
+\newtcolorbox{card}[2]{enhanced, colback=white, colframe=sky, boxrule=0.6pt, arc=1.5mm,
+  left=2.5mm, right=2.5mm, top=1.6mm, bottom=1.6mm, before skip=5pt, after skip=5pt,
+  title={\mont\bfseries #1\hfill\mdseries\footnotesize #2}, fonttitle=\small,
+  colbacktitle=tealD, coltitle=white, toptitle=0.8mm, bottomtitle=0.8mm}
+\newtcolorbox{key}[1][]{enhanced, colback=blush!25, colframe=coral, boxrule=0.6pt, arc=1.5mm,
+  left=2.5mm, right=2.5mm, top=1.5mm, bottom=1.5mm, before skip=5pt, after skip=5pt, #1}
+\newcommand{\head}[2]{\par\medskip{\mont\bfseries\Large\color{tealDD}#1}\hfill{\mont\small\color{coralD}#2}\par
+  {\color{coral}\rule{\linewidth}{1.2pt}}\par\smallskip}
+\newcommand{\ans}[1]{\par\smallskip{\color{coralD}\mont\bfseries\footnotesize MOCK ANSWER\ }#1}
+\newcommand{\free}{{\mont\bfseries\scriptsize\color{white}\colorbox{coralD}{FREE MARKS}}}
+
+\begin{document}
+
+% ===================================================================
+\head{AMATH301 Midterm: Just the Recipes}{read this, not the 44 pages}
+
+\textbf{How to use this.} Every question type on the paper has a recipe of 2 to 4 lines. Learn the
+recipe, not the explanation. The ``mock answer'' line shows the recipe already done, so you can check
+yourself. The real midterm will use different functions, the recipes stay the same.
+
+\begin{key}
+\textbf{\mont The rule that saves you:} if you are stuck on a question, \textbf{write the formula
+or the definition it needs anyway}. That line alone is usually worth part of the marks, and writing it
+often shows you the next step. Never leave a question blank.
+\end{key}
+
+\begin{card}{The 8 lines to know by heart}{everything else comes from these}
+\renewcommand{\arraystretch}{1.45}
+\begin{tabularx}{\linewidth}{@{}>{\bfseries\raggedright\arraybackslash}p{3.9cm}X@{}}
+Linear approximation & $L(x,y)=f(a,b)+f_x(a,b)(x-a)+f_y(a,b)(y-b)$\\
+Tangent plane & $z=L(x,y)$; \ normal vector $(f_x,\,f_y,\,-1)$; \ normal line $Q+s\,(f_x,f_y,-1)$\\
+Chain rule & $\frac{d}{dt}f(X(t))=\grad f(X(t))\cdot X'(t)$\\
+Directional derivative & $D_uf=\grad f\cdot u$ \ with $u$ \textbf{unit}: \ $u=\frac{v}{\norm v}$\\
+Steepest & up: $\frac{\grad f}{\norm{\grad f}}$, rate $\norm{\grad f}$; \ down: $-\frac{\grad f}{\norm{\grad f}}$, rate $-\norm{\grad f}$\\
+$C^1$ theorem & partials continuous on an open set $\Rightarrow$ differentiable there\\
+Differentiable at $O$ & $\varepsilon=\dfrac{f(h,k)-f(0,0)-\grad f(0,0)\cdot(h,k)}{\sqrt{h^2+k^2}}\to0$\\
+Radial & $r=\sqrt{x^2+y^2}$, \ $r_x=\frac xr$, \ $r_y=\frac yr$, \ $\Delta\varphi(r)=\varphi''+\frac1r\varphi'$
+\end{tabularx}
+\end{card}
+
+\begin{card}{Order in the exam room}{2 hours, 20 points}
+\begin{enumerate}
+  \item \textbf{Problem 1, questions 3, 4, 6, 7 first} (pure formulas, about 15 minutes total).
+        Then questions 1, 2, 5.
+  \item \textbf{Problem 3} next: question 1 is the only long one, questions 2 to 6 are 2 or 3 lines each.
+  \item \textbf{Problem 2} last: it is the same 5 steps every time (page 3).
+  \item Last 10 minutes: go back to every blank question and write its formula.
+\end{enumerate}
+\end{card}
+
+\begin{card}{The polar trick}{tells you the answer before you prove it}
+For a function defined ``by cases'' at the origin, put $x=r\cos\theta$, $y=r\sin\theta$ and simplify to
+$f=r^n\,h(\theta)$.
+\begin{itemize}
+  \item $n=0$ (like $\frac{xy}{x^2+y^2}$): \textbf{not continuous} (unless $h$ is constant).
+  \item $n=1$ (like $\frac{xy^2}{x^2+y^2}=r\cos\theta\sin^2\theta$): \textbf{continuous}, all directional derivatives
+        exist, usually \textbf{not differentiable}.
+  \item $n\ge2$ (like $\frac{x^2y^2}{x^2+y^2}$): \textbf{differentiable} at the origin.
+\end{itemize}
+Use it on scrap paper to know what to prove, then write the proof with the recipes.
+\end{card}
+
+\newpage
+% ===================================================================
+\head{Problem 1 type: one function, seven questions}{mock: $f=\sqrt{2y-x^2}$, $P=(1,1)$}
+
+\begin{card}{Domain, open or closed}{}
+\begin{enumerate}
+  \item Write the condition: $\sqrt{u}$ needs $u\ge0$; \ $\log u$ needs $u>0$; \ fraction needs bottom $\ne0$.
+  \item Solve for $y$, draw the boundary: \textbf{solid} if $\ge$, \textbf{dashed} if $>$.
+  \item $\ge$ or $=$ $\Rightarrow$ \textbf{closed}. \ $>$ or $\ne$ $\Rightarrow$ \textbf{open}.
+  \item ``Not open'': name one point on the solid boundary.
+\end{enumerate}
+\ans{$D=\{y\ge\frac{x^2}2\}$, inside of the parabola, boundary included. Closed. Not open: $(0,0)\in D$ is on the edge.}
+\end{card}
+
+\begin{card}{Level sets}{}
+Solve $f(x,y)=c$ for $y$. With a square root: \ $c<0$: empty. \ $c=0$: the boundary. \ $c>0$: square both sides.
+\ans{$c<0$: $\varnothing$; \ $c=0$: $y=\frac{x^2}2$; \ $c>0$: $y=\frac{x^2+c^2}2$ (same parabola, shifted up).}
+\end{card}
+
+\begin{card}{Differentiable, gradient, linear approximation}{\free}
+\begin{enumerate}
+  \item ``On the open set $\{2y-x^2>0\}$ the partials are continuous, so $f$ is differentiable ($C^1$ theorem).''
+  \item Compute $f_x$, $f_y$, plug in $P$. \ Then $L=f(P)+f_x(x-a)+f_y(y-b)$.
+\end{enumerate}
+\ans{$f_x=\frac{-x}{\sqrt{2y-x^2}}$, $f_y=\frac1{\sqrt{2y-x^2}}$; \ $f(P)=1$, $\grad f(P)=(-1,1)$, \ $L=1-x+y$.}
+\end{card}
+
+\begin{card}{Tangent plane and normal line}{\free}
+Plane: $z=L(x,y)$. \ Normal: $(f_x,f_y,-1)$. \ Line: point $+\,s\cdot$normal.
+\ans{$z=1-(x-1)+(y-1)$, i.e.\ $x-y+z=1$; \ line $(1,1,1)+s(1,-1,1)$.}
+\end{card}
+
+\begin{card}{Chain rule along a curve}{}
+\begin{enumerate}
+  \item If asked to show an inequality: expand, then \textbf{complete the square}.
+  \item $\frac{d}{dt}f(X(t))\big|_0=\grad f(X(0))\cdot X'(0)$.
+\end{enumerate}
+\ans{$1-4t-t^2=5-(t+2)^2>0\iff|t+2|<\sqrt5$. \ $X'(0)=(1,-1)$: \ $(-1,1)\cdot(1,-1)=-2$.}
+\end{card}
+
+\begin{card}{Directional derivative}{\free}
+Make the vector unit, dot with $\grad f(P)$. \textbf{If you get $0$:} ``this direction is tangent to the
+level curve through $P$, and $\grad f(P)$ is perpendicular to it.''
+\ans{$u=\frac{(1,1)}{\sqrt2}$: \ $D_uf(P)=\frac{-1+1}{\sqrt2}=0$. Tangent to $C_1$: $y=\frac{x^2+1}2$ (slope $1$ at $x=1$).}
+\end{card}
+
+\begin{card}{Steepest increase and decrease}{\free}
+Up: $\frac{\grad f}{\norm{\grad f}}$, rate $\norm{\grad f}$. \ Down: the opposite, rate $-\norm{\grad f}$.
+\ans{$\norm{\grad f(P)}=\sqrt2$. Up $\frac{(-1,1)}{\sqrt2}$ at rate $\sqrt2$; down $\frac{(1,-1)}{\sqrt2}$ at rate $-\sqrt2$.}
+\end{card}
+
+\newpage
+% ===================================================================
+\head{Problem 2 type: a function defined by cases}{mock: $g=\frac{xy^2}{x^2+y^2}$, $g(0,0)=0$}
+
+\begin{key}
+\textbf{\mont The golden rule:} away from $(0,0)$ use the normal rules. \textbf{At $(0,0)$ never
+plug into a formula, always use a limit.} Write the two cases as two separate paragraphs.
+\end{key}
+
+\begin{card}{1. Partial derivatives}{}
+Away from $O$: quotient rule $\frac{u'v-uv'}{v^2}$. \ At $O$: compute $g(h,0)$ and $g(0,k)$, then
+$g_x(0,0)=\lim\frac{g(h,0)-g(0,0)}{h}$.
+\ans{$g_x=\frac{y^2(y^2-x^2)}{(x^2+y^2)^2}$, \ $g_y=\frac{2x^3y}{(x^2+y^2)^2}$; \ $g(h,0)=g(0,k)=0$, so $g_x(0,0)=g_y(0,0)=0$.}
+\end{card}
+
+\begin{card}{2. Continuity at the origin}{}
+Find a bound that goes to $0$. Useful: $\frac{y^2}{x^2+y^2}\le1$ and $|x|\le\sqrt{x^2+y^2}$.
+\ans{$|g|=|x|\cdot\frac{y^2}{x^2+y^2}\le|x|\to0=g(0,0)$. Continuous. (Away from $O$: quotient, bottom $\ne0$.)}
+\end{card}
+
+\begin{card}{3. Directional derivative at the origin}{}
+Compute $g(ta,tb)$, use $a^2+b^2=1$, divide by $t$. \textbf{Do not use $\grad g\cdot v$ here.}
+\ans{$g(ta,tb)=\frac{t^3ab^2}{t^2}=t\,ab^2$, so $D_vg(0,0)=ab^2$. It exists.}
+\end{card}
+
+\begin{card}{4. Not differentiable at the origin}{}
+\begin{enumerate}
+  \item Write $\varepsilon(h,k)=\dfrac{g(h,k)}{\sqrt{h^2+k^2}}$ \ (because $g(0,0)=0$ and $\grad g(0,0)=(0,0)$).
+  \item Put $h=k=t$. If you get a constant $\ne0$: not differentiable.
+\end{enumerate}
+\ans{$\varepsilon(t,t)=\frac{t^3}{(2t^2)^{3/2}}=\frac1{2\sqrt2}\ne0$. Not differentiable.}
+\end{card}
+
+\begin{card}{5. Is $g_x$ continuous? Is $g$ $C^1$?}{}
+Put $x=0$ in the formula for $g_x$ (the $y$-axis). If you get a number $\ne g_x(0,0)$: not continuous, so not $C^1$.
+\ans{$g_x(0,y)=\frac{y^4}{y^4}=1\ne0$. \ $g_x$ not continuous at $O$, \ $g\notin C^1$.}
+\end{card}
+
+\begin{key}
+\textbf{\mont The story to write in one sentence if asked:} ``$g$ is continuous and has every
+directional derivative at $O$, but it is not differentiable there, so it is not $C^1$ either.''
+\end{key}
+
+\newpage
+% ===================================================================
+\head{Problem 3 type: radial functions $u=\varphi(r)$}{mock: harmonic on $\R^2\setminus\{O\}$}
+
+\begin{card}{1. First and second derivatives}{the only long one}
+\begin{enumerate}
+  \item $r_x=\frac xr$. \ So $u_x=\varphi'(r)\frac xr$.
+  \item Side line: $\frac{\partial}{\partial x}\big(\frac xr\big)=\frac{r^2-x^2}{r^3}=\frac{y^2}{r^3}$.
+  \item Product rule: $u_{xx}=\varphi''(r)\frac xr\cdot\frac xr+\varphi'(r)\frac{y^2}{r^3}$. \ Swap $x\leftrightarrow y$ for $u_{yy}$.
+\end{enumerate}
+\ans{$u_{xx}=\varphi''\frac{x^2}{r^2}+\varphi'\frac{y^2}{r^3}$, \ $u_{yy}=\varphi''\frac{y^2}{r^2}+\varphi'\frac{x^2}{r^3}$.}
+\end{card}
+
+\begin{card}{2. The Laplacian}{\free}
+Add the two and use $x^2+y^2=r^2$.
+\ans{$\Delta u=\varphi''(r)+\frac1r\varphi'(r)$.}
+\end{card}
+
+\begin{card}{3. $\ln r$ is harmonic}{\free}
+$\varphi=\ln r$: \ $\varphi'=\frac1r$, \ $\varphi''=-\frac1{r^2}$, \ sum $=0$. \ Limit: $r\to0$, $\ln r\to-\infty$.
+\ans{Harmonic on $\R^2\setminus\{O\}$; \ the limit at the origin is $-\infty$.}
+\end{card}
+
+\begin{card}{4 and 5. Find all of them}{\free}
+\begin{enumerate}
+  \item Harmonic: $\varphi''+\frac1r\varphi'=0$. Multiply by $r$: \ $(r\varphi')'=r\varphi''+\varphi'=0$, so $r\varphi'=A$
+        \ (``zero derivative on the interval $(0,\infty)$'').
+  \item $(\varphi-A\ln r)'=\varphi'-\frac Ar=0$, so $\varphi=A\ln r+B$.
+\end{enumerate}
+\ans{$u=A\ln\sqrt{x^2+y^2}+B$.}
+\end{card}
+
+\begin{card}{6. Finite limit at the origin}{\free}
+$A>0$: $-\infty$. \ $A<0$: $+\infty$. \ $A=0$: constant $B$.
+\ans{Finite only when $A=0$ (any $B$), and then the limit is $B$.}
+\end{card}
+
+\vfill
+\begin{key}
+\textbf{\mont Tonight:} you do not need to understand everything. Read these four pages twice, cover the
+``mock answer'' lines, and redo each card on paper. If you can redo Problem 1 questions 3, 4, 6, 7 and
+Problem 3 questions 2 to 6 from memory, you already have most of the formula marks. Then sleep: a
+rested brain recalls recipes much better than a tired one.
+\end{key}
+
+\end{document}

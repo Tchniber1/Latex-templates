@@ -1,0 +1,580 @@
+% ============================== CHAPTER 4 ============================
+\clearpage
+\setlecture{Lecture IV}\renewcommand{\tabname}{IV}
+\chapter{Maximum and Minimum}\label{ch:maxmin}
+
+A company wants the cheapest design, a physicist wants the state of lowest energy, a
+neural network wants the smallest loss. All of these are optimisation problems. In one
+variable we find maxima and minima by solving $f'(x)=0$ and checking the endpoints. This
+chapter does the same in several variables: critical points replace $f'=0$, the quadratic
+form decides what kind of point we found, boundaries must be checked separately, and
+Lagrange multipliers handle problems with a constraint.
+
+\section{Critical points}
+
+\begin{definition}{Critical point}
+Let $f$ be differentiable on an open set $U$ and $P\in U$. $P$ is a \emph{critical point} of
+$f$ if all partial derivatives of $f$ vanish at $P$:
+\[ D_1f(P)=0,\ \dots,\ D_nf(P)=0,\qquad\text{i.e.}\qquad \grad f(P)=O . \]
+\end{definition}
+
+Geometrically, at a critical point of $f(x,y)$ the tangent plane to the graph is horizontal.
+
+\begin{example}{critical points of $e^{-(x^2+y^2)}$}
+For $f(x,y)=e^{-(x^2+y^2)}$,
+\[ \pd fx=-2x\,e^{-(x^2+y^2)},\qquad \pd fy=-2y\,e^{-(x^2+y^2)} . \]
+The exponential is never $0$, so both vanish only when $x=0$ and $y=0$. The only critical
+point is $(0,0)$, and it is the top of the bell below.
+\end{example}
+
+\begin{center}
+\begin{tikzpicture}
+\begin{axis}[bp3d, width=10cm, height=7.6cm, xlabel=$x$, ylabel=$y$, zlabel=$z$,
+   xmin=-2.3, xmax=2.3, ymin=-2.3, ymax=2.3, zmin=0, zmax=1.35, view={-35}{28}]
+  \addplot3[plumsurf, domain=-2:2, y domain=-2:2, samples=26] {exp(-(x^2+y^2))};
+  \addplot3[surf, shader=flat, draw=cyanbp, fill=cyanbp, fill opacity=0.25, draw opacity=0.7,
+     domain=-0.6:0.6, y domain=-0.6:0.6, samples=3] {1};
+  \addplot3[only marks, mark=*, mark size=2.6pt, coral] coordinates {(0,0,1)};
+  \node[font=\scriptsize, text=cyanbp, anchor=west] at (axis cs:0.6,-0.6,1.12) {horizontal tangent plane};
+\end{axis}
+\end{tikzpicture}
+\end{center}
+
+\begin{trap}
+A critical point \textbf{need not be} a maximum or a minimum. Already in one variable,
+$x\mapsto x^3$ has $f'(0)=0$ without an extremum. In two variables the typical example is the
+saddle $x^2-y^2$: its gradient $(2x,-2y)$ vanishes at the origin, but the origin is a minimum
+along the $x$-axis and a maximum along the $y$-axis.
+\end{trap}
+
+\subsection{Local maxima are critical points}
+
+\begin{definition}{Local maximum and minimum}
+Let $f$ be any function (differentiable or not) on an open set $U$. A point $P\in U$ is a
+\emph{local maximum} of $f$ if there is an open ball $B$ of positive radius centred at $P$
+such that
+\[ f(X)\le f(P)\qquad\text{for all }X\in B . \]
+A \emph{local minimum} is defined with $f(X)\ge f(P)$.
+\end{definition}
+
+In one variable the ball is an open interval around $P$: this is the familiar notion.
+
+\begin{theorem}[label=thm:fermat]{A local extremum is a critical point}
+Let $f$ be differentiable on an open set $U$ and let $P\in U$ be a local maximum (or
+minimum) of $f$. Then $P$ is a critical point: $\grad f(P)=O$.
+\end{theorem}
+
+\begin{intuition}
+If you stand on a summit, then every straight path through you also has its highest point
+where you stand. So the slope in every direction is $0$. But the slope in direction $H$ is
+$\grad f(P)\cdot H$, and the only vector whose dot product with every $H$ is zero is $O$.
+\end{intuition}
+
+\begin{proof}
+Let $H\neq O$ be any vector and set $g(t)=f(P+tH)$. For $\abs t$ small, $P+tH$ lies in the
+ball $B$ of the definition, so
+\[ g(t)=f(P+tH)\le f(P)=g(0). \]
+Thus the one-variable function $g$ has a local maximum at $t=0$, and therefore $g'(0)=0$.
+By the chain rule, $g'(0)=\grad f(P)\cdot H$. Hence
+\[ \grad f(P)\cdot H=0\quad\text{for every vector }H . \]
+Taking $H=\grad f(P)$ gives $\norm{\grad f(P)}^2=0$, so $\grad f(P)=O$. The case of a minimum is
+identical with the inequality reversed (or apply the result to $-f$).
+\end{proof}
+
+\section{The quadratic form}
+
+\subsection{Taylor's formula at a critical point}
+
+Let $f$ have continuous partial derivatives up to order $3$ and let $P=(a,b)$ be a critical
+point. By Taylor's formula (Chapter~\ref{ch:higher}) the first-order terms vanish and
+\begin{align*}
+f(a+h,b+k)&=f(a,b)\\&\quad+\frac12\Big[h^2D_1^2f(a,b)+2hk\,D_1D_2f(a,b)+k^2D_2^2f(a,b)\Big]+R_3 .
+\end{align*}
+
+\begin{definition}{Quadratic form associated with $f$ at $P$}
+When $P$ is a critical point of $f$, the function
+\[ q(x,y)=\frac12\Big[x^2D_1^2f(P)+2xy\,D_1D_2f(P)+y^2D_2^2f(P)\Big] \]
+is called the \emph{quadratic form associated with $f$ at $P$}.
+\end{definition}
+
+\mnote{We write $x,y$ for the displacement $(h,k)$ because the quadratic form is a function
+in its own right, centred at the origin.}
+
+\begin{intuition}
+Near a critical point the linear part of $f$ is zero, so the leading behaviour is the
+\emph{quadratic} part. Zoom in on the graph near $P$: it looks like the graph of $q$. If $q$
+is a bowl, $P$ is a minimum; if $q$ is an upside-down bowl, a maximum; if $q$ is a saddle,
+neither.
+\end{intuition}
+
+\begin{example}{the bell again}
+For $f(x,y)=e^{-(x^2+y^2)}$ at $P=O$: $\grad f(O)=O$ and a short computation gives
+\[ D_1^2f(O)=-2,\qquad D_1D_2f(O)=0,\qquad D_2^2f(O)=-2 . \]
+Hence $q(x,y)=\tfrac12\big[-2x^2-2y^2\big]=-(x^2+y^2)$: an upside-down bowl, so the origin is a
+local maximum.
+\end{example}
+
+\subsection{The four model quadratic forms}
+
+\newcommand{\qfig}[4]{%
+\begin{minipage}[t]{0.48\textwidth}\centering
+\begin{tikzpicture}
+\begin{axis}[bp3d, width=6.6cm, height=5.6cm, xmin=-1.4, xmax=1.4, ymin=-1.4, ymax=1.4,
+   zmin=#3, zmax=#4, xlabel=$x$, ylabel=$y$, zlabel=$z$, view={-35}{26}]
+  \addplot3[plumsurf, domain=-1.1:1.1, y domain=-1.1:1.1, samples=17] {#1};
+\end{axis}
+\end{tikzpicture}\\[-2pt]
+{\small\color{navy}#2}
+\end{minipage}}
+
+\begin{center}
+\qfig{x^2+y^2}{$q=x^2+y^2$: minimum (bowl)}{0}{2.6}\hfill
+\qfig{-(x^2+y^2)}{$q=-(x^2+y^2)$: maximum}{-2.6}{0.4}\\[10pt]
+\qfig{x^2-y^2}{$q=x^2-y^2$: saddle}{-1.4}{1.4}\hfill
+\qfig{x*y}{$q=xy$: saddle, turned by $45^\circ$}{-1.4}{1.4}
+\end{center}
+
+\begin{itemize}
+  \item $q=x^2+y^2$: level curves are circles; the origin is a \textbf{local minimum} of the form.
+  \item $q=-(x^2+y^2)$: same circles; the origin is a \textbf{local maximum}.
+  \item $q=x^2-y^2$: level curves $x^2-y^2=c$ are hyperbolas, with the two lines $y=\pm x$ for
+  $c=0$. Positive along the $x$-axis, negative along the $y$-axis: neither.
+  \item $q=xy$: the same picture rotated by $45^\circ$; positive in the first and third
+  quadrants, negative in the others.
+\end{itemize}
+
+\begin{center}
+\begin{tikzpicture}
+\begin{axis}[bp, width=5.6cm, height=5.6cm, xmin=-2.2, xmax=2.2, ymin=-2.2, ymax=2.2,
+   xtick=\empty, ytick=\empty, axis equal image, title={\small\color{navy}$x^2-y^2=c$}]
+  \foreach \c/\T in {0.4/1.85, 1.2/1.25, 2.4/0.75} {
+    \edef\tmp{%
+    \noexpand\addplot[plum, domain=-\T:\T, samples=40] ({sqrt(\c)*cosh(x)},{sqrt(\c)*sinh(x)});
+    \noexpand\addplot[plum, domain=-\T:\T, samples=40] ({-sqrt(\c)*cosh(x)},{sqrt(\c)*sinh(x)});
+    \noexpand\addplot[coral, domain=-\T:\T, samples=40] ({sqrt(\c)*sinh(x)},{sqrt(\c)*cosh(x)});
+    \noexpand\addplot[coral, domain=-\T:\T, samples=40] ({sqrt(\c)*sinh(x)},{-sqrt(\c)*cosh(x)});}\tmp }
+  \addplot[navy, dashed, domain=-2.2:2.2] {x};
+  \addplot[navy, dashed, domain=-2.2:2.2] {-x};
+  \node[font=\scriptsize, text=plum, fill=white, inner sep=1pt] at (axis cs:1.75,0) {$c>0$};
+  \node[font=\scriptsize, text=coraldark, fill=white, inner sep=1pt] at (axis cs:0,1.75) {$c<0$};
+\end{axis}
+\end{tikzpicture}\hspace{0.6cm}
+\begin{tikzpicture}
+\begin{axis}[bp, width=5.6cm, height=5.6cm, xmin=-2.2, xmax=2.2, ymin=-2.2, ymax=2.2,
+   xtick=\empty, ytick=\empty, axis equal image, title={\small\color{navy}$xy=c$}]
+  \foreach \c in {0.25,0.8,1.8} {
+    \edef\tmp{%
+    \noexpand\addplot[plum, domain={\c/2.2}:2.2, samples=50] {\c/x};
+    \noexpand\addplot[plum, domain=-2.2:{-\c/2.2}, samples=50] {\c/x};
+    \noexpand\addplot[coral, domain={\c/2.2}:2.2, samples=50] {-\c/x};
+    \noexpand\addplot[coral, domain=-2.2:{-\c/2.2}, samples=50] {-\c/x};}\tmp }
+  \addplot[navy, dashed] coordinates {(-2.2,0) (2.2,0)};
+  \addplot[navy, dashed] coordinates {(0,-2.2) (0,2.2)};
+  \node[font=\scriptsize, text=plum, fill=white, inner sep=1pt] at (axis cs:1.6,1.6) {$c>0$};
+  \node[font=\scriptsize, text=coraldark, fill=white, inner sep=1pt] at (axis cs:1.6,-1.6) {$c<0$};
+\end{axis}
+\end{tikzpicture}
+\end{center}
+
+\subsection{The second derivative test}
+
+\begin{extra}
+The slides stop at the quadratic form. Here is how to decide its type with one computation,
+the version you will use in practice. Write
+\[ A=D_1^2f(P),\qquad B=D_1D_2f(P),\qquad C=D_2^2f(P), \]
+\[ q(x,y)=\tfrac12\big(Ax^2+2Bxy+Cy^2\big). \]
+\end{extra}
+
+\begin{theorem}[label=thm:2nd]{Second derivative test}
+Let $P$ be a critical point of $f$ (with continuous partials up to order $3$) and let
+$\delta=AC-B^2$, the determinant of the Hessian matrix $\begin{pmatrix}A&B\\B&C\end{pmatrix}$.
+\begin{itemize}
+  \item $\delta>0$ and $A>0$: $P$ is a \textbf{local minimum}.
+  \item $\delta>0$ and $A<0$: $P$ is a \textbf{local maximum}.
+  \item $\delta<0$: $P$ is a \textbf{saddle point} (neither).
+  \item $\delta=0$: the test is \textbf{inconclusive}.
+\end{itemize}
+\end{theorem}
+
+\begin{proof}[Why it works]
+If $A\neq0$, complete the square:
+\[
+Ax^2+2Bxy+Cy^2=A\left[\left(x+\frac BAy\right)^2+\frac{AC-B^2}{A^2}\,y^2\right].
+\]
+If $\delta>0$ the bracket is a sum of two squares, positive unless $x=y=0$; so $q$ has the sign of
+$A$ everywhere except at $O$: a bowl if $A>0$, an upside-down bowl if $A<0$. If $\delta<0$ the
+bracket takes both signs: it equals $1>0$ at $(x,y)=(1,0)$ and $\delta/A^2<0$ at $(x,y)=(-B/A,1)$. So $q$ is a saddle.
+(If $A=0$ and $\delta<0$, then $B\neq0$ and $q=\tfrac12y(2Bx+Cy)$ also changes sign.) Finally,
+when $\delta\neq0$ the remainder $R_3$ is $O(\norm H^3)$ while $\abs{q(H)}\ge m\norm H^2$ for some
+$m>0$, so near $P$ the sign of $f(P+H)-f(P)$ is the sign of $q(H)$.
+\end{proof}
+
+\begin{trap}
+When $\delta=0$, anything can happen. Both $x^4+y^4$ and $x^4-y^4$ have all second derivatives
+zero at the origin, yet the first has a minimum and the second a saddle. You then have to
+study $f$ directly.
+\end{trap}
+
+\begin{example}{$f(x,y)=x^3+y^3-3xy$}
+\textbf{Step 1: critical points.} $f_x=3x^2-3y=0$ gives $y=x^2$; $f_y=3y^2-3x=0$ gives
+$x=y^2=x^4$, so $x(x^3-1)=0$. Hence $x=0$ or $x=1$: the critical points are $(0,0)$ and $(1,1)$.
+
+\textbf{Step 2: second derivatives.} $A=f_{xx}=6x$, $B=f_{xy}=-3$, $C=f_{yy}=6y$.
+
+\textbf{Step 3: classify.}
+\begin{itemize}
+  \item At $(0,0)$: $\delta=0\cdot0-9=-9<0$: saddle point.
+  \item At $(1,1)$: $\delta=36-9=27>0$ and $A=6>0$: local minimum, with $f(1,1)=-1$.
+\end{itemize}
+\end{example}
+
+\begin{center}
+\begin{tikzpicture}
+\begin{axis}[bp3d, width=10cm, height=8cm, xlabel=$x$, ylabel=$y$, zlabel=$z$,
+   xmin=-0.6, xmax=1.7, ymin=-0.6, ymax=1.7, zmin=-1.5, zmax=4.2, view={50}{38}]
+  \addplot3[plumsurf, domain=-0.3:1.4, y domain=-0.3:1.4, samples=24] {x^3+y^3-3*x*y};
+  \addplot3[only marks, mark=*, mark size=2.6pt, coral] coordinates {(1,1,-1)};
+  \addplot3[only marks, mark=*, mark size=2.6pt, cyanbp] coordinates {(0,0,0)};
+  \node[font=\scriptsize, text=coraldark, anchor=north] at (axis cs:1,1,-1.15) {min $(1,1)$};
+  \node[font=\scriptsize, text=cyanbp, anchor=south] at (axis cs:0,0,0.15) {saddle};
+\end{axis}
+\end{tikzpicture}
+\end{center}
+
+\section{Boundary points and the existence of extrema}
+
+\subsection{Interior and boundary}
+
+In one variable, a function on a closed interval $[a,b]$ may have its maximum at an endpoint
+where $f'\neq0$. In several variables the role of the endpoints is played by the boundary.
+
+\begin{definition}{Interior point}
+Let $S$ be a set in $n$-space and $P\in S$. $P$ is an \emph{interior point} of $S$ if there is an
+open ball of positive radius centred at $P$ and contained in $S$.
+\end{definition}
+
+The set of all interior points of $S$ is an open set.
+
+\begin{definition}{Boundary point}
+A point $P$ (not necessarily in $S$) is a \emph{boundary point} of $S$ if every open ball
+centred at $P$ contains a point of $S$ and a point not in $S$.
+\end{definition}
+
+\begin{center}
+\begin{tikzpicture}[scale=0.9]
+  \draw[bpgrid, step=0.5] (-0.5,-0.5) grid (6.5,3.5);
+  \fill[plum, opacity=0.15] plot[smooth cycle, tension=0.7] coordinates {(0.4,0.6) (1.6,0.1) (3.6,0.3) (5.6,0.6) (6,2.2) (4.4,3.1) (2.2,2.9) (0.6,2.2)};
+  \draw[plum, line width=1.3pt] plot[smooth cycle, tension=0.7] coordinates {(0.4,0.6) (1.6,0.1) (3.6,0.3) (5.6,0.6) (6,2.2) (4.4,3.1) (2.2,2.9) (0.6,2.2)};
+  \node[pdot] (a) at (2.6,1.6) {};
+  \fill[cyanbp, opacity=0.25] (a) circle (0.55); \draw[cyanbp] (a) circle (0.55);
+  \node[font=\scriptsize, text=cyanbp] at (2.6,0.8) {interior point};
+  \node[dot] (b) at (6,2.2) {};
+  \fill[coral, opacity=0.25] (b) circle (0.5); \draw[coral] (b) circle (0.5);
+  \node[font=\scriptsize, text=coraldark, anchor=west] at (6.5,2.2) {boundary point};
+  \node[font=\small, text=plum] at (4.4,1.6) {$S$};
+\end{tikzpicture}
+\end{center}
+
+\begin{example}{boundaries}
+\begin{itemize}
+  \item The boundary of the closed ball of radius $a$ is the sphere of radius $a$ (and so is the
+  boundary of the open ball).
+  \item In the plane, the region $y>0$ is open; its boundary is the $x$-axis.
+  \item The boundary of the punctured disc $0<x^2+y^2<1$ is the circle together with the origin.
+\end{itemize}
+\end{example}
+
+\begin{definition}{Closed set, bounded set}
+A set is \emph{closed} if it contains all of its boundary points. A set is \emph{bounded} if
+there is a number $b>0$ such that $\norm X\le b$ for every $X$ in the set.
+\end{definition}
+
+\begin{theorem}[label=thm:evt]{Existence of maxima and minima}
+Let $S$ be a closed and bounded set and $f$ a continuous function on $S$. Then $f$ has a
+maximum and a minimum on $S$: there are points $P,Q\in S$ with
+\[ f(Q)\le f(X)\le f(P)\qquad\text{for all }X\in S . \]
+\end{theorem}
+
+\mnote{The proof needs the completeness of $\R$ (Bolzano-Weierstrass) and is beyond this
+course.}
+
+\begin{trap}
+Both hypotheses matter. On the open disc $x^2+y^2<1$ (not closed), $f=x$ has no maximum. On the
+whole plane (not bounded), $f=x$ has no maximum either. And $e^{-(x^2+y^2)}$ on $\R^2$ has a
+maximum but no minimum.
+\end{trap}
+
+\subsection{How to find extrema on a region}
+
+\begin{recipe}
+To find the maximum and minimum of $f$ on a closed and bounded region $S$:
+\begin{enumerate}
+  \item \textbf{Interior:} find the critical points of $f$ inside $S$ and evaluate $f$ there.
+  \item \textbf{Boundary:} study $f$ on the boundary. Parametrise it (a circle by
+  $(r\cos t,r\sin t)$, a segment by one variable) to get a one-variable problem, or use
+  Lagrange multipliers.
+  \item \textbf{Compare:} the largest of all candidate values is the maximum, the smallest is
+  the minimum.
+\end{enumerate}
+\end{recipe}
+
+\begin{example}{the bell on the whole plane}
+Let $f(x,y)=e^{-(x^2+y^2)}$ on $\R^2$, which is not bounded.
+\begin{itemize}
+  \item $f$ becomes very small when $x$ or $y$ is large; for instance on the circle of radius
+  $3$, $f=e^{-9}<1=f(0,0)$.
+  \item On the closed disc of radius $3$, Theorem~\ref{thm:evt} guarantees a maximum. It cannot be
+  on the boundary circle (values $e^{-9}$ are smaller than $f(O)$), so it is an interior critical
+  point. The only one is the origin.
+  \item Outside the disc $f<e^{-9}$. So the origin is the maximum on the whole plane, $f(0,0)=1$.
+  \item There is no minimum: $f>0$ everywhere but takes values as close to $0$ as we like.
+\end{itemize}
+\end{example}
+
+\begin{example}{a disc}
+Find the extreme values of $f(x,y)=x^2+y^2-2x$ on the closed disc $x^2+y^2\le4$.
+
+\textbf{Interior.} $\grad f=(2x-2,\,2y)=O$ gives $(1,0)$, which is inside; $f(1,0)=-1$.
+
+\textbf{Boundary.} Put $x=2\cos t$, $y=2\sin t$: $f=4-4\cos t$, $t\in[0,2\pi]$. This ranges from
+$0$ (at $t=0$, the point $(2,0)$) to $8$ (at $t=\pi$, the point $(-2,0)$).
+
+\textbf{Compare.} Candidates: $-1$, $0$, $8$. The minimum is $-1$ at $(1,0)$, the maximum is
+$8$ at $(-2,0)$.
+\end{example}
+
+\begin{center}
+\begin{tikzpicture}
+\begin{axis}[bp, width=6.4cm, height=6.4cm, xmin=-2.7, xmax=2.7, ymin=-2.7, ymax=2.7,
+   xtick={-2,1,2}, ytick={-2,2}, xlabel=$x$, ylabel=$y$, axis equal image]
+  \addplot[draw=plum, line width=1.3pt, fill=plum, fill opacity=0.08, domain=0:360, samples=80]
+     ({2*cos(x)},{2*sin(x)}) -- cycle;
+  \foreach \r in {0.5,1,1.5,2,2.5}
+    {\edef\tmp{\noexpand\addplot[plum!45, line width=0.7pt, domain=0:360, samples=70] ({1+\r*cos(x)},{\r*sin(x)});}\tmp}
+  \node[dot] at (axis cs:1,0) {};
+  \node[font=\scriptsize, text=coraldark, anchor=south] at (axis cs:1,0.1) {min $-1$};
+  \node[circle, fill=cyanbp, draw=white, inner sep=1.7pt] at (axis cs:-2,0) {};
+  \node[font=\scriptsize, text=cyanbp, anchor=east, fill=white, inner sep=1pt] at (axis cs:-2.05,0.35) {max $8$};
+\end{axis}
+\end{tikzpicture}
+
+{\small\color{navy} Level curves of $f=(x-1)^2+y^2-1$ are circles centred at $(1,0)$. The
+largest value on the disc is reached at the boundary point farthest from $(1,0)$.}
+\end{center}
+
+\section{Lagrange multipliers}
+
+\subsection{Extrema subject to a constraint}
+
+Let $g$ be differentiable and consider the surface (or curve) $g(X)=0$. Let $f$ be
+differentiable on an open set containing it. We look for points $P$ on the surface where $f$
+is largest or smallest \emph{among points of the surface}.
+
+\begin{definition}{Extremum subject to a constraint}
+A point $P$ with $g(P)=0$ at which $f(P)$ is a maximum or minimum compared with nearby points
+$X$ satisfying $g(X)=0$ is an \emph{extremum for $f$ subject to the constraint $g$}. We only
+consider points where $\grad g(P)\neq O$.
+\end{definition}
+
+\begin{intuition}
+Walk along the constraint curve on a contour map of $f$. While you cross contour lines, $f$
+is still going up or down. At a constrained maximum or minimum you stop crossing them: your path
+just \emph{touches} a contour line. Two curves that touch have the same normal direction.
+The normals are $\grad f$ and $\grad g$, so they must be parallel.
+\end{intuition}
+
+\begin{center}
+\begin{tikzpicture}
+\begin{axis}[bp, width=7.2cm, height=7.2cm, xmin=-2.1, xmax=2.1, ymin=-2.1, ymax=2.1,
+   xtick={-1,1}, ytick={-1,1}, xlabel=$x$, ylabel=$y$, axis equal image]
+  \foreach \c in {-2.1,-1.4142,-0.7,0,0.7,1.4142,2.1} {
+    \edef\tmp{\noexpand\addplot[plum!35, line width=0.8pt, domain=-2.1:2.1] {\c-x};}\tmp }
+  \addplot[plum, line width=1.4pt, domain=-2.1:2.1] {1.4142-x};
+  \addplot[cyanbp, line width=1.5pt, domain=0:360, samples=90] ({cos(x)},{sin(x)});
+  \draw[vec] (axis cs:0.7071,0.7071) -- (axis cs:1.25,1.25);
+  \draw[-{Stealth[length=2.3mm]}, plumdark, line width=1.1pt] (axis cs:0.7071,0.7071) -- (axis cs:1.05,1.05);
+  \node[dot] at (axis cs:0.7071,0.7071) {};
+  \node[font=\scriptsize, text=coraldark, anchor=west] at (axis cs:1.25,1.3) {$\nabla g$, $\nabla f$};
+  \node[circle, fill=cyanbp, draw=white, inner sep=1.6pt] at (axis cs:-0.7071,-0.7071) {};
+  \node[font=\scriptsize, text=cyanbp, anchor=north east, fill=white, inner sep=1pt] at (axis cs:-0.75,-0.75) {min};
+  \node[font=\scriptsize, text=coraldark, anchor=south west, fill=white, inner sep=1pt] at (axis cs:0.75,0.62) {max};
+  \node[font=\scriptsize, text=cyanbp, fill=white, inner sep=1pt] at (axis cs:-1.1,0.55) {$g=0$};
+\end{axis}
+\end{tikzpicture}
+
+{\small\color{navy} Maximise $f=x+y$ on the unit circle. The level lines $x+y=c$ sweep across the
+circle; the last one to touch it is tangent at $(\frac1{\sqrt2},\frac1{\sqrt2})$, where $\grad f$
+and $\grad g$ are parallel.}
+\end{center}
+
+\begin{theorem}[label=thm:lagrange]{Lagrange multipliers}
+Let $g$ be continuously differentiable on an open set $U$, and let $S$ be the set of points
+$X\in U$ with $g(X)=0$ and $\grad g(X)\neq O$. Let $f$ be continuously differentiable on $U$ and
+let $P\in S$ be an extremum for $f$ on $S$. Then there is a number $\lambda$ such that
+\[ \boxed{\,\grad f(P)=\lambda\,\grad g(P)\,} \]
+\end{theorem}
+
+\begin{proof}
+\textbf{Step 1: curves on the surface.} Let $X:J\to S$ be any differentiable curve lying on the
+surface and passing through $P$, with $X(t_0)=P$.
+
+\textbf{Step 2: $f$ along the curve.} Since $P$ is an extremum of $f$ on $S$, the one-variable
+function $t\mapsto f(X(t))$ has a maximum or minimum at $t_0$. Hence its derivative vanishes:
+\[ \frac{d}{dt}f(X(t))\Big|_{t=t_0}=\grad f(P)\cdot X'(t_0)=0 \]
+by the chain rule.
+
+\textbf{Step 3: interpret.} So $\grad f(P)$ is perpendicular to every tangent vector $X'(t_0)$ of
+curves on $S$ through $P$, that is, $\grad f(P)$ is perpendicular to the tangent plane of $S$ at $P$.
+
+\textbf{Step 4: conclude.} By Chapter~\ref{ch:chain}, $\grad g(P)\neq O$ is also perpendicular
+to that tangent plane. In $3$-space there is only one normal direction to a plane, so
+$\grad f(P)$ is a multiple of $\grad g(P)$: $\grad f(P)=\lambda\grad g(P)$ (with $\lambda=0$ if
+$\grad f(P)=O$).
+\end{proof}
+
+\begin{center}
+\begin{tikzpicture}[scale=1]
+  \fill[plum, opacity=0.12] (-3,-0.6) .. controls (-1,0.6) and (1,0.6) .. (3,-0.6) -- (3,-1.6) .. controls (1,-0.6) and (-1,-0.6) .. (-3,-1.6) -- cycle;
+  \draw[plum, line width=1pt] (-3,-0.6) .. controls (-1,0.6) and (1,0.6) .. (3,-0.6);
+  \node[font=\small, text=plum] at (2.6,-1.1) {$S$};
+  \fill[cyanbp, opacity=0.18] (-2.2,0.0) -- (1.6,0.0) -- (2.4,0.75) -- (-1.4,0.75) -- cycle;
+  \draw[cyanbp] (-2.2,0.0) -- (1.6,0.0) -- (2.4,0.75) -- (-1.4,0.75) -- cycle;
+  \node[font=\scriptsize, text=cyanbp, align=left, anchor=west] at (2.5,0.5) {tangent plane\\to $S$ at $P$};
+  \node[dot] (P) at (0,0.33) {};
+  \node[font=\small, below right] at (P) {$P$};
+  \draw[-{Stealth[length=2.5mm]}, plumdark, line width=1.2pt] (P) -- (0,1.6) node[left, font=\scriptsize]{$\nabla g(P)$};
+  \draw[vec] (P) -- (0,2.4) node[right, font=\scriptsize]{$\nabla f(P)=\lambda\nabla g(P)$};
+\end{tikzpicture}
+\end{center}
+
+\begin{recipe}
+To find extrema of $f$ subject to $g=0$:
+\begin{enumerate}
+  \item Write the system $\grad f=\lambda\grad g$ (one equation per coordinate) together with
+  $g=0$. In $\R^3$ that is $4$ equations in $x,y,z,\lambda$.
+  \item Solve it. Useful tricks: divide equations to eliminate $\lambda$; split into cases
+  ``this variable is $0$'' or ``it is not''; never divide by something that may be $0$.
+  \item Evaluate $f$ at every candidate. Decide by inspection which are the maxima and minima
+  (on a closed bounded constraint set, the largest and smallest values are the answers).
+\end{enumerate}
+\end{recipe}
+
+\begin{example}{maximise $x+y$ on the unit circle}
+$f=x+y$, $g=x^2+y^2-1$, so $\grad f=(1,1)$ and $\grad g=(2x,2y)$. The system is
+\[ 1=2\lambda x,\qquad 1=2\lambda y,\qquad x^2+y^2=1 . \]
+From the first two, $\lambda\neq0$ and $x=y=\frac{1}{2\lambda}$. Then $2x^2=1$, so
+$x=y=\pm\frac1{\sqrt2}$. Evaluating:
+\[ f\left(\tfrac1{\sqrt2},\tfrac1{\sqrt2}\right)=\tfrac2{\sqrt2}=\sqrt2,\qquad f\left(-\tfrac1{\sqrt2},-\tfrac1{\sqrt2}\right)=-\sqrt2 . \]
+The circle is closed and bounded, so the maximum is $\sqrt2$ and the minimum is $-\sqrt2$.
+\end{example}
+
+\begin{example}{distance to a hyperboloid}
+Find the extrema of $f=x^2+y^2+z^2$ subject to $g=x^2+2y^2-z^2-1=0$.
+
+\textbf{System.} $\grad f=(2x,2y,2z)$ and $\grad g=(2x,4y,-2z)$:
+\[ 2x=2\lambda x,\qquad 2y=4\lambda y,\qquad 2z=-2\lambda z,\qquad x^2+2y^2-z^2=1 . \]
+\textbf{Case analysis.}
+\begin{itemize}
+  \item If $z\neq0$: the third equation gives $\lambda=-1$. Then $2x=-2x$ forces $x=0$ and
+  $2y=-4y$ forces $y=0$, so the constraint reads $-z^2=1$: impossible. Hence $z=0$.
+  \item If $x\neq0$: $\lambda=1$, then $2y=4y$ gives $y=0$; with $z=0$ the constraint gives
+  $x=\pm1$. Candidates $(\pm1,0,0)$, where $f=1$.
+  \item If $y\neq0$: $\lambda=\tfrac12$, then $x=0$ (from $2x=x$) and $z=0$; the constraint gives
+  $2y^2=1$, $y=\pm\frac1{\sqrt2}$. Candidates $(0,\pm\frac1{\sqrt2},0)$, where $f=\tfrac12$.
+\end{itemize}
+\textbf{Conclusion.} $f$ is the squared distance to the origin. The surface is unbounded, so
+there is no maximum. The minimum is $\tfrac12$, at $(0,\pm\frac1{\sqrt2},0)$.
+
+\textbf{What about $(\pm1,0,0)$?} Along the curve $y=0$, $x^2-z^2=1$ we get $f=1+2z^2\ge1$, while
+along $z=0$, $x^2+2y^2=1$ we get $f=1-y^2\le1$. So $(\pm1,0,0)$ is a \emph{constrained saddle}:
+a candidate from Lagrange's method that is neither a maximum nor a minimum.
+\end{example}
+
+\begin{center}
+\begin{tikzpicture}
+\begin{axis}[bp3d, width=9.6cm, height=8.4cm, xlabel=$x$, ylabel=$y$, zlabel=$z$,
+   xmin=-2.4, xmax=2.4, ymin=-1.8, ymax=1.8, zmin=-1.6, zmax=1.6, view={-30}{18}]
+  \addplot3[plumsurf, opacity=0.7, fill opacity=0.7, domain=-1.1:1.1, y domain=0:360,
+     samples=14, samples y=36, z buffer=sort]
+     ({cosh(x)*cos(y)},{cosh(x)*sin(y)/1.4142},{sinh(x)});
+  \addplot3[cyanbp, line width=1.4pt, domain=0:360, samples=60, samples y=1]
+     ({cos(x)},{sin(x)/1.4142},0);
+  \addplot3[only marks, mark=*, mark size=2.8pt, coral] coordinates {(0,0.7071,0) (0,-0.7071,0)};
+  \addplot3[only marks, mark=*, mark size=2.6pt, cyanbp] coordinates {(1,0,0) (-1,0,0)};
+  \node[font=\scriptsize, text=coraldark, anchor=south west] at (axis cs:0,0.75,0.05) {min};
+  \node[font=\scriptsize, text=cyanbp, anchor=south] at (axis cs:1,0,0.1) {saddle};
+\end{axis}
+\end{tikzpicture}
+
+{\small\color{navy} The hyperboloid $x^2+2y^2-z^2=1$. Its waist (blue ellipse) is closest to the
+origin at the ends of its short axis.}
+\end{center}
+
+\begin{reallife}{the cheapest can}
+A can must hold a volume $V$. Which radius $r$ and height $h$ use the least metal? Minimise
+$S=2\pi r^2+2\pi rh$ subject to $\pi r^2h=V$. Lagrange gives
+$(4\pi r+2\pi h,\;2\pi r)=\lambda(2\pi rh,\;\pi r^2)$. The second equation gives
+$\lambda=2/r$; substituting into the first, $4\pi r+2\pi h=4\pi h$, so $h=2r$. The optimal can is
+as tall as it is wide. Food cans are often close to this; the deviations come from the cost of
+the seams and lids, which a better model would include.
+\end{reallife}
+
+\begin{extra}
+\textbf{What is $\lambda$?} If the constraint is $g(X)=c$ and $M(c)$ is the optimal value of $f$,
+then $M'(c)=\lambda$: the multiplier measures how fast the optimum improves when the constraint is
+relaxed. Economists call it a \emph{shadow price}: the value of one more unit of budget.
+\end{extra}
+
+\section{Summary}
+
+\begin{keyidea}
+\begin{itemize}
+  \item Critical point: $\grad f(P)=O$. Every interior local extremum is a critical point, not
+  conversely.
+  \item At a critical point, the quadratic form $q=\tfrac12(Ax^2+2Bxy+Cy^2)$ describes $f$ locally.
+  \item $\delta=AC-B^2$: $\delta>0$, $A>0$ min; $\delta>0$, $A<0$ max; $\delta<0$ saddle; $\delta=0$ no conclusion.
+  \item On a closed bounded set a continuous $f$ has a max and a min: check the interior critical
+  points and the boundary, then compare.
+  \item Constraint $g=0$: solve $\grad f=\lambda\grad g$, $g=0$, then compare the values.
+\end{itemize}
+\end{keyidea}
+
+\section{Exam-style questions}
+
+\begin{exercise}[1]
+Find and classify the critical points of $f(x,y)=x^2+xy+y^2-3x$.
+\end{exercise}
+
+\begin{exercise}[2]
+Find and classify all critical points of $f(x,y)=x^4+y^4-4xy$.
+\end{exercise}
+
+\begin{exercise}[1]
+Show that the origin is a critical point of $f(x,y)=\ln(1+x^2+3y^2)$, compute the associated
+quadratic form, and decide the nature of the origin.
+\end{exercise}
+
+\begin{exercise}[2]
+Find the absolute maximum and minimum of $f(x,y)=x^2-2xy+2y$ on the rectangle
+$0\le x\le3$, $0\le y\le2$.
+\end{exercise}
+
+\begin{exercise}[2]
+Use Lagrange multipliers to find the extreme values of $f(x,y)=xy$ on the ellipse
+$x^2+4y^2=8$.
+\end{exercise}
+
+\begin{exercise}[2]
+Find the point of the plane $x+2y+2z=9$ closest to the origin, and the distance.
+\end{exercise}
+
+\begin{exercise}[3]
+An open-top box must have surface area $xy+2xz+2yz=12$ (base $x\times y$, height $z$). Find
+the dimensions that maximise its volume.
+\end{exercise}
+
+\begin{exercise}[3]
+Let $f=x^4+y^4$ and $h=x^4-y^4$. Show that both have a critical point at the origin where
+$\delta=0$, and determine its nature for each function directly. What does this show about the
+second derivative test?
+\end{exercise}

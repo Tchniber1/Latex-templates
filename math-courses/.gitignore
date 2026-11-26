@@ -1,0 +1,13 @@
+# LaTeX build files
+*.aux
+*.log
+*.out
+*.toc
+*.fls
+*.fdb_latexmk
+*.synctex.gz
+build.log
+src/main.pdf
+# animation build output
+**/02-lecture-I-in-motion/src/dist/
+**/02-lecture-I-in-motion/src/rec.html

@@ -1,0 +1,291 @@
+% ============================== SOLUTIONS ============================
+\clearpage
+\setlecture{Appendix A}\renewcommand{\tabname}{A}
+\chapter{Solutions to the Exam-Style Questions}\label{app:sol}
+
+Each solution is written the way a full-marks exam answer should look: state what you compute,
+show the key steps, and conclude with a sentence.
+
+\section{Chapter 1: Functions of several variables}
+
+\begin{solution}{Q1.1}
+Three conditions: the root needs $9-x^2-y^2\ge0$; the logarithm needs $x^2+y^2>0$; the
+denominator needs $\ln(x^2+y^2)\neq0$, i.e. $x^2+y^2\neq1$. So
+\[ \Dom(f)=\{(x,y):0<x^2+y^2\le9,\ x^2+y^2\neq1\}, \]
+the closed disc of radius $3$ with the origin and the unit circle removed.
+\end{solution}
+
+\begin{solution}{Q1.2}
+$y-x^2=c$ means $y=x^2+c$: the parabola $y=x^2$ shifted vertically by $c$. For $c=-1,0,1,2$ we get
+four identical parabolas, stacked one above the other at equal spacing. The graph $z=y-x^2$ is a
+parabolic ``trough'': every slice $x=\text{const}$ is a straight line of slope $1$ in $y$, and every slice
+$y=\text{const}$ is a downward parabola.
+\end{solution}
+
+\begin{solution}{Q1.3}
+\[
+\pd fx=e^{yz}+\frac{2xz}{1+x^2},\qquad \pd fy=xz\,e^{yz},\qquad \pd fz=xy\,e^{yz}+\ln(1+x^2).
+\]
+At $(1,0,2)$: $\pd fx=1+\frac{4}{2}=3$, $\pd fy=2$, $\pd fz=0+\ln2$. So $\grad f(1,0,2)=(3,\,2,\,\ln2)$.
+\end{solution}
+
+\begin{solution}{Q1.4}
+With $H=(h,k)$:
+\begin{align*}
+f(1+h,1+k)&=(1+h)^3-3(1+h)(1+k)^2\\
+&=-2-6k+\big(3h^2-6hk-3k^2+h^3-3hk^2\big).
+\end{align*}
+Since $f(1,1)=-2$ and $\grad f=(3x^2-3y^2,\,-6xy)$ gives $\grad f(1,1)=(0,-6)$, the linear part is
+$\grad f(1,1)\cdot H=-6k$. The rest is $E(H)=3h^2-6hk-3k^2+h^3-3hk^2$. Using $\abs h,\abs k\le\norm H$:
+\[ \abs{E(H)}\le3\norm H^2+6\norm H^2+3\norm H^2+\norm H^3+3\norm H^3=12\norm H^2+4\norm H^3, \]
+so $\abs{E(H)}/\norm H\le12\norm H+4\norm H^2\to0$. Hence $f$ is differentiable at $(1,1)$.
+\end{solution}
+
+\begin{solution}{Q1.5}
+Yes. Let $P\in U$, $b=\norm P$, so $1<b<2$. Take $c=\min(b-1,\,2-b)>0$. If $\norm{X-P}<c$, then by the
+triangle inequality
+\begin{align*} \norm X&\le\norm P+\norm{X-P}<b+(2-b)=2,\\ \norm X&\ge\norm P-\norm{X-P}>b-(b-1)=1 . \end{align*}
+So $1<\norm X<2$, i.e. $X\in U$. Every point has a ball inside $U$: $U$ is open.
+\end{solution}
+
+\begin{solution}{Q1.6}
+(a) $f(h,0)=0$ and $f(0,k)=0$, so both difference quotients are $0$: $D_1f(0,0)=D_2f(0,0)=0$.
+
+(b) Along $y=mx$ ($m\neq0$): $f(x,mx)=\dfrac{mx^3}{x^4+m^2x^2}=\dfrac{mx}{x^2+m^2}\to0$. Along the axes
+$f=0$. So $f\to0$ along every line.
+
+(c) Along $y=x^2$: $f(x,x^2)=\dfrac{x^4}{2x^4}=\tfrac12$ for $x\neq0$. This does not tend to
+$f(0,0)=0$, so $f$ is not continuous at $O$ (and therefore not differentiable there). Lines are not
+enough to test a limit.
+\end{solution}
+
+\begin{solution}{Q1.7}
+$f(h,0)=f(0,k)=0$, so $D_1f(0,0)=D_2f(0,0)=0$. If $f$ were differentiable at $O$, then
+$f(H)=f(O)+\grad f(O)\cdot H+\norm Hg(H)=\norm Hg(H)$, so $f(H)/\norm H\to0$. But for $H=(h,h)$,
+\[ \frac{f(h,h)}{\norm H}=\frac{\abs h}{\sqrt2\abs h}=\frac1{\sqrt2}\not\to0 . \]
+Contradiction: $f$ is not differentiable at the origin.
+\end{solution}
+
+\begin{solution}{Q1.8}
+Write $r=\norm H$. Since $\abs{f(H)}\le r^2$, we have $f(H)-f(O)-0\cdot H=r\,g(H)$ with
+$\abs{g(H)}\le r\to0$. So $f$ is differentiable at $O$ with $\grad f(O)=O$. For $(x,y)\neq O$,
+\[ D_1f(x,y)=2x\sin\frac1r-\frac xr\cos\frac1r . \]
+On the positive $x$-axis this is $2x\sin\frac1x-\cos\frac1x$, which has no limit as $x\to0^+$
+(the second term oscillates between $-1$ and $1$). So $D_1f$ is not continuous at $O$. Conclusion:
+the converse of Theorem~\ref{thm:C1} is false; differentiable does not imply $C^1$.
+\end{solution}
+
+\section{Chapter 2: The chain rule and the gradient}
+
+\begin{solution}{Q2.1}
+$\grad f=(2xy,\,x^2-3y^2)$, $X'(t)=(-\sin t,\cos t)$. With $c=\cos t$, $s=\sin t$:
+\[ \frac{d}{dt}f(X(t))=2cs(-s)+(c^2-3s^2)c=c^3-5cs^2 . \]
+Check: $f(X(t))=c^2s-s^3$, whose derivative is $-2cs^2+c^3-3s^2c=c^3-5cs^2$.
+\end{solution}
+
+\begin{solution}{Q2.2}
+$g=xe^y$: $g_x=e^y=1$, $g_y=xe^y=2$ at $(2,0)$. Tangent plane: $z=2+1(x-2)+2(y-0)$, i.e. $z=x+2y$.
+\end{solution}
+
+\begin{solution}{Q2.3}
+$\grad f=(y+z,\,x+z,\,x+y)$, so $\grad f(1,-1,2)=(1,3,0)$. $\norm B=3$, $A=\tfrac13(2,1,-2)$, and
+\[ D_Af(P)=\tfrac13(2+3+0)=\tfrac53 . \]
+Fastest increase: direction $\frac{1}{\sqrt{10}}(1,3,0)$, at rate $\norm{\grad f(P)}=\sqrt{10}$.
+\end{solution}
+
+\begin{solution}{Q2.4}
+By the chain rule, $z_r=f_x\cos\theta+f_y\sin\theta$ and $z_\theta=-f_xr\sin\theta+f_yr\cos\theta$. Then
+\[
+z_r^2+\frac{z_\theta^2}{r^2}=(f_x\cos\theta+f_y\sin\theta)^2+(-f_x\sin\theta+f_y\cos\theta)^2=f_x^2+f_y^2,
+\]
+because the cross terms $\pm2f_xf_y\sin\theta\cos\theta$ cancel and $\cos^2\theta+\sin^2\theta=1$.
+\end{solution}
+
+\begin{solution}{Q2.5}
+The normal to $x^2+2y^2+3z^2=12$ is $(2x,4y,6z)$; it must be parallel to $(1,4,6)$:
+$(2x,4y,6z)=\lambda(1,4,6)$, so $x=\lambda/2$, $y=z=\lambda$. Substituting,
+$\lambda^2/4+2\lambda^2+3\lambda^2=12$, so $\lambda^2=\frac{16}{7}$ and $\lambda=\pm\frac{4}{\sqrt7}$. The points are
+\[ \pm\left(\tfrac{2}{\sqrt7},\tfrac{4}{\sqrt7},\tfrac{4}{\sqrt7}\right). \]
+\end{solution}
+
+\begin{solution}{Q2.6}
+Put $s=x-y$, $t=y-z$, $w=z-x$. Then
+$u_x=f_s-f_w$, $u_y=-f_s+f_t$, $u_z=-f_t+f_w$. Adding: $u_x+u_y+u_z=0$.
+\end{solution}
+
+\begin{solution}{Q2.7}
+$\grad T=T\cdot(-2x,-4y,-6z)$, so at $(1,1,1)$, $\grad T=e^{-6}(-2,-4,-6)$. To cool fastest, fly
+along $-\grad T$, i.e. in the direction $\frac{1}{\sqrt{14}}(1,2,3)$. With velocity $(1,0,0)$ the felt
+rate is $\grad T\cdot(1,0,0)=-2e^{-6}$: the bee cools down, but more slowly than possible.
+\end{solution}
+
+\begin{solution}{Q2.8}
+(a) $\Phi(x,y)=x^2+4y^2$, since $-\grad\Phi=(-2x,-8y)=F$.
+
+(b) Energy: $E=\tfrac12\cdot2\cdot\norm{(0,3)}^2+\Phi(1,0)=9+1=10$. At $(0,1)$, $\Phi=4$, so
+$\tfrac12\cdot2\cdot v^2=10-4$, giving $v=\sqrt6$.
+
+(c) At $(0,2)$, $\Phi=16>10=E$, which would require negative kinetic energy. Impossible.
+\end{solution}
+
+\section{Chapter 3: Higher derivatives}
+
+\begin{solution}{Q3.1}
+$f_x=3x^2y^2+ye^{xy}$, $f_y=2x^3y+xe^{xy}$,
+\[ f_{xx}=6xy^2+y^2e^{xy},\quad f_{yy}=2x^3+x^2e^{xy},\quad f_{xy}=f_{yx}=6x^2y+e^{xy}+xye^{xy}. \]
+\end{solution}
+
+\begin{solution}{Q3.2}
+$u_x=\dfrac{2x}{x^2+y^2}$, $u_{xx}=\dfrac{2(x^2+y^2)-4x^2}{(x^2+y^2)^2}=\dfrac{2y^2-2x^2}{(x^2+y^2)^2}$. By symmetry
+$u_{yy}=\dfrac{2x^2-2y^2}{(x^2+y^2)^2}$. The sum is $0$.
+\end{solution}
+
+\begin{solution}{Q3.3}
+$\left(\pd{}{x}-\pd{}{y}\right)\left(\pd{}{x}+\pd{}{y}\right)=\left(\pd{}{x}\right)^2-\left(\pd{}{y}\right)^2$ (the mixed terms cancel).
+$f_{xx}=6xy-\sin(x+y)$, $f_{yy}=-\sin(x+y)$, so the result is $6xy$.
+\end{solution}
+
+\begin{solution}{Q3.4}
+At $(1,2)$: $f=3$, $f_x=\frac xf=\frac13$, $f_y=\frac{3y^2}{2f}=2$, $f_{xx}=\frac{8}{27}$, $f_{xy}=-\frac29$, $f_{yy}=\frac23$. So
+\[ f(1+h,2+k)\approx3+\tfrac13h+2k+\tfrac{4}{27}h^2-\tfrac29hk+\tfrac13k^2 . \]
+With $h=0.02$, $k=-0.03$: $\approx2.947159$. The true value is $2.947164$.
+\end{solution}
+
+\begin{solution}{Q3.5}
+Multiplying the series: $(1+x+\tfrac12x^2)(y-\tfrac16y^3)$ up to degree $3$ gives
+\[ G=y+xy+\tfrac12x^2y-\tfrac16y^3 . \]
+The coefficient of $x^2y$ is $c_{21}=\tfrac12$, so $D_1^2D_2f(0,0)=2!\,1!\cdot\tfrac12=1$. (Directly:
+$D_1^2D_2(e^x\sin y)=e^x\cos y=1$ at $O$.)
+\end{solution}
+
+\begin{solution}{Q3.6}
+The $x^2y^3$ term of $e^x\sin y$ is $\tfrac{x^2}{2}\cdot\left(-\tfrac{y^3}{6}\right)$, so $c_{23}=-\tfrac1{12}$
+and $D_1^2D_2^3f(0,0)=2!\,3!\,c_{23}=-1$.
+\end{solution}
+
+\begin{solution}{Q3.7}
+(a) For $y\neq0$: $\dfrac{f(h,y)-f(0,y)}{h}=\dfrac{y(h^2-y^2)}{h^2+y^2}\to-y$; for $y=0$, $f(h,0)=0$ gives
+$0=-0$. Similarly $\dfrac{f(x,k)}{k}=\dfrac{x(x^2-k^2)}{x^2+k^2}\to x$.
+
+(b) $D_2D_1f(0,0)=\frac{d}{dy}(-y)=-1$ and $D_1D_2f(0,0)=\frac{d}{dx}(x)=1$.
+
+(c) Continuity of the mixed partials at $O$ fails. Away from the origin both equal
+$\dfrac{(x^2-y^2)(x^4+10x^2y^2+y^4)}{(x^2+y^2)^3}$, which is $1$ on the $x$-axis and $-1$ on the
+$y$-axis, so it has no limit at $O$.
+\end{solution}
+
+\begin{solution}{Q3.8}
+$D_1f=D_2f=\cos(x+y)$, so $g_1=g_2=\int_0^1\cos\big(t(x+y)\big)dt=\dfrac{\sin(x+y)}{x+y}$ when
+$x+y\neq0$ (and $1$ when $x+y=0$). Check: $xg_1+yg_2=(x+y)\dfrac{\sin(x+y)}{x+y}=\sin(x+y)$, and
+$f(0,0)=0$.
+\end{solution}
+
+\section{Chapter 4: Maximum and minimum}
+
+\begin{solution}{Q4.1}
+$f_x=2x+y-3=0$, $f_y=x+2y=0$ give $(2,-1)$. $A=2$, $B=1$, $C=2$, $\delta=3>0$, $A>0$: local minimum,
+$f(2,-1)=-3$.
+\end{solution}
+
+\begin{solution}{Q4.2}
+$f_x=4x^3-4y=0$, $f_y=4y^3-4x=0$: $y=x^3$ and $x=x^9$, so $x\in\{0,1,-1\}$. Points $(0,0)$, $(1,1)$,
+$(-1,-1)$. $A=12x^2$, $B=-4$, $C=12y^2$.
+\begin{itemize}
+  \item $(0,0)$: $\delta=-16<0$, saddle.
+  \item $(\pm1,\pm1)$: $\delta=144-16>0$, $A>0$: local minima with $f=-2$.
+\end{itemize}
+\end{solution}
+
+\begin{solution}{Q4.3}
+$f_x=\dfrac{2x}{1+x^2+3y^2}$, $f_y=\dfrac{6y}{1+x^2+3y^2}$, both $0$ at $O$. At $O$: $f_{xx}=2$, $f_{xy}=0$,
+$f_{yy}=6$, so $q(x,y)=x^2+3y^2$, positive for $(x,y)\neq O$. The origin is a local minimum (in fact
+global, since $f\ge0=f(O)$).
+\end{solution}
+
+\begin{solution}{Q4.4}
+Interior: $f_x=2x-2y=0$, $f_y=-2x+2=0$ give $(1,1)$, $f=1$. Edges:
+$y=0$: $f=x^2\in[0,9]$; $x=3$: $f=9-4y\in[1,9]$; $y=2$: $f=(x-2)^2\in[0,4]$; $x=0$: $f=2y\in[0,4]$.
+Maximum $9$ at $(3,0)$; minimum $0$ at $(0,0)$ and $(2,2)$.
+\end{solution}
+
+\begin{solution}{Q4.5}
+$(y,x)=\lambda(2x,8y)$. Then $y=2\lambda x$ and $x=8\lambda y=16\lambda^2x$. If $x=0$ then $y=0$, not on the
+ellipse; so $\lambda^2=\frac1{16}$ and $y=\pm\frac x2$. Then $2x^2=8$: $x=\pm2$, $y=\pm1$. Maximum $2$ at
+$(2,1),(-2,-1)$; minimum $-2$ at $(2,-1),(-2,1)$.
+\end{solution}
+
+\begin{solution}{Q4.6}
+Minimise $x^2+y^2+z^2$: $(2x,2y,2z)=\lambda(1,2,2)$, so $(x,y,z)=\frac\lambda2(1,2,2)$. Then
+$\frac\lambda2\cdot9=9$, $\lambda=2$: the point is $(1,2,2)$ at distance $3$.
+\end{solution}
+
+\begin{solution}{Q4.7}
+$(yz,xz,xy)=\lambda(y+2z,\,x+2z,\,2x+2y)$. Multiply the equations by $x$, $y$, $z$ respectively: each
+left side becomes $xyz$, so $\lambda(xy+2xz)=\lambda(xy+2yz)=\lambda(2xz+2yz)$. The first equality gives
+$x=y$, the second gives $xy=2xz$, so $y=2z$. Then $4z^2+4z^2+4z^2=12$, $z=1$: the box is
+$2\times2\times1$, volume $4$.
+\end{solution}
+
+\begin{solution}{Q4.8}
+Both gradients vanish at $O$ and all second partials are $0$ there, so $\delta=0$. Since $x^4+y^4\ge0$,
+the origin is a minimum of $f$. For $h=x^4-y^4$, $h>0$ on the $x$-axis and $h<0$ on the $y$-axis:
+a saddle. Two functions with the same (zero) second-order data behave differently, so the test
+can say nothing when $\delta=0$.
+\end{solution}
+
+\section{Chapter 5: The derivative as a linear map}
+
+\begin{solution}{Q5.1}
+The Jacobian matrix and its value at $(1,0)$ are
+\[ J_F=\begin{pmatrix}2xy&x^2\\1&3y^2\\y\cos(xy)&x\cos(xy)\end{pmatrix},\qquad J_F(1,0)=\begin{pmatrix}0&1\\1&0\\0&1\end{pmatrix}. \]
+\end{solution}
+
+\begin{solution}{Q5.2}
+Expanding the $3\times3$ determinant along the last row $(\cos\varphi,\,-\rho\sin\varphi,\,0)$:
+\begin{align*} \Delta_F&=\cos\varphi\cdot\rho^2\sin\varphi\cos\varphi+\rho\sin\varphi\cdot\rho\sin^2\varphi\\ &=\rho^2\sin\varphi(\cos^2\varphi+\sin^2\varphi)=\rho^2\sin\varphi . \end{align*}
+So $dV=\rho^2\sin\varphi\,d\rho\,d\varphi\,d\theta$: a small coordinate box far from the origin, near the
+equator, has larger volume.
+\end{solution}
+
+\begin{solution}{Q5.3}
+$F(1,1)=(2,0)$, $J_F=\begin{pmatrix}1&1\\1&-1\end{pmatrix}$, $J_G(2,0)=\begin{pmatrix}0&2\\4&0\end{pmatrix}$, so
+$J_{G\circ F}(1,1)=\begin{pmatrix}2&-2\\4&4\end{pmatrix}$. Check: $G\circ F=(x^2-y^2,\,4xy)$ has Jacobian
+$\begin{pmatrix}2x&-2y\\4y&4x\end{pmatrix}$, equal at $(1,1)$.
+\end{solution}
+
+\begin{solution}{Q5.4}
+$dz=2xy\,dx+x^2\,dy$ with $dx=\cos\theta\,dr-r\sin\theta\,d\theta$, $dy=\sin\theta\,dr+r\cos\theta\,d\theta$. Substituting
+$x=r\cos\theta$, $y=r\sin\theta$ and collecting:
+\[ dz=3r^2\cos^2\theta\sin\theta\,dr+r^3\cos\theta(\cos^2\theta-2\sin^2\theta)\,d\theta . \]
+Check: $z=r^3\cos^2\theta\sin\theta$ has exactly these partial derivatives in $r$ and $\theta$.
+\end{solution}
+
+\begin{solution}{Q5.5}
+(a) $J_F=\begin{pmatrix}1&2y\\2x&1\end{pmatrix}$, $\Delta_F=1-4xy$. The theorem applies at every point off the
+hyperbola $xy=\frac14$.
+
+(b) $J_F(1,1)=\begin{pmatrix}1&2\\2&1\end{pmatrix}$, $\Delta=-3$, so
+$J_G(2,2)=-\frac13\begin{pmatrix}1&-2\\-2&1\end{pmatrix}=\begin{pmatrix}-\frac13&\frac23\\ \frac23&-\frac13\end{pmatrix}$.
+\end{solution}
+
+\begin{solution}{Q5.6}
+(a) $f=x^3+y^3-6xy$, $f(3,3)=0$, $D_2f=3y^2-6x=9\neq0$ at $(3,3)$, so the theorem applies.
+$\varphi'(3)=-\dfrac{3x^2-6y}{3y^2-6x}\Big|_{(3,3)}=-1$; tangent line $x+y=6$.
+
+(b) $D_2f=0$ means $y^2=2x$. Substituting $x=y^2/2$ in the curve: $\frac{y^6}{8}+y^3=3y^3$, so $y=0$ or
+$y^3=16$. The points are $(0,0)$ and $(2^{5/3},2^{4/3})\approx(3.17,2.52)$.
+\end{solution}
+
+\begin{solution}{Q5.7}
+$J_F(2,\frac\pi2)=\begin{pmatrix}0&-2\\1&0\end{pmatrix}$, so $J_G(0,2)=\begin{pmatrix}0&1\\-\frac12&0\end{pmatrix}$:
+$r_x=0$, $r_y=1$, $\theta_x=-\frac12$, $\theta_y=0$. Directly: $r_y=\frac yr=1$, and
+$\theta_x=-\frac{y}{r^2}=-\frac24=-\frac12$ (for $y>0$).
+\end{solution}
+
+\begin{solution}{Q5.8}
+(a) $F(P+H)=AP+AH+B=F(P)+AH$: the remainder is $O$, so $A$ is tangent to $F$ at $P$, and by
+uniqueness $F'(P)=A$.
+
+(b) $f(P+H)=P\cdot P+2P\cdot H+H\cdot H$. The map $H\mapsto2P\cdot H$ is linear and the remainder
+$H\cdot H=\norm H\cdot\norm H$ has the form $\norm Hg(H)$ with $g(H)=\norm H\to0$. So $f'(P)H=2P\cdot H$.
+\end{solution}

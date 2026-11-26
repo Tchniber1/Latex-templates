@@ -1,0 +1,386 @@
+% ============================== PROBLEM 3 ============================
+\settab{PROBLEM 3}{3}
+\chapter[Problem 3: Radial Harmonic Functions]{Radial Harmonic\\ Functions}\label{ch:p3}
+
+\begin{examnote}[title={Problem 3 \;·\; 5 points}]
+Let $\Omega=\R^2\setminus\{(0,0)\}$ and let $\varphi\in C^2((0,+\infty))$. For $(x,y)\in\Omega$, set
+$r=\sqrt{x^2+y^2}$ and $u(x,y)=\varphi(r)$. Such a $u$ is called \emph{radial}. The Laplace operator is
+$\Delta=\pdd{}{x}+\pdd{}{y}$, and a $C^2$ function $u$ is \emph{harmonic} if $\Delta u=0$.
+\end{examnote}
+
+\section{What this problem is about}
+
+A \textbf{radial} function only cares about how far you are from the origin, not in which direction.
+Its level curves are circles centred at $O$, and its graph is a surface of revolution. Think of the
+ripples around a stone dropped in water, the temperature around a hot pipe, or the brightness around
+a lamp.
+
+A \textbf{harmonic} function is one with $\Delta u=0$. In physics this is the equation of a steady
+state: the temperature in a metal plate once it has stopped changing, or the electric potential in
+empty space. So the problem asks a natural question: \emph{which temperatures in a plate depend only on
+the distance to the centre?}
+
+The plan has two parts, and you should see it before you start:
+\begin{itemize}
+  \item \textbf{Part A} uses the chain rule twice to turn $\Delta u$, which has two variables, into an
+        expression in the single variable $r$: $\ \Delta u=\varphi''(r)+\frac1r\varphi'(r)$.
+  \item \textbf{Part B} solves the one variable equation $\varphi''+\frac1r\varphi'=0$ by hand.
+\end{itemize}
+Every question in Part B says ``deduce'': it uses the previous one directly. That makes Part B the
+cheapest marks on the paper once Part A is done.
+
+\begin{intuition}
+Why remove the origin? Because $r=\sqrt{x^2+y^2}$ is not differentiable at $(0,0)$: its graph is a
+cone with a sharp tip there. Everything in this problem needs derivatives of $r$, so we stay on
+$\Omega$, where $r>0$.
+\end{intuition}
+
+\partbanner{Part A \;·\; from two variables to one}
+
+% -------------------------------------------------------------------
+\section{Question 1: first and second derivatives of a radial function}
+
+\begin{question}{Problem 3 \;·\; chain rule}
+Use the chain rule to compute $\pd ux$ and $\pd uy$. Differentiate again to show that
+\[
+  \pdd ux=\varphi''(r)\frac{x^2}{r^2}+\varphi'(r)\frac{y^2}{r^3},\qquad
+  \pdd uy=\varphi''(r)\frac{y^2}{r^2}+\varphi'(r)\frac{x^2}{r^3}.
+\]
+\end{question}
+
+\begin{lesson}
+\textbf{The chain rule for $u=\varphi(r(x,y))$.} The function $u$ depends on $x$ only through $r$.
+So to differentiate in $x$: differentiate $\varphi$ with respect to its variable, then multiply by how
+$r$ changes with $x$:
+\[
+  \pd ux=\varphi'(r)\,\pd rx .
+\]
+\begin{center}
+\begin{tikzpicture}[n/.style={circle, draw=tealD, fill=ice!30, minimum size=7mm, font=\small, line width=0.7pt},
+   e/.style={tealD, line width=0.8pt}]
+  \node[n] (u) at (0,0) {$u$};
+  \node[n] (r) at (0,-1.3) {$r$};
+  \node[n] (x) at (-1,-2.6) {$x$};
+  \node[n] (y) at (1,-2.6) {$y$};
+  \draw[e] (u) -- node[right, font=\scriptsize, text=coralD] {$\varphi'(r)$} (r);
+  \draw[e] (r) -- node[left, font=\scriptsize, text=coralD] {$\frac xr$} (x);
+  \draw[e] (r) -- node[right, font=\scriptsize, text=coralD] {$\frac yr$} (y);
+\end{tikzpicture}
+\end{center}
+\textbf{The derivatives of $r$:} $\ r=\sqrt{x^2+y^2}$ gives $r_x=\frac{2x}{2\sqrt{x^2+y^2}}=\frac xr$ and
+$r_y=\frac yr$. Memorise these two: they appear in every radial computation.
+
+\textbf{For the second derivative} you differentiate a \emph{product}, $\varphi'(r)\cdot\frac xr$, and
+both factors depend on $x$. The first factor needs the chain rule again ($\varphi'(r)$ is also a
+function of $r$); the second needs the quotient rule, remembering that $r$ depends on $x$.
+\end{lesson}
+
+\begin{howto}
+\begin{enumerate}
+  \item Write $r_x=\frac xr$, $r_y=\frac yr$.
+  \item $u_x=\varphi'(r)\frac xr$. Do not simplify further.
+  \item Compute $\pd{}{x}\big(\frac xr\big)$ separately, on a side line. It equals $\frac{y^2}{r^3}$.
+  \item Product rule: (derivative of the first)$\times$(second) $+$ (first)$\times$(derivative of the second).
+\end{enumerate}
+\end{howto}
+
+\begin{answer}
+On $\Omega$, $r>0$ and $r$ is differentiable, with
+\[
+  r_x=\frac{x}{\sqrt{x^2+y^2}}=\frac xr,\qquad r_y=\frac yr .
+\]
+\textbf{First derivatives.} By the chain rule,
+\[
+  \pd ux=\varphi'(r)\,r_x=\varphi'(r)\,\frac xr,\qquad \pd uy=\varphi'(r)\,\frac yr .
+\]
+\textbf{A side computation.} By the quotient rule,
+\[
+  \pd{}{x}\Big(\frac xr\Big)=\frac{1\cdot r-x\cdot r_x}{r^2}=\frac{r-\frac{x^2}r}{r^2}=\frac{r^2-x^2}{r^3}=\frac{y^2}{r^3},
+\]
+using $r^2-x^2=y^2$. In the same way, $\pd{}{y}\big(\frac yr\big)=\frac{x^2}{r^3}$.
+
+\textbf{Second derivatives.} By the product rule, and the chain rule on $\varphi'(r)$:
+\[
+  \pdd ux=\underbrace{\varphi''(r)\,\frac xr}_{\pd{}{x}[\varphi'(r)]}\cdot\frac xr+\varphi'(r)\cdot\frac{y^2}{r^3}
+  =\varphi''(r)\frac{x^2}{r^2}+\varphi'(r)\frac{y^2}{r^3}.
+\]
+Exchanging the roles of $x$ and $y$ (the formula for $r$ is symmetric in $x$ and $y$),
+\[
+  \pdd uy=\varphi''(r)\frac{y^2}{r^2}+\varphi'(r)\frac{x^2}{r^3}.
+\]
+\end{answer}
+
+\begin{center}
+\begin{tikzpicture}[scale=1.3]
+  \draw[gridc, line width=0.4pt] (-0.3,0) -- (2.6,0) (0,-0.3) -- (0,1.9);
+  \fill[ice!30] (0,0) -- (2,0) -- (2,1.4) -- cycle;
+  \draw[tealD, line width=1.2pt] (0,0) -- node[above left, font=\small, text=tealDD] {$r$} (2,1.4);
+  \draw[coralD, line width=1pt] (0,0) -- node[below, font=\small, text=coralD] {$x$} (2,0);
+  \draw[coralD, line width=1pt] (2,0) -- node[right, font=\small, text=coralD] {$y$} (2,1.4);
+  \draw[tealD] (0.55,0) arc (0:35:0.55); \node[font=\scriptsize, text=tealD] at (0.75,0.2) {$\theta$};
+  \node[dot] at (2,1.4) {};
+  \node[font=\scriptsize, text=tealDD, anchor=west] at (2.1,1.45) {$(x,y)$};
+  \node[font=\scriptsize, text=tealDD, align=left, anchor=west] at (2.9,0.7)
+     {$r_x=\frac xr=\cos\theta$\\[2pt] $r_y=\frac yr=\sin\theta$};
+\end{tikzpicture}
+\figcap{$r_x=\frac xr$ is the cosine of the polar angle: moving right, the distance to $O$ grows
+fastest when you are on the $x$-axis ($\theta=0$) and not at all when you are on the $y$-axis.}
+\end{center}
+
+\begin{trap}
+\begin{itemize}
+  \item Writing $\pd{}{x}[\varphi'(r)]=\varphi''(r)$. It is $\varphi''(r)\,\frac xr$: the chain rule applies
+        again. This is the most common error on this question.
+  \item Differentiating $\frac xr$ as if $r$ were a constant (getting $\frac1r$). The variable $x$ is
+        inside $r$ too.
+  \item ``Showing'' the formula by writing it down. The question says \emph{show}: every step must
+        appear, in particular the side computation of $\pd{}{x}(\frac xr)$.
+\end{itemize}
+\end{trap}
+
+% -------------------------------------------------------------------
+\section{Question 2: the Laplacian of a radial function}
+
+\begin{question}{Problem 3 \;·\; deduce}
+Deduce that $\ \Delta u(x,y)=\varphi''(r)+\dfrac1r\varphi'(r)$.
+\end{question}
+
+\begin{lesson}
+``Deduce'' means: use the previous result, do not start again. Add the two formulas of question 1
+and use the only identity a radial computation ever needs: $x^2+y^2=r^2$.
+
+This is the polar Laplacian you met in TD 3, $\ g_{rr}+\frac1rg_r+\frac1{r^2}g_{\theta\theta}$,
+in the special case where nothing depends on $\theta$.
+\end{lesson}
+
+\begin{answer}
+Adding the two formulas of question 1,
+\[
+  \Delta u=\varphi''(r)\,\frac{x^2+y^2}{r^2}+\varphi'(r)\,\frac{x^2+y^2}{r^3}
+  =\varphi''(r)\,\frac{r^2}{r^2}+\varphi'(r)\,\frac{r^2}{r^3}=\varphi''(r)+\frac1r\,\varphi'(r).
+\]
+\end{answer}
+
+\begin{intuition}
+The point of Part A in one sentence: for a radial function, the Laplacian, which is a statement about
+two variables, becomes a statement about one variable. Hard PDE, easy ODE.
+\end{intuition}
+
+% -------------------------------------------------------------------
+\section{Question 3: the logarithm is harmonic}
+
+\begin{question}{Problem 3 \;·\; an example}
+Apply this identity to show that $v(x,y)=\ln\sqrt{x^2+y^2}$ is harmonic on $\Omega$.
+Determine $\displaystyle\lim_{(x,y)\to(0,0)}v(x,y)$.
+\end{question}
+
+\begin{lesson}
+To ``apply the identity'', first recognise $v$ as a radial function: write it as $\varphi(r)$ and name
+$\varphi$. Here $v=\ln r$, so $\varphi(r)=\ln r$. Then compute $\varphi'$ and $\varphi''$ and plug them into
+$\varphi''+\frac1r\varphi'$.
+
+For the limit: $(x,y)\to(0,0)$ is the same as $r\to0^+$, so the question becomes a one variable limit.
+\end{lesson}
+
+\begin{answer}
+$v(x,y)=\ln r=\varphi(r)$ with $\varphi(r)=\ln r$, which is $C^2$ (in fact $C^\infty$) on $(0,+\infty)$.
+Then
+\[
+  \varphi'(r)=\frac1r,\qquad \varphi''(r)=-\frac1{r^2},
+\]
+and by question 2, for every $(x,y)\in\Omega$,
+\[
+  \Delta v=\varphi''(r)+\frac1r\varphi'(r)=-\frac1{r^2}+\frac1r\cdot\frac1r=0 .
+\]
+So $v$ is harmonic on $\Omega$.
+
+\textbf{Limit.} As $(x,y)\to(0,0)$, $r=\sqrt{x^2+y^2}\to0^+$, and $\ln r\to-\infty$. Hence
+\[
+  \lim_{(x,y)\to(0,0)}v(x,y)=-\infty :
+\]
+$v$ has no finite limit at the origin; it decreases without bound.
+\end{answer}
+
+\begin{center}
+\begin{tikzpicture}
+\begin{axis}[bp3d, width=9cm, height=7cm, view={-35}{22}, xlabel=$x$, ylabel=$y$, zlabel=$z$,
+   xmin=-1.8, xmax=1.8, ymin=-1.8, ymax=1.8, zmin=-2.4, zmax=0.9]
+  \addplot3[gsurf, shader=interp, domain=0.12:1.6, y domain=0:360, samples=22, samples y=48,
+     point meta=z] ({x*cos(y)},{x*sin(y)},{ln(x)});
+  \foreach \rr in {0.25,0.5,1}{
+    \edef\tmp{\noexpand\addplot3[coralD, line width=0.9pt, domain=0:360, samples=60, samples y=1]
+      ({\rr*cos(x)},{\rr*sin(x)},{ln(\rr)});}\tmp}
+\end{axis}
+\end{tikzpicture}
+\figcap{The graph of $v=\ln r$: a funnel that plunges to $-\infty$ at the origin (cut at $r=0.12$).
+The coral circles are level curves: a radial function always has circles as level curves.}
+\end{center}
+
+\begin{reallife}
+$\ln r$ is the electric potential around a long, thin, charged wire, seen in a cross-section, and
+the steady temperature around a thin hot pipe. The blow-up at $r=0$ is real: the wire itself is
+where the source sits.
+\end{reallife}
+
+\begin{trap}
+\begin{itemize}
+  \item Saying $v$ is harmonic on $\R^2$. It is not even defined at the origin.
+  \item Writing $\varphi(r)=\ln\sqrt r$. Since $\sqrt{x^2+y^2}=r$, we have $v=\ln r$, so $\varphi=\ln$.
+  \item Answering ``the limit does not exist'' and stopping. Say what happens: it tends to $-\infty$.
+\end{itemize}
+\end{trap}
+
+\partbanner{Part B \;·\; finding every radial harmonic function}
+
+From now on, $u=\varphi(r)$ is assumed harmonic on $\Omega$, and the goal is to find every such $u$.
+
+% -------------------------------------------------------------------
+\section{Question 4: the hidden derivative}
+
+\begin{question}{Problem 3 \;·\; deduce}
+Show that $\dfrac{d}{dr}\big(r\varphi'(r)\big)=0$ for every $r>0$. Deduce that $r\varphi'(r)=A$ for a constant
+$A\in\R$.
+\end{question}
+
+\begin{lesson}
+Two facts.
+
+\textbf{The product rule backwards.} $\ \frac{d}{dr}\big(r\varphi'(r)\big)=\varphi'(r)+r\varphi''(r)$. So
+the equation $\varphi''+\frac1r\varphi'=0$, multiplied by $r$, is exactly ``the derivative of $r\varphi'$
+is zero''. Spotting a derivative hidden in an expression is one of the most useful tricks in analysis.
+
+\textbf{Zero derivative on an interval means constant.} If $F'(r)=0$ for all $r$ in an
+\emph{interval}, then $F$ is constant there (mean value theorem). The word interval matters: on
+$(0,1)\cup(2,3)$ a function with zero derivative can take two different constant values. Here the
+domain is $(0,+\infty)$, which is an interval.
+\end{lesson}
+
+\begin{howto}
+Write the harmonic condition with question 2. Multiply by $r$. Recognise the product rule.
+\end{howto}
+
+\begin{answer}
+Since $u$ is harmonic on $\Omega$, question 2 gives $\varphi''(r)+\frac1r\varphi'(r)=0$ at every
+$r=\sqrt{x^2+y^2}$ with $(x,y)\in\Omega$. Every $r>0$ is of this form (take the point $(r,0)$), so
+\[
+  \varphi''(r)+\frac1r\,\varphi'(r)=0\qquad\text{for all }r>0 .
+\]
+Multiplying by $r>0$ and using the product rule,
+\[
+  \frac{d}{dr}\big(r\varphi'(r)\big)=\varphi'(r)+r\,\varphi''(r)=r\Big(\varphi''(r)+\frac1r\varphi'(r)\Big)=0 .
+\]
+The function $r\mapsto r\varphi'(r)$ has zero derivative on the interval $(0,+\infty)$, so it is
+constant: there is $A\in\R$ with $r\varphi'(r)=A$ for all $r>0$.
+\end{answer}
+
+\begin{trap}
+\begin{itemize}
+  \item Skipping the sentence ``every $r>0$ is the distance of some point of $\Omega$''. Question 2 gives
+        the identity at points $(x,y)$; you need it for every number $r>0$. One line closes that gap.
+  \item Writing ``derivative zero, so constant'' without saying $(0,+\infty)$ is an interval.
+\end{itemize}
+\end{trap}
+
+% -------------------------------------------------------------------
+\section{Question 5: all radial harmonic functions}
+
+\begin{question}{Problem 3 \;·\; deduce}
+Show that $\varphi(r)-A\ln r$ has zero derivative. Deduce that every such radial harmonic function has
+the form $\ u(x,y)=A\ln\sqrt{x^2+y^2}+B$, $\ A,B\in\R$.
+\end{question}
+
+\begin{lesson}
+Same tool as question 4, used once more. From $r\varphi'(r)=A$ you get $\varphi'(r)=\frac Ar$, and the
+function with derivative $\frac Ar$ is $A\ln r$ plus a constant. The question guides you to prove it
+cleanly by showing the difference has zero derivative.
+\end{lesson}
+
+\begin{answer}
+For $r>0$, using $r\varphi'(r)=A$ from question 4,
+\[
+  \frac{d}{dr}\big(\varphi(r)-A\ln r\big)=\varphi'(r)-\frac Ar=\frac{r\varphi'(r)-A}{r}=0 .
+\]
+Again $(0,+\infty)$ is an interval, so $\varphi(r)-A\ln r=B$ for a constant $B\in\R$. Therefore
+$\varphi(r)=A\ln r+B$, and
+\[
+  u(x,y)=\varphi\big(\sqrt{x^2+y^2}\big)=A\ln\sqrt{x^2+y^2}+B .
+\]
+Conversely, every function of this form is radial and harmonic on $\Omega$: $\Delta u=A\,\Delta v=0$ by
+question 3 (constants have zero Laplacian). So these are \emph{exactly} the radial harmonic functions on $\Omega$.
+\end{answer}
+
+\begin{intuition}
+What you just did is solve the differential equation $\varphi''+\frac1r\varphi'=0$ without any ODE theory:
+two ``zero derivative means constant'' steps, which is why there are two constants, $A$ and $B$. A
+second order equation always leaves two constants.
+\end{intuition}
+
+% -------------------------------------------------------------------
+\section{Question 6: which ones stay finite at the centre?}
+
+\begin{question}{Problem 3 \;·\; limit}
+For which values of $A$ and $B$ does $\displaystyle\lim_{(x,y)\to(0,0)}u(x,y)$ exist as a finite real
+number? Compute this limit when it exists.
+\end{question}
+
+\begin{lesson}
+Reduce to one variable: as $(x,y)\to(0,0)$, $r\to0^+$, and $u=A\ln r+B$. The behaviour depends on the
+\emph{sign of $A$}, since $\ln r\to-\infty$. Always split into $A>0$, $A<0$, $A=0$.
+\end{lesson}
+
+\begin{answer}
+As $(x,y)\to(0,0)$, $r\to0^+$ and $\ln r\to-\infty$. With $u=A\ln r+B$:
+\begin{itemize}
+  \item if $A>0$: $\ u\to-\infty$;
+  \item if $A<0$: $\ u\to+\infty$;
+  \item if $A=0$: $\ u=B$ is constant, so $u\to B$.
+\end{itemize}
+The limit is a finite real number \textbf{if and only if $A=0$}, for any $B\in\R$, and then
+\[
+  \lim_{(x,y)\to(0,0)}u(x,y)=B .
+\]
+\end{answer}
+
+\begin{center}
+\begin{tikzpicture}
+\begin{axis}[bp, width=9cm, height=6cm, xmin=0, xmax=3.3, ymin=-2.6, ymax=4.2,
+   xlabel=$r$, ylabel={$u$}, xtick={1,2,3}, ytick={-2,-1,1,2,3}]
+  \addplot[tealD, line width=1.4pt, domain=0.04:3.2, samples=120] {ln(x)+1};
+  \addplot[coralD, line width=1.4pt, domain=0.04:3.2, samples=120] {-ln(x)+1};
+  \addplot[tealDD, line width=1.4pt, dashed, domain=0:3.2] {1};
+  \node[font=\scriptsize, text=tealD, anchor=west] at (axis cs:2.2,2.05) {$A=1$};
+  \node[font=\scriptsize, text=coralD, anchor=west] at (axis cs:2.3,-0.35) {$A=-1$};
+  \node[font=\scriptsize, text=tealDD, anchor=south west] at (axis cs:2.3,1.02) {$A=0$};
+  \node[font=\scriptsize, text=tealDD, anchor=east] at (axis cs:0,1) {$B$};
+\end{axis}
+\end{tikzpicture}
+\figcap{$u=A\ln r+B$ with $B=1$, seen as a function of the distance $r$. Only $A=0$ arrives at the
+centre with a finite value.}
+\end{center}
+
+\begin{reallife}
+Read the result as physics. In a metal disc with no heat source at its centre, a steady temperature
+that depends only on the distance to the centre must be \emph{constant}. The $\ln r$ part can only exist if
+something at the centre is pumping heat in or out, like a hot wire, and then the temperature blows
+up there. A finite value at the centre forces $A=0$.
+\end{reallife}
+
+\begin{trap}
+\begin{itemize}
+  \item Answering ``$A=0$ and $B=0$''. Any $B$ works: a constant function has a limit.
+  \item Treating only $A>0$. The sign of $A$ decides $+\infty$ or $-\infty$; write both cases.
+  \item Forgetting to give the value of the limit, $B$, when it exists. The question asks for it.
+\end{itemize}
+\end{trap}
+
+\section{Problem 3 in five lines}
+
+\begin{remember}[unbreakable]
+\begin{enumerate}
+  \item $r_x=\frac xr$, $r_y=\frac yr$; $u_x=\varphi'(r)\frac xr$; $\pd{}{x}(\frac xr)=\frac{y^2}{r^3}$; product rule gives $u_{xx}$.
+  \item Add and use $x^2+y^2=r^2$: $\Delta u=\varphi''+\frac1r\varphi'$.
+  \item $\varphi=\ln$: $-\frac1{r^2}+\frac1{r^2}=0$, harmonic; $\ln r\to-\infty$ at $O$.
+  \item $\varphi''+\frac1r\varphi'=0\iff(r\varphi')'=0$, so $r\varphi'=A$ (interval!). Then $(\varphi-A\ln r)'=0$, so $u=A\ln r+B$.
+  \item Finite limit at $O$ $\iff A=0$; the limit is $B$.
+\end{enumerate}
+\end{remember}

@@ -1,0 +1,499 @@
+% ============================== CHAPTER 1 ============================
+\settab{LECTURE I}{1}
+\chapter[Functions of Several Variables]{Functions of\\ Several Variables}\label{ch:one}
+
+\begin{examnote}
+Lecture I gives the vocabulary of the whole course. In the exam it shows up as short
+questions (domains, level curves, a gradient) and as one longer question where you prove
+differentiability from the definition, or show that a function is not even continuous.
+TD 1, the first half of the quiz and the GT4 sessions of 21 and 23 October all drill these.
+\end{examnote}
+
+\section{Domains, graphs and level curves}
+
+\begin{intuition}
+A function $f(x,y)$ is a landscape: above each point $(x,y)$ of the floor sits the height
+$f(x,y)$. The \emph{graph} is the landscape itself, a surface in $\R^3$. A \emph{level
+curve} is a contour line on a hiking map: all the points of the floor at the same height.
+You get it by slicing the landscape horizontally at height $c$ and looking straight down.
+\end{intuition}
+
+\begin{defi}[Function, domain, graph, level set]
+A function on $S\subset\R^n$ assigns a number $f(X)$ to each $X\in S$. The \emph{natural
+domain} is the largest set where the formula makes sense. The \emph{graph} is
+$\{(X,f(X)) : X\in S\}\subset\R^{n+1}$. For a number $c$, the \emph{level set}
+$\{X\in S : f(X)=c\}$ is a level curve when $n=2$ and a level surface when $n=3$.
+\end{defi}
+
+\begin{method}
+\textbf{Natural domain.} List every operation and its condition, then intersect.
+\begin{center}
+\begin{tabular}{@{}ll@{}}
+$\sqrt{u}$ & $u\ge 0$\\
+$u/v$ & $v\neq 0$\\
+$\log u$ & $u>0$\\
+$\arcsin u,\ \arccos u$ & $-1\le u\le 1$
+\end{tabular}
+\end{center}
+Then sketch: a \textbf{solid} boundary is included, a \textbf{dashed} boundary is excluded.
+
+\textbf{Level curves.} Write $f(x,y)=c$, rearrange into a shape you recognise (complete
+the square if needed), and discuss $c>0$, $c=0$, $c<0$ and the values of $c$ that give the
+empty set.
+\end{method}
+
+\begin{center}
+\begin{tikzpicture}
+\begin{axis}[bp, width=5.4cm, height=5.4cm, xmin=-2.6, xmax=2.6, ymin=-2.6, ymax=2.6,
+   xtick={-2,-1,1,2}, ytick={-2,-1,1,2}, xlabel=$x$, ylabel=$y$, axis equal image,
+   title={\small\color{tealDD}$x^2+y^2=c$}]
+  \foreach \c in {1,2,3,4} {
+    \edef\tmp{\noexpand\addplot[domain=0:360, samples=80,
+       draw=tealD!\the\numexpr 100-18*\c\relax!coral] ({sqrt(\c)*cos(x)},{sqrt(\c)*sin(x)});}\tmp }
+  \node[font=\scriptsize, text=tealD, fill=white, inner sep=1pt] at (axis cs:0.72,0.72) {$1$};
+  \node[font=\scriptsize, text=coralD, fill=white, inner sep=1pt] at (axis cs:1.42,1.42) {$4$};
+\end{axis}
+\end{tikzpicture}\hspace{2mm}
+\begin{tikzpicture}
+\begin{axis}[bp, width=5.4cm, height=5.4cm, xmin=-2.5, xmax=2.5, ymin=-2.5, ymax=2.5,
+   xtick={-2,-1,1,2}, ytick={-2,-1,1,2}, xlabel=$x$, ylabel=$y$, axis equal image,
+   title={\small\color{tealDD}$x^2-y^2=c$}]
+  \foreach \c/\T in {0.5/1.75, 1.5/1.15, 3/0.62} {
+    \edef\tmp{%
+    \noexpand\addplot[tealD, domain=-\T:\T, samples=40] ({sqrt(\c)*cosh(x)},{sqrt(\c)*sinh(x)});
+    \noexpand\addplot[tealD, domain=-\T:\T, samples=40] ({-sqrt(\c)*cosh(x)},{sqrt(\c)*sinh(x)});
+    \noexpand\addplot[coral, domain=-\T:\T, samples=40] ({sqrt(\c)*sinh(x)},{sqrt(\c)*cosh(x)});
+    \noexpand\addplot[coral, domain=-\T:\T, samples=40] ({sqrt(\c)*sinh(x)},{-sqrt(\c)*cosh(x)});}\tmp }
+  \addplot[tealDD, dashed, domain=-2.5:2.5] {x};
+  \addplot[tealDD, dashed, domain=-2.5:2.5] {-x};
+\end{axis}
+\end{tikzpicture}\hspace{2mm}
+\begin{tikzpicture}
+\begin{axis}[bp3d, width=5.8cm, height=5.6cm, xlabel=$x$, ylabel=$y$, zlabel=$z$,
+   xmin=-1.8, xmax=1.8, ymin=-1.8, ymax=1.8, zmin=-3, zmax=3, view={-30}{24}]
+  \addplot3[gsurf, domain=-1.5:1.5, y domain=-1.5:1.5, samples=20] {x^2-y^2};
+\end{axis}
+\end{tikzpicture}
+\figcap{Left: circles of the bowl $x^2+y^2$; the gaps shrink, so the bowl gets steeper.
+Middle: hyperbolas of the saddle $x^2-y^2$ (teal for $c>0$, coral for $c<0$, dashed for
+$c=0$). Right: the saddle itself.}
+\end{center}
+
+\begin{remember}
+On a contour map with equal steps in $c$, curves that are \textbf{close together} mean
+the graph is \textbf{steep} there. The graph lives in $\R^{n+1}$; a level set stays in the
+input space $\R^n$.
+\end{remember}
+
+\section{Open sets}
+
+\begin{defi}[Balls, open sets]
+For $P\in\R^n$ and $a>0$: open ball $\norm{X-P}<a$, closed ball $\norm{X-P}\le a$, sphere
+$\norm{X-P}=a$. A set $U$ is \emph{open} if every $P\in U$ has some open ball around it
+contained in $U$.
+\end{defi}
+
+\begin{intuition}
+To differentiate at $P$ you need to wiggle $P$ in every direction and stay where $f$ is
+defined. Open means: every point has a little room around it.
+\end{intuition}
+
+\begin{thm}[An open ball is open]
+The ball $\norm{X}<a$ is open: for $\norm P=b<a$, the ball of radius $c=a-b$ around $P$ is
+inside, since $\norm X\le\norm{X-P}+\norm P<(a-b)+b=a$.
+\end{thm}
+
+\begin{method}
+\textbf{Show a set is open.} Take a general point $P$, write an explicit radius (distance
+to the boundary), and use the triangle inequality. Quick rule: $\{g>0\}$ and $\{g\ne 0\}$
+with $g$ continuous are open; $\{g\ge 0\}$ and $\{g=0\}$ are closed.
+
+\textbf{Show a set is not open.} Exhibit one point of the set whose every ball leaves it.
+
+\textbf{Show a set is not closed.} Exhibit a sequence in the set converging to a point
+outside it, for example $(0,\tfrac1n)\to(0,0)$.
+\end{method}
+
+\begin{trap}
+``Not open'' does not mean ``closed''. And openness depends on the ambient space: $(-1,1)$
+is open in $\R$ but not in $\R^2$ (quiz Q8).
+\end{trap}
+
+\section{Partial derivatives and the gradient}
+
+\begin{defi}[Partial derivative, gradient]
+On an open set $U$, $D_if(X)=\displaystyle\pd f{x_i}(X)=\lim_{h\to0}\frac{f(X+hE_i)-f(X)}{h}$,
+where only $x_i$ moves. The gradient is $\grad f(X)=\big(D_1f(X),\dots,D_nf(X)\big)$.
+\end{defi}
+
+\begin{center}
+\begin{tikzpicture}
+\begin{axis}[bp3d, width=8.6cm, height=7cm, xlabel=$x$, ylabel=$y$, zlabel=$z$,
+   xmin=-0.2, xmax=2.3, ymin=-0.2, ymax=2.3, zmin=0, zmax=6.5, view={-40}{25}]
+  \addplot3[gsurf, opacity=0.55, fill opacity=0.55, domain=0:2, y domain=0:2, samples=15]
+     {4-0.5*(x-1)^2-0.75*(y-1)^2+0.6*x};
+  \addplot3[aqua, line width=1.8pt, domain=0:2, samples=40, samples y=1] (x,1,{4-0.5*(x-1)^2+0.6*x});
+  \addplot3[coral, line width=1.8pt, domain=0:2, samples=40, samples y=1] (1,x,{4.6-0.75*(x-1)^2});
+  \addplot3[tealDD, dashed, line width=1pt, domain=0.4:1.6, samples=2, samples y=1] (x,1,{4.6+0.6*(x-1)});
+  \addplot3[only marks, mark=*, mark size=2.6pt, white, mark options={draw=tealDD, line width=1pt}] coordinates {(1,1,4.6)};
+  \node[font=\scriptsize, text=tealD, anchor=west] at (axis cs:2,1,5.1) {$y=y_0$ fixed};
+  \node[font=\scriptsize, text=coralD, anchor=south] at (axis cs:1,2.1,4.0) {$x=x_0$ fixed};
+\end{axis}
+\end{tikzpicture}
+\figcap{Freeze $y$ and the surface becomes a curve (teal); its slope is $\partial f/\partial x$.
+Freeze $x$ instead (coral) to get $\partial f/\partial y$.}
+\end{center}
+
+\begin{trap}
+$D_if(P)$ means \emph{first} compute the function $D_if$, \emph{then} evaluate at $P$. It is
+not the derivative of the number $f(P)$, which would be $0$. Same for $\grad f(X)$, read
+$(\grad f)(X)$ (quiz Q15).
+\end{trap}
+
+\begin{method}
+\textbf{At an ordinary point}, use one-variable rules with the other variables frozen.
+\textbf{At a special point} of a piecewise function (usually the origin), go back to the
+limit definition: e.g.\ if $f(h,0)=0$ for all $h$ then $D_1f(0,0)=0$.
+\end{method}
+
+\section{Differentiability}
+
+\begin{intuition}
+You cannot divide by a vector, so the one-variable Newton quotient is useless. Instead,
+copy the other form of the one-variable derivative: \emph{change = linear part + error
+smaller than the step}. Zoom in on a differentiable surface and it becomes its tangent
+plane.
+\end{intuition}
+
+\begin{defi}[Differentiable at $X$]
+$f$ is differentiable at $X$ if its partial derivatives exist and
+\[
+f(X+H)-f(X)=\grad f(X)\cdot H+R(H)\qquad\text{with}\qquad \frac{R(H)}{\norm H}\xrightarrow[H\to O]{}0 .
+\]
+Equivalently $R(H)=\norm H\,g(H)$ with $g(H)\to0$. In two variables, $H=(h,k)$ and the
+linear part is $f_xh+f_yk$.
+\end{defi}
+
+\begin{thm}[$C^1$ implies differentiable]
+If all first partial derivatives exist and are continuous on an open set $U$, then $f$ is
+differentiable on $U$.
+\end{thm}
+
+\begin{intuition}
+Proof idea: go from $(x,y)$ to $(x+h,y+k)$ in an L-shape. Each leg moves one variable, the
+mean value theorem turns it into ``partial derivative times step'', and continuity of the
+partials makes the small mistake in the evaluation point vanish.
+\end{intuition}
+
+\begin{center}
+\begin{tikzpicture}[node distance=0.45cm and 0.8cm,
+   b/.style={draw=tealD, line width=0.8pt, fill=mist, font=\small\sffamily, inner sep=5pt,
+   align=center, rounded corners=1.2mm}]
+ \node[b] (c1) {partials exist\\ and are continuous ($C^1$)};
+ \node[b, right=of c1] (d) {differentiable};
+ \node[b, right=of d, yshift=0.55cm] (c) {continuous};
+ \node[b, right=of d, yshift=-0.55cm] (p) {partials exist};
+ \draw[vec] (c1) -- (d); \draw[vec] (d) -- (c.west); \draw[vec] (d) -- (p.west);
+ \draw[coralD, line width=1pt, dashed, -{Stealth}] (p.north) -- node[right, font=\scriptsize\sffamily]{false} (c.south);
+\end{tikzpicture}
+\figcap{None of the arrows can be reversed. ``Partials exist'' does not even give
+continuity.}
+\end{center}
+
+\begin{method}
+\textbf{Is $f$ differentiable at $P$?} (exam checklist)
+\begin{enumerate}
+  \item Partials continuous near $P$ (polynomials, $\exp$, $\sin$, compositions\dots)?
+  Then yes, by the $C^1$ theorem. One line.
+  \item Special point: is $f$ continuous at $P$? Test two paths. Different limits give
+  ``not continuous, so not differentiable''.
+  \item Compute the partials at $P$ from the definition. If one fails to exist: no.
+  \item Otherwise write the remainder $R(H)=f(P+H)-f(P)-\grad f(P)\cdot H$ and show that
+  $|R(H)|/\norm H\to0$ with the toolbox below.
+\end{enumerate}
+\textbf{Toolbox} ($H=(h,k)$): $|h|\le\norm H$, $|k|\le\norm H$, $2|hk|\le h^2+k^2$,
+$4x^2y^2\le(x^2+y^2)^2$. If $|R(H)|\le C\norm H^p$ with $p>1$, you are done.
+\end{method}
+
+\begin{trap}
+To prove a limit \emph{does not} exist, two paths with different limits are enough. To
+prove a limit \emph{does} exist, agreement along lines is never enough: Problem~\ref{p:parab}
+below agrees along every line and still has no limit. Use a squeeze instead.
+\end{trap}
+
+\begin{center}
+\begin{tikzpicture}
+\begin{axis}[bp3d, width=7.6cm, height=6.4cm, xlabel=$x$, ylabel=$y$, zlabel=$z$,
+   xmin=-1.3, xmax=1.3, ymin=-1.3, ymax=1.3, zmin=-0.8, zmax=0.8, view={-30}{30}]
+  \addplot3[gsurf, domain=0.04:1, y domain=0:360, samples=10, samples y=48, z buffer=sort]
+    ({x*cos(y)},{x*sin(y)},{0.5*sin(2*y)});
+  \addplot3[aqua, line width=1.6pt, samples=2, samples y=1, domain=0:1] ({x*0.7071},{x*0.7071},0.5);
+  \addplot3[coral, line width=1.6pt, samples=2, samples y=1, domain=0:1] ({x*0.7071},{-x*0.7071},-0.5);
+\end{axis}
+\end{tikzpicture}
+\figcap{$f=\dfrac{xy}{x^2+y^2}$ equals $\tfrac12\sin2\theta$: the height depends only on the
+angle. Both partials at $O$ are $0$, yet $f=\tfrac12$ along $y=x$ and $-\tfrac12$ along
+$y=-x$.}
+\end{center}
+
+\begin{reallife}
+Every engineering simulation uses the linear part: to predict how a stress $\sigma$ reacts
+to small changes $h,k$ of two dimensions, write $\Delta\sigma\approx\sigma_xh+\sigma_yk$.
+Differentiability is the guarantee that this prediction improves as the changes shrink, in
+every direction at once.
+\end{reallife}
+
+\section{TD 1, solved}
+
+\begin{problem}{TD 1 · Ex. 1}
+Find and sketch the natural domain; say whether it is open, closed or neither.
+(a) $\sqrt{9-x^2-4y^2}$ \quad (b) $\log(y-x^2)$ \quad
+(c) $\dfrac{\sqrt{x+y-1}}{x^2+y^2-4}$ \quad (d) $\arcsin(x+y)$.
+\end{problem}
+\begin{hint}One condition per operation. ``$\ge$'' gives a closed set, ``$>$'' an open one.
+Mixed conditions give ``neither''.\end{hint}
+\begin{solution}
+\begin{enumerate}[label=(\alph*)]
+  \item $9-x^2-4y^2\ge0$, i.e.\ $x^2+4y^2\le9$: the filled ellipse with semi-axes $3$ and
+  $\tfrac32$, boundary included. Closed (preimage of $(-\infty,9]$ by a continuous map), not open.
+  \item $y-x^2>0$: the region strictly above the parabola $y=x^2$. Open; not closed, since
+  $(0,\tfrac1n)\to(0,0)\notin D$.
+  \item $x+y\ge1$ and $x^2+y^2\ne4$: the half-plane on or above $y=1-x$ with the arc of the
+  circle of radius 2 removed. Neither: $(1,0)$ is in it but every disc around $(1,0)$ contains
+  points with $x+y<1$; and $(2+\tfrac1n,0)\to(2,0)$, which is excluded.
+  \item $-1\le x+y\le1$: the closed strip between the lines $y=-x-1$ and $y=-x+1$. Closed.
+\end{enumerate}
+\begin{center}
+\begin{tikzpicture}
+\begin{axis}[bp, width=4.2cm, height=4.2cm, xmin=-3.5, xmax=3.5, ymin=-3.5, ymax=3.5,
+  xtick=\empty, ytick=\empty, axis equal image, title={\scriptsize (a)}]
+  \addplot[draw=tealD, fill=aqua, fill opacity=.3, domain=0:360, samples=80] ({3*cos(x)},{1.5*sin(x)}) -- cycle;
+\end{axis}\end{tikzpicture}
+\begin{tikzpicture}
+\begin{axis}[bp, width=4.2cm, height=4.2cm, xmin=-2, xmax=2, ymin=-1, ymax=4,
+  xtick=\empty, ytick=\empty, title={\scriptsize (b)}]
+  \addplot[name path=p, tealD, dashed, domain=-2:2, samples=40] {x^2};
+  \addplot[name path=t, draw=none, domain=-2:2] {4};
+  \addplot[aqua, fill opacity=.3] fill between[of=p and t];
+\end{axis}\end{tikzpicture}
+\begin{tikzpicture}
+\begin{axis}[bp, width=4.2cm, height=4.2cm, xmin=-3, xmax=3, ymin=-3, ymax=3,
+  xtick=\empty, ytick=\empty, axis equal image, title={\scriptsize (c)}]
+  \addplot[name path=l, tealD, domain=-3:3] {1-x};
+  \addplot[name path=t, draw=none, domain=-3:3] {3};
+  \addplot[aqua, fill opacity=.3] fill between[of=l and t];
+  \addplot[coralD, dashed, line width=1.3pt, domain=-90:180, samples=60] ({2*cos(x)},{2*sin(x)});
+\end{axis}\end{tikzpicture}
+\begin{tikzpicture}
+\begin{axis}[bp, width=4.2cm, height=4.2cm, xmin=-3, xmax=3, ymin=-3, ymax=3,
+  xtick=\empty, ytick=\empty, axis equal image, title={\scriptsize (d)}]
+  \addplot[name path=a, tealD, domain=-3:3] {-x-1};
+  \addplot[name path=b, tealD, domain=-3:3] {-x+1};
+  \addplot[aqua, fill opacity=.3] fill between[of=a and b];
+\end{axis}\end{tikzpicture}
+\end{center}
+\end{solution}
+
+\begin{problem}{TD 1 · Ex. 2}
+Sketch level curves and name their shape: (a) $x^2+4y^2$, $c=0,1,4$;
+(b) $x^2-y^2$; (c) $2x-y+3$, $c=-1,0,1,4$; (d) $xy$.
+\end{problem}
+\begin{hint}Isolate a familiar equation. For (b) and (d), treat $c>0$, $c=0$, $c<0$ separately.\end{hint}
+\begin{solution}
+(a) $x^2+4y^2=c$: for $c>0$ ellipses with semi-axes $\sqrt c$ and $\sqrt c/2$ (so $1,\tfrac12$
+for $c=1$ and $2,1$ for $c=4$); $c=0$ only the origin; $c<0$ empty.
+(b) $c>0$: hyperbolas opening left and right, vertices $(\pm\sqrt c,0)$; $c<0$: opening up and
+down, vertices $(0,\pm\sqrt{-c})$; $c=0$: the two lines $y=\pm x$ (the asymptotes).
+(c) $y=2x+3-c$: parallel lines of slope 2, namely $y=2x+4$, $2x+3$, $2x+2$, $2x-1$.
+(d) $c\ne0$: hyperbolas $y=c/x$, in quadrants I and III if $c>0$, II and IV if $c<0$; $c=0$:
+the two axes.
+\end{solution}
+
+\begin{problem}{TD 1 · Ex. 3}
+(a) Complete the square and describe the level curves of $x^2+y^2-4x+6y$.
+(b) Domain and level curves of $g=\log(4-x^2-y^2)$. Which $c$ occur?
+\end{problem}
+\begin{hint}(a) $x^2-4x=(x-2)^2-4$. (b) Exponentiate $g=c$.\end{hint}
+\begin{solution}
+(a) $f=(x-2)^2+(y+3)^2-13$, so $f=c$ is the circle of centre $(2,-3)$ and radius
+$\sqrt{c+13}$ when $c>-13$, the single point $(2,-3)$ when $c=-13$, and empty below. The
+admissible levels are $c\ge-13$.
+
+(b) $\Dom g=\{x^2+y^2<4\}$, the open disc of radius 2. $g=c\iff x^2+y^2=4-e^c$: a circle of
+radius $\sqrt{4-e^c}\in(0,2)$ if $c<\log 4$, the origin if $c=\log4$, empty if $c>\log4$. So
+$c\in(-\infty,\log 4]$. The boundary circle is never reached.
+\end{solution}
+
+\begin{problem}{TD 1 · Ex. 4}
+Describe the level surfaces of (a) $x^2+y^2+z^2$ and (b) $x^2+y^2-z^2$.
+\end{problem}
+\begin{hint}At height $z$, the cross-section of (b) is a circle. Watch its radius.\end{hint}
+\begin{solution}
+(a) Spheres of radius $\sqrt c$ for $c>0$, the origin for $c=0$, empty for $c<0$.
+(b) $c>0$: hyperboloid of one sheet around the $z$-axis (cross-section radius
+$\sqrt{c+z^2}$, never zero). $c=0$: the double cone $x^2+y^2=z^2$. $c<0$: hyperboloid of two
+sheets, vertices $(0,0,\pm\sqrt{-c})$, no points with $|z|<\sqrt{-c}$.
+\end{solution}
+
+\begin{problem}{TD 1 · Ex. 5}
+First partial derivatives, saying what is held constant:
+(a) $\sin(xy)$ \quad (b) $x^y$, $x>0$ \quad (c) $x\cos(y-2z)+\sin(xy)$.
+\end{problem}
+\begin{hint}Write $x^y=e^{y\log x}$.\end{hint}
+\begin{solution}
+(a) $f_x=y\cos(xy)$ ($y$ fixed), $f_y=x\cos(xy)$ ($x$ fixed).
+(b) $g_x=yx^{y-1}$ ($y$ fixed, power rule), $g_y=x^y\log x$ ($x$ fixed, exponential rule).
+(c) $h_x=\cos(y-2z)+y\cos(xy)$, $h_y=-x\sin(y-2z)+x\cos(xy)$,
+$h_z=+2x\sin(y-2z)$: the two minus signs (from $\cos'$ and from $-2z$) cancel.
+\end{solution}
+
+\begin{problem}{TD 1 · Ex. 6 (GT4, 23 Oct.)}
+(a) $\grad f(1,1)$ for $f=\log(x^2+y^2)$. (b) For fixed $A$, show $\grad(A\cdot X)=A$ in $\R^n$.
+\end{problem}
+\begin{solution}
+(a) $\grad f=\left(\dfrac{2x}{x^2+y^2},\dfrac{2y}{x^2+y^2}\right)$, so $\grad f(1,1)=(1,1)$.
+(b) $f(X)=\sum_j a_jx_j$, hence $\partial f/\partial x_i=a_i$ and $\grad f=A$ everywhere. Here
+$f(X+H)-f(X)=A\cdot H$ exactly: a linear function is its own linear approximation.
+\end{solution}
+
+\begin{problem}{TD 1 · Ex. 7}
+Show from the definition that $f=x^2y$ is differentiable at $(0,0)$.
+\end{problem}
+\begin{hint}Both partials at $O$ are $0$, so the remainder is $f(h,k)$ itself.\end{hint}
+\begin{solution}
+$f(h,0)=f(0,k)=0$ gives $\grad f(0,0)=(0,0)$. Then $R(H)=f(h,k)-0-0=h^2k$. With $r=\norm H$,
+$|h|,|k|\le r$, so $\dfrac{|R(H)|}{\norm H}\le\dfrac{r^2\cdot r}{r}=r^2\to0$. Hence $f$ is
+differentiable at $O$ with zero derivative; its linear approximation there is $f\approx0$.
+\end{solution}
+
+\begin{problem}{TD 1 · Ex. 8 (GT4, 23 Oct.)}
+$f=x^2+xy+y^2$. Compute $\grad f$, expand $f(a+h,b+k)-f(a,b)$, identify $R(H)=h^2+hk+k^2$,
+prove $R(H)/\norm H\to0$ and conclude.
+\end{problem}
+\begin{hint}The board solution: $\left|\frac{hk}{h^2+k^2}\right|\le\frac12$ because
+$(|h|-|k|)^2\ge0$.\end{hint}
+\begin{solution}
+$\grad f=(2x+y,\;x+2y)$. Expanding,
+$f(a+h,b+k)-f(a,b)=(2a+b)h+(a+2b)k+h^2+hk+k^2=\grad f(a,b)\cdot H+R(H)$.
+Since $(|h|-|k|)^2\ge0$ we have $|hk|\le\tfrac12(h^2+k^2)$, so
+\[
+|R(H)|\le h^2+k^2+|hk|\le\tfrac32\norm H^2,\qquad
+0\le\frac{|R(H)|}{\norm H}\le\tfrac32\norm H\to0 .
+\]
+By the squeeze theorem $R(H)=o(\norm H)$, and $f$ is differentiable at every $(a,b)$.
+\end{solution}
+
+\begin{problem}{TD 1 · Ex. 9}
+$f=\dfrac{xy}{x^2+y^2}$, $f(0,0)=0$. Partials at $O$; limits along $y=\pm x$; continuity and
+differentiability at $O$.
+\end{problem}
+\begin{solution}
+On the axes $f=0$, so $f_x(0,0)=f_y(0,0)=0$. Along $y=x$, $f(t,t)=\tfrac12$; along $y=-x$,
+$f(t,-t)=-\tfrac12$. Two paths, two limits: no limit at $O$, so $f$ is \textbf{not continuous}
+and therefore \textbf{not differentiable} at $O$, although both partials exist. (Directly:
+$|f(t,t)|/\norm{(t,t)}=1/(2\sqrt2|t|)\to\infty$.)
+\end{solution}
+
+\begin{problem}{TD 1 · Ex. 10}
+$g=\dfrac{x^2y^2}{x^2+y^2}$, $g(0,0)=0$. Continuity, partials, gradient and differentiability at $O$.
+\end{problem}
+\begin{hint}$(x^2-y^2)^2\ge0$ gives $4x^2y^2\le(x^2+y^2)^2$.\end{hint}
+\begin{solution}
+Continuity: $0\le g\le\tfrac14(x^2+y^2)\to0=g(0,0)$ by the squeeze. Partials: $g(h,0)=g(0,k)=0$,
+so $\grad g(0,0)=(0,0)$. Differentiability: with $L=0$,
+\[
+\frac{|g(H)|}{\norm H}=\frac{h^2k^2}{(h^2+k^2)^{3/2}}\le\tfrac14\sqrt{h^2+k^2}\to0 .
+\]
+So $g$ is differentiable at $O$ with $Dg(0,0)=0$.
+\end{solution}
+
+\begin{problem}{TD 1 · Ex. 11 (GT4, 28 Oct.)}
+$f=e^{xy}+\sin(x^2+y)$: domain, partials, their continuity, differentiability on $\R^2$,
+$\grad f(0,0)$ and the linear approximation at $O$.
+\end{problem}
+\begin{solution}
+$\Dom f=\R^2$. $f_x=ye^{xy}+2x\cos(x^2+y)$, $f_y=xe^{xy}+\cos(x^2+y)$: sums, products and
+compositions of continuous functions, hence continuous on $\R^2$. So $f$ is $C^1$, hence
+differentiable everywhere. $\grad f(0,0)=(0,1)$ and $f(0,0)=1$, so near $O$
+\[ f(x,y)=1+y+o\big(\norm{(x,y)}\big),\qquad f(x,y)\approx 1+y . \]
+\end{solution}
+
+\begin{problem}{Extra · beyond TD 1}\label{p:parab}
+$f=\dfrac{x^2y}{x^4+y^2}$, $f(0,0)=0$. Show $f\to0$ along every line through $O$, but $f$ is
+not continuous at $O$.
+\end{problem}
+\begin{solution}
+Along $y=mx$ ($m\ne0$): $f=\dfrac{mx}{x^2+m^2}\to0$; along the axes $f=0$. But along the
+parabola $y=x^2$: $f=\dfrac{x^4}{2x^4}=\tfrac12$. Two paths, two limits: not continuous.
+Lines alone never prove a limit.
+\end{solution}
+
+\begin{trap}
+Three classic errors in TD 1: writing $\log(y-x^2)$ with ``$\ge$'' (log needs $>$); forgetting
+that a sum of squares can only give $c\ge0$ (empty level sets); and in Ex.~5(c), writing
+$h_z=-2x\sin(y-2z)$ (two minus signs make a plus).
+\end{trap}
+
+\section{More exam-style problems}
+
+\begin{problem}{Exam style · continuity without differentiability}
+$f(x,y)=\dfrac{x^3+y^3}{x^2+y^2}$ for $(x,y)\ne O$, $f(0,0)=0$. (a) Show $f$ is continuous at $O$.
+(b) Compute $f_x(0,0)$, $f_y(0,0)$. (c) Is $f$ differentiable at $O$?
+\end{problem}
+\begin{hint}(a) $|x^3|\le|x|(x^2+y^2)$. (c) The candidate linear part is $h+k$; test the
+remainder along $h=k$.\end{hint}
+\begin{solution}
+(a) $|x^3+y^3|\le(|x|+|y|)(x^2+y^2)$, so $|f|\le|x|+|y|\to0$. Continuous.
+(b) $f(h,0)=h$, so $f_x(0,0)=\lim\frac{h-0}{h}=1$; likewise $f_y(0,0)=1$.
+(c) $R(h,k)=f(h,k)-h-k=\dfrac{h^3+k^3-(h+k)(h^2+k^2)}{h^2+k^2}=-\dfrac{hk(h+k)}{h^2+k^2}$. Along $h=k=t$:
+$R=-t$ and $\dfrac{R}{\norm H}=\dfrac{-t}{\sqrt2|t|}=\mp\dfrac{\sqrt2}2\not\to0$. Not differentiable at $O$:
+continuous, both partials exist, and still no tangent plane.
+\end{solution}
+
+\begin{problem}{Exam style · gradient field}
+Sketch the level curves of $f=x^2+y^2$ and the vectors $\grad f$ at a few points. What do you
+notice?
+\end{problem}
+\begin{solution}
+$\grad f=2(x,y)$ points straight away from $O$, perpendicular to the circles, and gets longer
+as the circles get closer together. This is the picture behind Lecture II: the gradient is
+normal to level curves and points uphill.
+\begin{center}
+\begin{tikzpicture}
+\begin{axis}[bp, width=5.8cm, height=5.8cm, xmin=-2.4, xmax=2.4, ymin=-2.4, ymax=2.4,
+   xtick={-2,-1,1,2}, ytick={-2,-1,1,2}, xlabel=$x$, ylabel=$y$, axis equal image]
+  \foreach \r in {0.7,1.4,2.1} {\edef\tmp{\noexpand\addplot[tealD!60, domain=0:360, samples=70] ({\r*cos(x)},{\r*sin(x)});}\tmp}
+  \foreach \xx in {-1.8,-1.2,...,1.9} { \foreach \yy in {-1.8,-1.2,...,1.9} {
+     \edef\tmp{\noexpand\draw[coralD, -{Stealth[length=1.6mm]}, line width=0.8pt]
+       (axis cs:\xx,\yy) -- (axis cs:{\xx+0.28*\xx},{\yy+0.28*\yy});}\tmp }}
+\end{axis}
+\end{tikzpicture}
+\end{center}
+\end{solution}
+
+\begin{problem}{Exam style · open or not}
+Is $U=\{1<x^2+y^2<4\}$ open? Give an explicit radius for $P\in U$ with $\norm P=b$.
+\end{problem}
+\begin{solution}
+Yes. Take $c=\min(b-1,2-b)>0$. If $\norm{X-P}<c$ then $\norm X<b+(2-b)=2$ and $\norm X>b-(b-1)=1$, so
+$X\in U$.
+\end{solution}
+
+\begin{problem}{Exam style · differentiable but not $C^1$}
+$f=(x^2+y^2)\sin\dfrac1{\sqrt{x^2+y^2}}$, $f(O)=0$. Show $f$ is differentiable at $O$.
+\end{problem}
+\begin{solution}
+$|f(H)|\le\norm H^2$, so with $L=0$, $|R(H)|/\norm H\le\norm H\to0$: differentiable, $\grad f(O)=O$. Yet
+$f_x=2x\sin\frac1r-\frac xr\cos\frac1r$ has no limit at $O$ (on the $x$-axis it contains $-\cos\frac1x$). So
+the converse of the $C^1$ theorem is false.
+\end{solution}
+
+\section{Quick check}
+\begin{quickcheck}
+If both partials exist at $P$, then $f$ is continuous at $P$. & \qF & $\frac{xy}{x^2+y^2}$ at $O$.\\
+Differentiable at $P$ implies continuous at $P$. & \qT & The remainder $\norm Hg(H)\to0$.\\
+$\{x^2+y^2<1,\ y\ge0\}$ is open. & \qF & No ball around a point of the segment $y=0$.\\
+Continuous partials near $P$ imply differentiable at $P$. & \qT & The $C^1$ theorem.\\
+Equal limits along every line through $P$ imply that the limit exists. & \qF & $\frac{x^2y}{x^4+y^2}$: lines give $0$, $y=x^2$ gives $\frac12$.\\
+Level curves for two different values can cross. & \qF & A crossing point would have two values.\\
+\end{quickcheck}

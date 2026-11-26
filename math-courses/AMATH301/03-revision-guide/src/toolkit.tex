@@ -1,0 +1,237 @@
+% ============================== TOOLKIT ============================
+\settab{TOOLKIT}{6}
+\chapter{Exam Toolkit}\label{ch:toolkit}
+
+\section{Every theorem with its conditions}
+
+\begin{center}\small
+\begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}p{3.1cm} Y Y@{}}
+\toprule
+\textbf{Result} & \textbf{Check first} & \textbf{Then} \\ \midrule
+$C^1\Rightarrow$ differentiable & partials exist and are \emph{continuous} on an open set & $f(X+H)=f(X)+\grad f\cdot H+o(\norm H)$\\
+Differentiable $\Rightarrow$ continuous & differentiable at $X$ & $f(X+H)\to f(X)$\\
+Chain rule & $f$ differentiable, $X(t)$ differentiable & $(f\circ X)'=\grad f(X)\cdot X'$\\
+Tangent plane & $\grad F(P)\ne O$ & $\grad F(P)\cdot(X-P)=0$\\
+Steepest ascent & $\grad f(P)\ne O$, $\norm A=1$ & $-\norm{\grad f}\le D_Af\le\norm{\grad f}$\\
+Energy & $F=-\grad\Phi$, $mX''=F(X)$ & $\tfrac12m\norm{X'}^2+\Phi(X)$ constant\\
+Schwarz & $D_1f,D_2f,D_1D_2f,D_2D_1f$ continuous & $D_1D_2f=D_2D_1f$\\
+Taylor & continuous partials up to order $r$ on the segment & remainder $\frac{(H\cdot\grad)^rf(P+\tau H)}{r!}$\\
+Fermat & $P$ \emph{interior}, $f$ differentiable, local extremum & $\grad f(P)=O$\\
+2nd derivative test & critical point, $C^3$ & $\delta>0$: $A>0$ min, $A<0$ max; $\delta<0$ saddle\\
+Existence of extrema & $S$ closed \emph{and} bounded, $f$ continuous & max and min attained\\
+Lagrange & $f,g\in C^1$, $\grad g(P)\ne O$ & $\grad f(P)=\lambda\grad g(P)$\\
+Inverse mapping & $F\in C^1$, $\det J_F(P)\ne0$ & local $C^1$ inverse, $J_{F^{-1}}=J_F^{-1}$\\
+Implicit function & $f\in C^1$, $f(a,b)=c$, $f_y(a,b)\ne0$ & $y=\varphi(x)$, $\varphi'=-f_x/f_y$\\
+Fubini (annexe) & $f$ integrable, sections integrable & iterated integral in either order\\
+Change of variables (annexe) & $G$ $C^1$-invertible inside $R$ & $\iint_{G(R)}f=\iint_R(f\circ G)|\Delta_G|$\\
+\bottomrule
+\end{tabularx}
+\end{center}
+
+\section{Proofs you should be able to write}
+
+Closed-book exams often ask for a short proof of a course result. These are the ones that fit in
+ten lines; learn the idea in the first sentence of each and the rest follows.
+
+\begin{proofbox}{Differentiable implies continuous}
+\emph{Idea: the remainder goes to $0$.} If $f(P+H)-f(P)=\grad f(P)\cdot H+\norm Hg(H)$ with
+$g(H)\to0$, then $|\grad f(P)\cdot H|\le\norm{\grad f(P)}\norm H\to0$ (Cauchy--Schwarz) and
+$\norm Hg(H)\to0$. Hence $f(P+H)\to f(P)$.
+\end{proofbox}
+
+\begin{proofbox}{Differentiable implies the partials exist, and the linear part is the gradient}
+\emph{Idea: take $H=tE_i$.} If $f(P+H)-f(P)=A\cdot H+\norm Hg(H)$, put $H=tE_i$ and divide by $t$:
+$\frac{f(P+tE_i)-f(P)}t=a_i\pm g(tE_i)\to a_i$. So $D_if(P)$ exists and equals $a_i$; $A=\grad f(P)$,
+which also shows the linear part is unique.
+\end{proofbox}
+
+\begin{proofbox}{The directional derivative and the steepest direction}
+\emph{Idea: chain rule, then Cauchy--Schwarz.} With $\norm A=1$, $D_Af(P)=\frac{d}{dt}f(P+tA)\big|_0=\grad f(P)\cdot A$.
+Then $|D_Af(P)|\le\norm{\grad f(P)}$, with equality exactly when $A$ is parallel to $\grad f(P)$:
+the largest value $\norm{\grad f(P)}$ is reached at $A=\grad f(P)/\norm{\grad f(P)}$.
+\end{proofbox}
+
+\begin{proofbox}{The gradient is perpendicular to the level set}
+\emph{Idea: differentiate a constant.} Let $X(t)$ be a differentiable curve in $\{f=c\}$ with
+$X(0)=P$. Then $f(X(t))=c$ for all $t$, so $0=\frac{d}{dt}f(X(t))\big|_0=\grad f(P)\cdot X'(0)$. Every
+tangent vector to the level set is orthogonal to $\grad f(P)$.
+\end{proofbox}
+
+\begin{proofbox}{Conservation of energy}
+\emph{Idea: differentiate the energy.} If $mX''=-\grad\Phi(X)$, then
+$\frac{d}{dt}\Big[\tfrac12m\,X'\cdot X'+\Phi(X)\Big]=mX'\cdot X''+\grad\Phi(X)\cdot X'=X'\cdot(mX''+\grad\Phi(X))=0.$
+\end{proofbox}
+
+\begin{proofbox}{An interior extremum is a critical point}
+\emph{Idea: freeze all variables but one.} If $f$ has a local max at an interior point $P$, then
+$t\mapsto f(P+tE_i)$ has a local max at $t=0$, so its derivative there, $D_if(P)$, is $0$ (one
+variable Fermat). This holds for every $i$: $\grad f(P)=O$.
+\end{proofbox}
+
+\begin{proofbox}{The sign of a quadratic form}
+\emph{Idea: complete the square.} For $a\ne0$,
+$ax^2+bxy+cy^2=a\Big(x+\tfrac b{2a}y\Big)^2+\tfrac{4ac-b^2}{4a}\,y^2.$
+If $4ac-b^2>0$ both coefficients have the sign of $a$: the form is positive (or negative) for
+$(x,y)\ne O$. If $4ac-b^2<0$, the choices $y=0$ and $x=-\frac b{2a}y$ give opposite signs: saddle.
+\end{proofbox}
+
+\begin{proofbox}{Lagrange in two variables}
+\emph{Idea: walk along the constraint.} Near $P$, with $\grad g(P)\ne O$, parametrise $\{g=0\}$ by
+a curve $X(t)$, $X(0)=P$, $X'(0)\ne O$. If $f$ restricted to the curve has an extremum at $t=0$,
+then $0=\frac{d}{dt}f(X(t))\big|_0=\grad f(P)\cdot X'(0)$. So $\grad f(P)$ and $\grad g(P)$ are both
+orthogonal to $X'(0)$ in the plane: they are parallel, $\grad f(P)=\lambda\grad g(P)$.
+\end{proofbox}
+
+\begin{proofbox}{The implicit derivative formula}
+\emph{Idea: chain rule on an identity.} If $f(x,\varphi(x))=c$ near $a$, differentiating gives
+$f_x+f_y\,\varphi'(x)=0$, so $\varphi'(x)=-\dfrac{f_x}{f_y}$ wherever $f_y\ne0$. (The theorem gives
+existence of $\varphi$; this computation only finds its derivative.)
+\end{proofbox}
+
+\begin{proofbox}{The Jacobian of an inverse}
+\emph{Idea: chain rule on $F^{-1}\circ F=\mathrm{id}$.} If both are differentiable,
+$J_{F^{-1}}(F(P))\,J_F(P)=I$, so $J_{F^{-1}}(F(P))=J_F(P)^{-1}$. In particular $\det J_F(P)\ne0$ is
+necessary for a differentiable inverse.
+\end{proofbox}
+
+\section{Exam-room strategy}
+
+\begin{method}
+\begin{enumerate}
+  \item \textbf{First 10 minutes}: read every question, mark the ones you can do immediately, and
+  start with them. Easy marks first build momentum.
+  \item \textbf{Time per mark}: for a 3-hour paper on 20 points, about 9 minutes per point. If a
+  question overruns by half its budget, leave a gap and move on.
+  \item \textbf{Write the method before the numbers}: ``critical points solve $\grad f=O$'', ``by the
+  $C^1$ theorem'', ``by Lagrange since $\grad g\ne O$ on the constraint''. Method marks survive
+  arithmetic slips.
+  \item \textbf{State hypotheses} before using a theorem (open set, continuity, $\grad g\ne O$,
+  $f_y\ne0$, closed and bounded).
+  \item \textbf{End with a sentence} in the context of the question: ``so $f$ is not differentiable
+  at $O$'', ``the minimum is $-5$, at $(1,-2)$''.
+  \item \textbf{Last 10 minutes}: run the sanity checks below on your answers.
+\end{enumerate}
+\end{method}
+
+\section{Sanity checks that catch errors}
+
+\begin{itemize}
+  \item \textbf{Mixed partials}: compute $f_{xy}$ and $f_{yx}$ separately; if they differ, you made a slip.
+  \item \textbf{Chain rule}: substitute first and differentiate directly; same answer?
+  \item \textbf{Directional derivative}: $|D_Af|\le\norm{\grad f}$. If not, you forgot to normalise.
+  \item \textbf{Tangent plane}: does the point $P$ satisfy your plane equation?
+  \item \textbf{Critical point}: plug it back into $f_x$ and $f_y$.
+  \item \textbf{Classification}: does the value of $f$ fit (the minimum smaller than nearby values)?
+  \item \textbf{Lagrange}: does every candidate satisfy the constraint? Did you consider $x=0$?
+  \item \textbf{Jacobian}: rows $=$ outputs, columns $=$ inputs; size of the product.
+  \item \textbf{Potential}: compute $-\grad\Phi$ and compare with $F$.
+  \item \textbf{Integral}: an area or a volume is positive; a mass divided by an area is a density.
+\end{itemize}
+
+\section{All the traps in one table}
+
+\begin{center}\small
+\begin{tabularx}{\linewidth}{@{}Y Y@{}}
+\toprule
+\textbf{\color{coralD}Wrong} & \textbf{\color{tealD}Right}\\ \midrule
+$\log u$ requires $u\ge0$ & $\log u$ requires $u>0$\\
+``not open'' so closed & a set can be neither (e.g.\ $[0,1)$)\\
+limits agree on all lines, so the limit exists & lines prove nothing; use a squeeze (or a parabola)\\
+partials exist, so differentiable & need continuity of partials, or the definition\\
+$D_if(P)=D_i\big(f(P)\big)=0$ & compute $D_if$, then evaluate at $P$\\
+$D_Af=\grad f\cdot B$ with $\norm B\ne1$ & $D_Af=\grad f\cdot B/\norm B$\\
+``$\partial f/\partial x$'' for the first slot of $f(x^2-y,xy)$ & $f_s$ or $D_1f$ at $(x^2-y,xy)$\\
+potential of $CX/r^3$ is $-C/r$ & with $F=-\grad\Phi$ it is $+C/r$\\
+$\left(\pd{}{x}\right)^2f=\left(\pd fx\right)^2$ & second derivative $\neq$ square of first\\
+Taylor: $f_{xx}h^2+f_{xy}hk+f_{yy}k^2$ & $\tfrac12\big(f_{xx}h^2+2f_{xy}hk+f_{yy}k^2\big)$\\
+$\delta=0$ so saddle (or so min) & $\delta=0$: no conclusion, study $f$ directly\\
+critical point, so extremum & saddles exist ($x^2-y^2$)\\
+extremum on the boundary needs $\grad f=O$ & Fermat only for interior points\\
+forget corners of a rectangle or triangle & corners are candidates\\
+divide by $x$ in a Lagrange system & split cases $x=0$ / $x\ne0$\\
+Lagrange candidates are the answer & compare values; check existence\\
+$J_{G\circ F}=J_F\,J_G$ & $J_{G\circ F}(P)=J_G(F(P))\,J_F(P)$\\
+$\det J_F\ne0$ so globally invertible & only locally ($e^x(\cos y,\sin y)$)\\
+use the IFT without checking $f_y\ne0$ & state $f(a,b)=c$ and $f_y(a,b)\ne0$\\
+polar integral without the factor $r$ & $dA=r\,dr\,d\theta$; spherical $\rho^2\sin\varphi$\\
+change of variables with $\det$ instead of $|\det|$ & use $|\det DG|$\\
+\bottomrule
+\end{tabularx}
+\end{center}
+
+\section{Errors found in the course material}
+
+\begin{examnote}
+\begin{itemize}
+  \item \textbf{Lecture V (older version)}: for $F=(e^x\cos y,e^x\sin y)$ the slide wrote $\det J_F=e^x$;
+  the correct value is $e^{2x}$. The revised slides of 26 October have it right.
+  \item \textbf{Lecture VII, Example 4.2}: for $A_1=(3,1,2)$, $A_2=(1,-1,4)$, $A_3=(2,1,0)$ the slide gives
+  $\det=-4$ and volume $4$. Expanding along the last row: $2(4+2)-1(12-2)+0=2$, so the volume is
+  $\mathbf 2$.
+  \item \textbf{Lecture VII, Example 1.5}: the determinant is $-42$ (the volume $42$ is right).
+  \item \textbf{Quiz Q14}: options (A) and (D) are identical ($3\,\mathrm{grad}f-\mathrm{grad}g$).
+  \item \textbf{Conventions}: slides use $q=\tfrac12(Ax^2+2Bxy+Cy^2)$ with $AC-B^2$; TD 4 uses
+  $ax^2+bxy+cy^2$ with $4ac-b^2$. Same test (Chapter~\ref{ch:four}).
+\end{itemize}
+\end{examnote}
+
+\section{A twenty-minute multiple-choice drill}
+
+Sixteen quick questions, one per classic trap. Give yourself twenty minutes, write your letters on
+a sheet, then check against the key. Each wrong answer points to the box you should reread.
+
+\newcommand{\opts}[4]{\par\smallskip\noindent\begin{tabularx}{\linewidth}{@{}YYYY@{}}(A)\ #1 & (B)\ #2 & (C)\ #3 & (D)\ #4\end{tabularx}\par\medskip}
+\begin{enumerate}[label={\color{tealD}\sffamily\bfseries Q\arabic*.}, leftmargin=2.3em, itemsep=4pt]
+\item The domain of $\log(x^2+y^2-1)$ is
+\opts{$x^2+y^2\le1$}{$x^2+y^2\ge1$}{$x^2+y^2>1$}{$x^2+y^2<1$}
+\item $\displaystyle\lim_{(x,y)\to O}\frac{x^2y^2}{x^2+y^2}$ equals
+\opts{$\frac12$}{$0$}{$1$}{does not exist}
+\item For $f=x^2y+y^3$, $\grad f(1,1)$ is
+\opts{$(2,3)$}{$(4,2)$}{$(1,4)$}{$(2,4)$}
+\item Same $f$: the rate of change at $(1,1)$ in the direction of $(3,4)$ is
+\opts{$22$}{$\frac{22}5$}{$\frac{14}5$}{$6$}
+\item The tangent plane to $z=x^2+y^2$ at $(1,2,5)$ is
+\opts{$2x+4y+z=15$}{$x+2y-z=0$}{$2x+4y-z=0$}{$2x+4y-z=5$}
+\item $g(t)=f(t^2,t^3)$ with $f_x(1,1)=2$, $f_y(1,1)=-1$. Then $g'(1)$ is
+\opts{$7$}{$-1$}{$1$}{$4$}
+\item Which function satisfies $f_{xx}+f_{yy}=0$?
+\opts{$x^2+y^2$}{$xy^2$}{$e^x\sin x$}{$x^2-y^2$}
+\item The coefficient of $xy$ in the Taylor expansion of $\sin(x+2y)$ at $O$ is
+\opts{$2$}{$1$}{$0$}{$4$}
+\item At $O$, the function $x^2+4xy+y^2$ has
+\opts{a minimum}{a saddle}{a maximum}{no conclusion}
+\item The minimum of $x^2+y^2$ on the line $x+y=2$ is
+\opts{$2$}{$1$}{$4$}{$\sqrt2$}
+\item $\det J_F$ for $F(u,v)=(u+v,\;u-v)$ is
+\opts{$2$}{$0$}{$-2$}{$1$}
+\item $J_F(P)=\begin{pmatrix}1&0\\1&1\end{pmatrix}$, $J_G(F(P))=\begin{pmatrix}2&1\\0&1\end{pmatrix}$. Then $J_{G\circ F}(P)$ is
+\opts{$\begin{pmatrix}2&1\\2&2\end{pmatrix}$}{$\begin{pmatrix}3&1\\1&1\end{pmatrix}$}{$\begin{pmatrix}2&1\\0&1\end{pmatrix}$}{$\begin{pmatrix}1&0\\1&1\end{pmatrix}$}
+\item The curve $x^3+y^3=2xy$ near $(1,1)$: the slope $y'(1)$ is
+\opts{$1$}{$0$}{$-2$}{$-1$}
+\item $f$ is continuous on a closed disc and has no critical point inside. Its maximum is
+\opts{at the centre}{possibly absent}{on the boundary circle}{at a saddle}
+\item The direction of steepest descent of $x^2+3y^2$ at $(1,1)$ is
+\opts{$\frac{(1,3)}{\sqrt{10}}$}{$-(2,6)$}{$\frac{(3,-1)}{\sqrt{10}}$}{$-\frac{(1,3)}{\sqrt{10}}$}
+\item (Annexe) $\iint_{x^2+y^2\le1}1\dd A$ written in polar coordinates gives
+\opts{$2\pi$}{$\pi$}{$\frac\pi2$}{$1$}
+\end{enumerate}
+
+\begin{remember}
+\textbf{Key.} \
+1\,C (log needs $>0$) \;
+2\,B ($x^2y^2\le\frac14(x^2+y^2)^2$) \;
+3\,D \;
+4\,B (normalise: $\frac{6+16}5$) \;
+5\,D \;
+6\,C ($2\cdot2-1\cdot3$) \;
+7\,D \;
+8\,C (no degree 2 terms in $\sin$) \;
+9\,B ($4ac-b^2=-12$) \;
+10\,A at $(1,1)$ \;
+11\,C \;
+12\,B ($J_GJ_F$, outer first) \;
+13\,D ($-\frac{3-2}{3-2}$) \;
+14\,C \;
+15\,D \;
+16\,B (do not forget $r$).
+\end{remember}

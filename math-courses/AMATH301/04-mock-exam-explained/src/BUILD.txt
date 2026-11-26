@@ -1,0 +1,13 @@
+AMATH301 Mock Exam, Explained - build instructions
+
+Requirements: TeX Live 2023 or newer with XeLaTeX (tcolorbox, pgfplots, tikz, scrlayer-scrpage,
+fontspec, mathpazo, TeX Gyre Pagella). Montserrat is bundled in fonts/.
+
+Build from this folder, three passes:
+    xelatex main.tex
+    xelatex main.tex
+    xelatex main.tex
+
+Files: main.tex (structure), style.tex (palette, boxes, tabs, plots), front.tex (Before You Start),
+p1.tex, p2.tex, p3.tex (one chapter per problem), wrap.tex (summary and tick sheet),
+beautybook.cls + stys/ + cncolours.sty (template), fonts/, inner_pics/, figs/.

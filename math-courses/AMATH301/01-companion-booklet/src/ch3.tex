@@ -1,0 +1,561 @@
+% ============================== CHAPTER 3 ============================
+\clearpage
+\setlecture{Lecture III}\renewcommand{\tabname}{III}
+\chapter{Higher Derivatives}\label{ch:higher}
+
+The gradient tells us how a function tilts. To know how it \emph{bends}, whether a flat
+point is the top of a hill or the bottom of a valley, we need second derivatives, and in
+general derivatives of every order. This chapter shows that mixed partial derivatives can
+be taken in any order, builds an algebra of differential operators, and uses it to write
+Taylor's formula in several variables: the best polynomial approximation of a function.
+
+\section{Repeated partial derivatives}
+
+Let $f$ be defined on an open set $U\subset\R^2$. Once $D_1f$ and $D_2f$ exist, they are
+functions again, and we may differentiate them:
+\[ D_1D_1f,\quad D_1D_2f,\quad D_2D_1f,\quad D_2D_2f . \]
+Operators are applied from right to left:
+\[
+D_1D_2f=\pd{}{x}\left(\pd fy\right),\qquad D_2D_1f=\pd{}{y}\left(\pd fx\right).
+\]
+
+\begin{example}{mixed partial derivatives}
+Let $f(x,y)=\sin(xy)$. Then $\pd fx=y\cos(xy)$ and $\pd fy=x\cos(xy)$.
+\begin{itemize}
+  \item $D_2D_1f=\pd{}{y}\big(y\cos(xy)\big)=\cos(xy)-xy\sin(xy)$ (product rule in $y$).
+  \item $D_1D_2f=\pd{}{x}\big(x\cos(xy)\big)=\cos(xy)-xy\sin(xy)$ (product rule in $x$).
+\end{itemize}
+The two mixed partials are equal. This is not a coincidence.
+\end{example}
+
+\begin{theorem}[label=thm:schwarz]{Equality of mixed partial derivatives}
+Let $f$ be a function of two variables defined on an open set $U\subset\R^2$. Assume that
+$D_1f$, $D_2f$, $D_1D_2f$ and $D_2D_1f$ exist and are continuous. Then
+\[ D_1D_2f=D_2D_1f . \]
+\end{theorem}
+
+\begin{intuition}
+Look at the four corners of a tiny rectangle and form the alternating sum
+$\Delta=f(\text{NE})-f(\text{SE})-f(\text{NW})+f(\text{SW})$. You can read $\Delta$ as
+``change in $x$ of the change in $y$'' or as ``change in $y$ of the change in $x$''. It is
+the same number either way. Divide by the area $hk$ and shrink the rectangle: one reading
+gives $D_2D_1f$, the other gives $D_1D_2f$.
+\end{intuition}
+
+\begin{center}
+\begin{tikzpicture}[scale=1.1]
+  \draw[bpgrid, step=0.5] (-0.7,-0.7) grid (4.7,2.9);
+  \fill[plum, opacity=0.1] (0,0) rectangle (4,2.2);
+  \draw[plum, line width=1pt] (0,0) rectangle (4,2.2);
+  \node[pdot] at (0,0) {}; \node[pdot] at (4,0) {}; \node[pdot] at (0,2.2) {}; \node[dot] at (4,2.2) {};
+  \node[font=\small, below left, text=plumdark] at (0,0) {$+f(x,y)$};
+  \node[font=\small, below right, text=plumdark] at (4,0) {$-f(x{+}h,y)$};
+  \node[font=\small, above left, text=plumdark] at (0,2.2) {$-f(x,y{+}k)$};
+  \node[font=\small, above right, text=coraldark] at (4,2.2) {$+f(x{+}h,y{+}k)$};
+  \draw[navy, <->, line width=0.6pt] (0,-0.45) -- node[below, font=\scriptsize]{$h$} (4,-0.45);
+  \draw[navy, <->, line width=0.6pt] (-0.45,0) -- node[left, font=\scriptsize]{$k$} (-0.45,2.2);
+  \node[font=\small, text=navy] at (2,1.1) {$\Delta(h,k)$};
+\end{tikzpicture}
+\end{center}
+
+\begin{proof}
+Fix $(x,y)\in U$ and take $h\neq0$, $k\neq0$ small enough that the closed rectangle with
+corners $(x,y)$ and $(x+h,y+k)$ lies in $U$. Let
+\[ \Delta=f(x+h,y+k)-f(x+h,y)-f(x,y+k)+f(x,y). \]
+
+\textbf{First reading: vary $x$ first, then $y$.} Put $\varphi(t)=f(t,y+k)-f(t,y)$. Then
+$\Delta=\varphi(x+h)-\varphi(x)$. By the mean value theorem there is $s_1$ between $x$ and
+$x+h$ with
+\[ \Delta=\varphi'(s_1)\,h=\big[D_1f(s_1,y+k)-D_1f(s_1,y)\big]h . \]
+Now apply the mean value theorem to $t\mapsto D_1f(s_1,t)$ on the interval from $y$ to
+$y+k$: there is $s_2$ between $y$ and $y+k$ with
+\[ \Delta=D_2D_1f(s_1,s_2)\,kh . \]
+
+\textbf{Second reading: vary $y$ first, then $x$.} Put $\psi(t)=f(x+h,t)-f(x,t)$. Then
+$\Delta=\psi(y+k)-\psi(y)=\psi'(t_2)k=\big[D_2f(x+h,t_2)-D_2f(x,t_2)\big]k$ for some $t_2$
+between $y$ and $y+k$, and the mean value theorem in the first variable gives $t_1$ between
+$x$ and $x+h$ with
+\[ \Delta=D_1D_2f(t_1,t_2)\,hk . \]
+
+\textbf{Compare.} Both expressions equal $\Delta$; cancelling $hk\neq0$,
+\[ D_2D_1f(s_1,s_2)=D_1D_2f(t_1,t_2). \]
+As $(h,k)\to(0,0)$, both points $(s_1,s_2)$ and $(t_1,t_2)$ tend to $(x,y)$ because they are
+trapped in the shrinking rectangle. By continuity of the mixed partials, the left side
+tends to $D_2D_1f(x,y)$ and the right side to $D_1D_2f(x,y)$. Hence they are equal.
+\end{proof}
+
+\begin{extra}
+\textbf{The continuity hypothesis matters.} Let
+\[ f(x,y)=\frac{xy(x^2-y^2)}{x^2+y^2}\ \ \big((x,y)\neq O\big),\qquad f(O)=0 . \]
+For $y\neq0$, $D_1f(0,y)=\lim_{h\to0}\frac{f(h,y)}{h}=\lim_{h\to0}\frac{y(h^2-y^2)}{h^2+y^2}=-y$,
+and also $D_1f(0,0)=0$. So $D_2D_1f(0,0)=\frac{d}{dy}(-y)=-1$. In the same way
+$D_2f(x,0)=x$, so $D_1D_2f(0,0)=+1$. The mixed partials exist but differ; they are not
+continuous at the origin (Question~\ref{q:schwarz} asks you to check the details).
+\end{extra}
+
+\subsection{Higher repeated partial derivatives}
+
+For $f(x,y,z)$ with all partial derivatives under consideration existing and continuous,
+the theorem lets us swap any two \emph{adjacent} derivatives, for instance
+\[ D_3D_1f=D_1D_3f,\qquad D_1D_3(D_1f)=D_3D_1(D_1f). \]
+By swapping adjacent pairs again and again (like sorting cards) we can move all the $D_1$'s
+to the left, then all the $D_2$'s, then the $D_3$'s. So if $D_1,D_2,D_3$ occur $m_1,m_2,m_3$
+times, every ordering equals
+\[ \underbrace{D_1\cdots D_1}_{m_1}\ \underbrace{D_2\cdots D_2}_{m_2}\ \underbrace{D_3\cdots D_3}_{m_3}f . \]
+
+\begin{keyidea}
+Under continuity assumptions, a repeated partial derivative depends only on \emph{how many
+times} each variable is differentiated, not on the order. The same argument works in any
+number of variables.
+\end{keyidea}
+
+\begin{example}{order does not matter}
+Let $f(x,y,z)=x^2y^3z$. Compute $D_1D_2D_3f$ in two orders.
+\begin{itemize}
+  \item $D_3f=x^2y^3$, then $D_2D_3f=3x^2y^2$, then $D_1D_2D_3f=6xy^2$.
+  \item $D_1f=2xy^3z$, then $D_3D_1f=2xy^3$, then $D_2D_3D_1f=6xy^2$.
+\end{itemize}
+Same result, as predicted.
+\end{example}
+
+\section{Partial differential operators}
+
+\subsection{From derivatives to operators}
+
+In one variable write $D=\frac{d}{dx}$, so $D^mf=f^{(m)}$. Iterating gives
+$D^mD^nf=D^{m+n}f$, and with $D^0f=f$ this holds for all $m,n\ge0$.
+
+\begin{definition}{Simple differential operator}
+In one variable, $D^m$ is a simple differential operator of order $m$. In $n$ variables, if
+$D_1,\dots,D_n$ are the partial derivatives in $x_1,\dots,x_n$, then
+\[
+D_1^{m_1}\cdots D_n^{m_n}\qquad\text{or}\qquad\left(\pd{}{x_1}\right)^{m_1}\cdots\left(\pd{}{x_n}\right)^{m_n}
+\]
+(with integers $m_i\ge0$) is a \emph{simple differential operator} of \emph{order}
+$m_1+\dots+m_n$.
+\end{definition}
+
+\begin{example}{an operator of order 10}
+For functions of $(x,y,z)$,
+\[
+D=\left(\pd{}{x}\right)^3\left(\pd{}{y}\right)^5\left(\pd{}{z}\right)^2=\frac{\partial^{10}}{\partial x^3\partial y^5\partial z^2}
+\]
+has order $3+5+2=10$. In two variables, $D_1^2D_2^5$ has order $7$.
+\end{example}
+
+\subsection{Notation}
+
+All of these appear in the literature and mean the same thing:
+\[
+\left(\pd{}{x}\right)^2f=\pdd fx=D_1^2f=f_{xx},\qquad
+\pd{}{x}\left(\pd fy\right)=\pdm fxy=D_1D_2f .
+\]
+
+\begin{trap}
+Do not confuse $\left(\pd{}{x}\right)^2f=\pdd fx$ (differentiate twice) with
+$\left(\pd fx\right)^2$ (differentiate once, then square). For $f(x,y)=x^2y$:
+\[ \pdd fx=2y,\qquad\left(\pd fx\right)^2=(2xy)^2=4x^2y^2 . \]
+They are different functions.
+\end{trap}
+
+\subsection{General differential operators}
+
+For simple operators $D,D'$ and a constant $c$, define $(D+D')f=Df+D'f$ and $(cD)f=c(Df)$.
+
+\begin{definition}{Differential operator}
+A \emph{differential operator} is a sum of terms of the form $c\,D_1^{m_1}\cdots D_n^{m_n}$,
+where $c$ is a number and the $m_i$ are integers $\ge0$.
+\end{definition}
+
+\begin{example}{applying an operator}
+Let $D=3\pd{}{x}+5\left(\pd{}{x}\right)^2-\pi\pd{}{x}\pd{}{y}$ and $f(x,y)=\sin(xy)$.
+
+We need three pieces: $\pd fx=y\cos(xy)$, $\pdd fx=-y^2\sin(xy)$, and (from the first example)
+$\pd{}{x}\pd fy=\cos(xy)-xy\sin(xy)$. So
+\[
+Df=3y\cos(xy)-5y^2\sin(xy)-\pi\big(\cos(xy)-xy\sin(xy)\big).
+\]
+\end{example}
+
+\textbf{Linearity.} For any differential operator, $D(cf)=cDf$ and $D(f+g)=Df+Dg$, because
+ordinary partial differentiation has these properties. Constant-coefficient differential
+operators are \emph{linear}.
+
+\subsection{Multiplying operators}
+
+\begin{definition}{Product of operators}
+For differential operators $D,D'$, the product $DD'$ is defined by $(DD')f=D(D'f)$.
+\end{definition}
+
+\begin{example}{multiplying like polynomials}
+Let $D=3\pd{}{x}+2\pd{}{y}$ and $D'=\pd{}{x}+4\pd{}{y}$. Expanding as if they were numbers,
+\begin{align*}
+DD'&=3\left(\pd{}{x}\right)^2+12\pd{}{x}\pd{}{y}+2\pd{}{y}\pd{}{x}+8\left(\pd{}{y}\right)^2\\
+&=3\left(\pd{}{x}\right)^2+14\pd{}{x}\pd{}{y}+8\left(\pd{}{y}\right)^2 .
+\end{align*}
+The middle terms combine only because $\pd{}{x}\pd{}{y}=\pd{}{y}\pd{}{x}$ (Theorem~\ref{thm:schwarz}).
+\end{example}
+
+\begin{keyidea}
+Differential operators add and multiply exactly like polynomials:
+\[ DD'=D'D,\qquad D(D'+D'')=DD'+DD'' . \]
+This rests on the commutation of mixed partial derivatives. It is why we can expand
+$\left(h\pd{}{x}+k\pd{}{y}\right)^2$ with the binomial formula below.
+\end{keyidea}
+
+\begin{definition}{Standard form, homogeneous operator}
+An operator written as a sum of terms $cD_1^{m_1}\cdots D_n^{m_n}$ is in \emph{standard form}.
+Each term has \emph{degree} $m_1+\dots+m_n$. If all terms have the same degree $m$, the
+operator is \emph{homogeneous of degree $m$}.
+\end{definition}
+
+For instance $DD'$ above is homogeneous of degree $2$, while
+$3\pd{}{x}+5\left(\pd{}{x}\right)^2$ is not homogeneous.
+
+\subsection{Operators applied to monomials}
+
+\begin{example}{a monomial}
+Let $f(x,y)=x^3y^2$. Then
+\[ D_1f=3x^2y^2,\quad D_1^2f=2\cdot3\,xy^2,\quad D_1^3f=6y^2,\quad D_1^4f=0, \]
+and $D_1^3D_2^2f=D_2^2(6y^2)=12=3!\,2!$.
+\end{example}
+
+\begin{proposition}[label=prop:mono]{Derivatives of monomials at the origin}
+Let $f(x,y)=x^iy^j$. Then $D_1^iD_2^jf=i!\,j!$, and for $(r,s)\neq(i,j)$,
+\[ D_1^rD_2^sf(0,0)=0 . \]
+\end{proposition}
+
+\begin{proof}
+Differentiating $x^i$ exactly $i$ times gives $i!$, and $y^j$ exactly $j$ times gives $j!$.
+If $r>i$, differentiating $x^i$ $r$ times gives $0$. If $r<i$, a positive power $x^{i-r}$
+remains, which vanishes at $x=0$. The same argument applies to $y$. So unless $r=i$ and $s=j$,
+the value at the origin is $0$.
+\end{proof}
+
+\begin{reallife}{the operators of physics}
+The most famous differential operator is the \emph{Laplacian}
+$\Delta=\left(\pd{}{x}\right)^2+\left(\pd{}{y}\right)^2+\left(\pd{}{z}\right)^2$, homogeneous of degree $2$.
+Steady temperatures, electrostatic potentials and incompressible flows all satisfy
+$\Delta u=0$. The heat equation $\pd ut=\kappa\Delta u$ and the wave equation
+$\left(\pd{}{t}\right)^2u=c^2\Delta u$ are built from the same algebra. For example
+$u=x^2-y^2$ and $u=e^x\sin y$ satisfy $\Delta u=0$ in the plane: check it!
+\end{reallife}
+
+\section{Taylor's formula}
+
+\subsection{The idea: reduce to one variable}
+
+\begin{intuition}
+Taylor's formula in one variable approximates $f(a+h)$ by a polynomial in $h$. To do the same
+for $f(P+H)$, walk from $P$ to $P+H$ along the straight segment $P+tH$, $0\le t\le1$. Along
+that segment $f$ becomes a one-variable function $g(t)$, and we already know Taylor's formula
+for $g$. The only work is to compute the derivatives of $g$ with the chain rule.
+\end{intuition}
+
+Recall the one-variable formula: for some $c$ between $a$ and $a+h$,
+\[
+f(a+h)=f(a)+f'(a)h+\frac{f''(a)}{2!}h^2+\dots+\frac{f^{(r-1)}(a)}{(r-1)!}h^{r-1}+\frac{f^{(r)}(c)}{r!}h^r .
+\]
+Now let $P=(a,b)$, $H=(h,k)$ and
+\[ g(t)=f(P+tH)=f(a+th,\,b+tk), \qquad g(0)=f(P),\quad g(1)=f(P+H). \]
+
+\begin{center}
+\begin{tikzpicture}[scale=1]
+  \draw[bpgrid, step=0.5] (-0.5,-0.5) grid (5.5,3);
+  \node[pdot, label={[font=\small]below left:$P$}] (P) at (0.5,0.3) {};
+  \node[dot, label={[font=\small]above right:$P+H$}] (Q) at (4.6,2.4) {};
+  \draw[vecc] (P) -- (Q);
+  \node[odot, label={[font=\scriptsize, text=navy]above left:$P+tH$}] at ($(P)!0.55!(Q)$) {};
+  \node[font=\scriptsize, text=navy, align=left] at (4.3,0.4) {$g(t)=f(P+tH)$\\$t\in[0,1]$};
+\end{tikzpicture}
+\end{center}
+
+\subsection{Derivatives along a line}
+
+With $x=a+th$, $y=b+tk$ we have $dx/dt=h$, $dy/dt=k$, so the chain rule gives
+\[ g'(t)=\pd fx h+\pd fy k, \]
+the partials being evaluated at $P+tH$. Differentiate once more, applying the same rule to
+each of $\pd fx$ and $\pd fy$:
+\begin{align*}
+g''(t)&=h\left(\pdd fx h+\pdm fyx k\right)+k\left(\pdm fxy h+\pdd fy k\right)\\
+&=h^2\pdd fx+2hk\pdm fxy+k^2\pdd fy=\left(h\pd{}{x}+k\pd{}{y}\right)^2f(P+tH).
+\end{align*}
+We used the equality of mixed partials to merge the two middle terms.
+
+\begin{definition}{The operator $H\cdot\grad$}
+For $H=(h_1,\dots,h_n)$, define the differential operator
+\[ H\cdot\grad=h_1D_1+\dots+h_nD_n=h_1\pd{}{x_1}+\dots+h_n\pd{}{x_n}. \]
+In two variables $H\cdot\grad=hD_1+kD_2$.
+\end{definition}
+
+So $g'(t)=(H\cdot\grad)f(P+tH)$ and $g''(t)=(H\cdot\grad)^2f(P+tH)$.
+
+\begin{trap}
+$(H\cdot\grad)^rf(P+tH)$ means: \emph{first} apply the operator $(H\cdot\grad)^r$ to $f$,
+\emph{then} evaluate the resulting function at $P+tH$. The vector $H$ is a constant here;
+it is not differentiated.
+\end{trap}
+
+\begin{theorem}[label=thm:gr]{Higher derivatives along a line}
+Let $r\ge1$ and let $f$ have continuous partial derivatives of orders $\le r$ on an open set
+$U$. Let $P\in U$, $H$ a vector, and $g(t)=f(P+tH)$. Then
+\[ g^{(r)}(t)=\big((H\cdot\grad)^rf\big)(P+tH) \]
+for all $t$ such that $P+tH\in U$.
+\end{theorem}
+
+\begin{proof}
+By induction on $r$. The case $r=1$ is the chain rule (and $r=2$ was computed above).
+Assume the formula for $r$, and let $\psi=(H\cdot\grad)^rf$, so that $g^{(r)}(t)=\psi(P+tH)$.
+The function $\psi$ has continuous first partial derivatives (it involves derivatives of
+order $r$ only, and $f$ has continuous derivatives up to order $r+1$ when we treat this
+step). Applying the case $r=1$ to $\psi$,
+\[ g^{(r+1)}(t)=\frac{d}{dt}\psi(P+tH)=\big((H\cdot\grad)\psi\big)(P+tH)=\big((H\cdot\grad)^{r+1}f\big)(P+tH). \]
+This is the formula for $r+1$.
+\end{proof}
+
+\subsection{The formula}
+
+\begin{theorem}[label=thm:taylor]{Taylor's formula}
+Let $f$ have continuous partial derivatives up to order $r$ on an open set $U$. Let $P\in U$
+and $H$ a vector such that the segment $P+tH$, $0\le t\le1$, lies in $U$. Then there is a
+number $\tau$ between $0$ and $1$ such that
+\begin{align*}
+f(P+H)&=f(P)+\frac{(H\cdot\grad)f(P)}{1!}+\dots+\frac{(H\cdot\grad)^{r-1}f(P)}{(r-1)!}\\
+&\quad+\frac{(H\cdot\grad)^rf(P+\tau H)}{r!}.
+\end{align*}
+\end{theorem}
+
+\begin{proof}
+Put $g(t)=f(P+tH)$ and apply the one-variable Taylor formula to $g$ between $0$ and $1$:
+\[ g(1)=g(0)+g'(0)+\frac{g''(0)}{2!}+\dots+\frac{g^{(r-1)}(0)}{(r-1)!}+\frac{g^{(r)}(\tau)}{r!} \]
+for some $\tau\in(0,1)$. By Theorem~\ref{thm:gr}, $g^{(s)}(0)=(H\cdot\grad)^sf(P)$ and
+$g^{(r)}(\tau)=(H\cdot\grad)^rf(P+\tau H)$. Since $g(1)=f(P+H)$ and $g(0)=f(P)$, this is the
+claimed formula.
+\end{proof}
+
+In $(x,y)$ notation:
+\begin{align*}
+f(a+h,b+k)&=f(a,b)+\frac{1}{1!}\left(h\pd{}{x}+k\pd{}{y}\right)f(a,b)+\dots\\
+&\quad+\frac{1}{(r-1)!}\left(h\pd{}{x}+k\pd{}{y}\right)^{r-1}f(a,b)\\
+&\quad+\frac{1}{r!}\left(h\pd{}{x}+k\pd{}{y}\right)^rf(a+\tau h,b+\tau k).
+\end{align*}
+The powers are expanded exactly as binomials:
+\begin{align*}
+\left(h\pd{}{x}+k\pd{}{y}\right)^2&=h^2\pdd{}{x}+2hk\frac{\partial^2}{\partial x\partial y}+k^2\pdd{}{y},\\
+\left(h\pd{}{x}+k\pd{}{y}\right)^3&=h^3\left(\pd{}{x}\right)^3+3h^2k\left(\pd{}{x}\right)^2\pd{}{y}\\
+&\quad+3hk^2\pd{}{x}\left(\pd{}{y}\right)^2+k^3\left(\pd{}{y}\right)^3 .
+\end{align*}
+
+\begin{recipe}
+\textbf{Second-order Taylor expansion at $(a,b)$} (the version used most in exams):
+\[
+f(a+h,b+k)\approx f+f_xh+f_yk+\tfrac12\big(f_{xx}h^2+2f_{xy}hk+f_{yy}k^2\big),
+\]
+all derivatives evaluated at $(a,b)$.
+\begin{enumerate}
+  \item Compute $f$, the two first and the three second partials.
+  \item Evaluate them at $(a,b)$.
+  \item Plug into the template. Keep the factor $2$ on $hk$ and the overall $\tfrac12$.
+\end{enumerate}
+\end{recipe}
+
+\begin{example}{quadratic terms of $\log(1+x+2y)$ at $(2,1)$}
+Let $f(x,y)=\log(1+x+2y)$, so $1+x+2y=5$ at $(2,1)$.
+
+\textbf{Step 1: derivatives.} With $u=1+x+2y$:
+\[ f_x=\frac1u,\ f_y=\frac2u,\ f_{xx}=-\frac1{u^2},\ f_{xy}=-\frac2{u^2},\ f_{yy}=-\frac4{u^2}. \]
+\textbf{Step 2: evaluate at $u=5$.}
+\[ f=\log5,\ f_x=\tfrac15,\ f_y=\tfrac25,\ f_{xx}=-\tfrac1{25},\ f_{xy}=-\tfrac2{25},\ f_{yy}=-\tfrac4{25}. \]
+\textbf{Step 3: template.}
+\[
+f(2+h,1+k)=\log5+\left(\tfrac15h+\tfrac25k\right)+\frac1{2!}\left(-\tfrac1{25}h^2-\tfrac4{25}hk-\tfrac4{25}k^2\right)+\cdots
+\]
+Note $2hk\cdot\left(-\tfrac2{25}\right)=-\tfrac4{25}hk$.
+\end{example}
+
+\subsection{Taylor polynomials at the origin}
+
+With $P=O$ and $H=(x,y)$:
+\begin{align*}
+f(x,y)&=f(0,0)+D_1f(0,0)x+D_2f(0,0)y\\
+&\quad+\frac1{2!}\Big[D_1^2f(0,0)x^2+2D_1D_2f(0,0)xy+D_2^2f(0,0)y^2\Big]\\
+&\quad+\frac1{3!}\Big[D_1^3f(0,0)x^3+3D_1^2D_2f(0,0)x^2y\\
+&\qquad\qquad+3D_1D_2^2f(0,0)xy^2+D_2^3f(0,0)y^3\Big]+R_4 .
+\end{align*}
+In general $f(x,y)=f(0,0)+G_1(x,y)+\dots+G_{r-1}(x,y)+R_r$ with $G_d$ homogeneous of degree $d$.
+
+\begin{definition}{Polynomial approximation}
+The polynomial $f(0,0)+G_1(x,y)+\dots+G_s(x,y)$ is the \emph{polynomial approximation} (or
+Taylor polynomial) of $f$ of degree $\le s$.
+\end{definition}
+
+\begin{proposition}{Coefficients of a polynomial}
+If $G(x,y)=\sum_{i,j}c_{ij}x^iy^j$, then $D_1^rD_2^sG(0,0)=r!\,s!\,c_{rs}$, so
+\[ c_{ij}=\frac{D_1^iD_2^jG(0,0)}{i!\,j!}. \]
+\end{proposition}
+
+\begin{proof}
+Apply $D_1^rD_2^s$ term by term and evaluate at the origin. By
+Proposition~\ref{prop:mono} every monomial $x^iy^j$ with $(i,j)\neq(r,s)$ contributes $0$,
+and $x^ry^s$ contributes $r!\,s!$. So $D_1^rD_2^sG(0,0)=c_{rs}\,r!\,s!$.
+\end{proof}
+
+Consistently, the binomial expansion of the Taylor terms gives
+\[
+\frac{(xD_1+yD_2)^m}{m!}=\sum_{i=0}^m\frac{x^iy^{m-i}}{i!\,(m-i)!}D_1^iD_2^{m-i},
+\]
+and so the Taylor polynomial of degree $\le s$ is
+\[
+\boxed{\,G(x,y)=\sum_{i+j\le s}c_{ij}x^iy^j,\qquad c_{ij}=\frac{D_1^iD_2^jf(0,0)}{i!\,j!}\,}
+\]
+
+\begin{keyidea}
+The Taylor polynomial of $f$ up to order $s$ is \emph{the} polynomial that has the same
+partial derivatives as $f$ at the origin, up to order $s$.
+\end{keyidea}
+
+\begin{example}{$\log(1+x+2y)$ at the origin}
+At $(0,0)$, $u=1$, so $f=0$, $D_1f=1$, $D_2f=2$, $D_1^2f=-1$, $D_1D_2f=-2$, $D_2^2f=-4$, and
+\[ G(x,y)=x+2y-\tfrac12\big(x^2+4xy+4y^2\big). \]
+\end{example}
+
+\begin{center}
+\begin{tikzpicture}
+\begin{axis}[bp3d, width=10cm, height=8.2cm, xlabel=$x$, ylabel=$y$, zlabel=$z$,
+   xmin=-1.8, xmax=1.8, ymin=-1.8, ymax=1.8, zmin=-1.6, zmax=1.3, view={-35}{25}]
+  \addplot3[surf, shader=flat, draw=cyanbp, fill=cyanbp, fill opacity=0.15, draw opacity=0.6,
+     domain=-1.5:1.5, y domain=-1.5:1.5, samples=13] {1-0.5*(x^2+y^2)};
+  \addplot3[plumsurf, domain=-1.5:1.5, y domain=-1.5:1.5, samples=22, opacity=0.8, fill opacity=0.8]
+     {cos(deg(x))*cos(deg(y))};
+  \node[font=\scriptsize, text=cyanbp, anchor=west] at (axis cs:1.5,-1.5,-1.3) {$1-\tfrac12(x^2+y^2)$};
+  \node[font=\scriptsize, text=plum, anchor=south] at (axis cs:0,0,1.05) {$\cos x\cos y$};
+\end{axis}
+\end{tikzpicture}
+
+{\small\color{navy} $f=\cos x\cos y$ (surface) and its degree-2 Taylor polynomial
+$1-\tfrac12(x^2+y^2)$ (blue mesh). They agree closely near the origin and separate further out.}
+\end{center}
+
+\subsection{Shortcuts with one-variable expansions}
+
+For composite functions it is often faster to substitute into a known one-variable series.
+
+\begin{example}{$\sin(xy)$}
+Since $\sin u=u+R_3(u)$ with $\abs{R_3(u)}\le\abs u^3/3!$, put $u=xy$:
+\[ \sin(xy)=xy+R_3(xy),\qquad \abs{\sin(xy)-xy}\le\frac{\abs{xy}^3}{3!}. \]
+For instance, for $y\neq0$,
+$\abs{\dfrac{\sin(xy)-xy}{y}}\le\dfrac{\abs x^3\abs y^2}{3!}\to0$ as $(x,y)\to(0,0)$.
+\end{example}
+
+\begin{example}{$\log(1+x+2y)$ the fast way}
+From $\log(1+u)=u-\tfrac12u^2+\dots$ with $u=x+2y$:
+\begin{align*}\log(1+x+2y)&=x+2y-\tfrac12(x+2y)^2+\dots\\&=x+2y-\tfrac12\big(x^2+4xy+4y^2\big)+\dots\end{align*}
+Same polynomial, with no derivatives computed.
+\end{example}
+
+\begin{example}{$e^x\cos y$ to order 2}
+Multiply $e^x=1+x+\tfrac12x^2+\dots$ by $\cos y=1-\tfrac12y^2+\dots$ and keep degree $\le2$:
+\[ e^x\cos y=1+x+\tfrac12x^2-\tfrac12y^2+\dots \]
+Check with derivatives: $D_1^2f(0,0)=1$, $D_2^2f(0,0)=-1$, $D_1D_2f(0,0)=0$.
+\end{example}
+
+\subsection{Several variables}
+
+For $H=(h_1,\dots,h_n)$ and $H\cdot\grad=h_1D_1+\dots+h_nD_n$, Theorem~\ref{thm:gr} and
+Taylor's formula hold word for word. Only the expansion of $(H\cdot\grad)^r$ involves more
+terms (use the multinomial formula). For example, in three variables
+\[ (H\cdot\grad)^2=h_1^2D_1^2+h_2^2D_2^2+h_3^2D_3^2+2h_1h_2D_1D_2+2h_1h_3D_1D_3+2h_2h_3D_2D_3 . \]
+
+\begin{reallife}{the error of an approximation}
+Engineers linearise models every day: a pendulum's $\sin\theta\approx\theta$, a structure's
+small deformations, an option price's ``delta-gamma'' approximation in finance
+($\Delta V\approx V_SdS+\tfrac12V_{SS}dS^2+V_t\,dt$). Taylor's formula with remainder is what
+tells them how big the error of such an approximation can be.
+\end{reallife}
+
+\section{Integral expressions}
+
+The mean value remainder contains an unknown $\tau$ that depends on the point. An integral
+form avoids this. Start from the fundamental theorem of calculus applied to
+$t\mapsto f(tx,ty)$ on $[0,1]$:
+\[ f(x,y)=f(0,0)+\int_0^1\frac{d}{dt}f(tx,ty)\,dt . \]
+By the chain rule, $\frac{d}{dt}f(tx,ty)=D_1f(tx,ty)\,x+D_2f(tx,ty)\,y$. Hence
+\[ f(x,y)=f(0,0)+\int_0^1\big[D_1f(tx,ty)\,x+D_2f(tx,ty)\,y\big]dt . \]
+
+\begin{proposition}{Smooth decomposition}
+If $f$ has continuous first partial derivatives on an open disc centred at $O$, then
+\[ f(x,y)=f(0,0)+x\,g_1(x,y)+y\,g_2(x,y), \]
+with
+\[ g_1(x,y)=\int_0^1D_1f(tx,ty)\,dt,\qquad g_2(x,y)=\int_0^1D_2f(tx,ty)\,dt . \]
+\end{proposition}
+
+\begin{itemize}
+  \item $g_1$ and $g_2$ are as smooth as $D_1f$ and $D_2f$.
+  \item One can differentiate under the integral sign with respect to $x$ and $y$.
+  \item There is no undetermined $\tau$ depending on $(x,y)$.
+\end{itemize}
+
+\begin{example}{a decomposition}
+For $f(x,y)=e^{x+y}$: $D_1f=D_2f=e^{x+y}$, so
+\[ g_1=g_2=\int_0^1e^{t(x+y)}dt=\frac{e^{x+y}-1}{x+y}\quad(x+y\neq0), \]
+and indeed $1+x\,g_1+y\,g_2=1+(e^{x+y}-1)=e^{x+y}$.
+\end{example}
+
+\section{Summary}
+
+\begin{keyidea}
+\begin{itemize}
+  \item With continuous second partials, $D_1D_2f=D_2D_1f$; the order of differentiation never matters.
+  \item Differential operators form an algebra that behaves like polynomials.
+  \item $(\partial/\partial x)^2f\neq(\partial f/\partial x)^2$.
+  \item Along $g(t)=f(P+tH)$: $g^{(r)}(t)=(H\cdot\grad)^rf(P+tH)$.
+  \item Taylor: $f(P+H)=\sum_{s<r}\frac{(H\cdot\grad)^sf(P)}{s!}+\frac{(H\cdot\grad)^rf(P+\tau H)}{r!}$.
+  \item Taylor coefficients at $O$: $c_{ij}=D_1^iD_2^jf(0,0)/(i!\,j!)$; one-variable series give shortcuts.
+\end{itemize}
+\end{keyidea}
+
+\section{Exam-style questions}
+
+\begin{exercise}[1]
+Let $f(x,y)=x^3y^2+e^{xy}$. Compute all second-order partial derivatives and check that
+the mixed ones agree.
+\end{exercise}
+
+\begin{exercise}[1]
+Show that $u(x,y)=\ln(x^2+y^2)$ satisfies Laplace's equation $u_{xx}+u_{yy}=0$ on
+$\R^2\setminus\{O\}$.
+\end{exercise}
+
+\begin{exercise}[1]
+Write the operator $\left(\pd{}{x}-\pd{}{y}\right)\left(\pd{}{x}+\pd{}{y}\right)$ in standard
+form and apply it to $f(x,y)=x^3y+\sin(x+y)$.
+\end{exercise}
+
+\begin{exercise}[2]
+Find the Taylor polynomial of degree $2$ of $f(x,y)=\sqrt{x^2+y^3}$ at $(1,2)$, and use it
+to approximate $\sqrt{1.02^2+1.97^3}$.
+\end{exercise}
+
+\begin{exercise}[2]
+Find the degree-3 Taylor polynomial of $f(x,y)=e^x\sin y$ at the origin in two ways: with
+derivatives, and by multiplying one-variable series. Deduce $D_1^2D_2f(0,0)$ without
+differentiating.
+\end{exercise}
+
+\begin{exercise}[2]
+Without computing any derivative, find $D_1^2D_2^3f(0,0)$ for $f(x,y)=e^x\sin y$.
+\end{exercise}
+
+\begin{exercise}[3]\label{q:schwarz}
+Let $f(x,y)=\dfrac{xy(x^2-y^2)}{x^2+y^2}$ for $(x,y)\neq O$ and $f(O)=0$.
+\begin{enumerate}[label=(\alph*)]
+  \item Show that $D_1f(0,y)=-y$ for all $y$ and $D_2f(x,0)=x$ for all $x$.
+  \item Deduce $D_2D_1f(0,0)=-1$ and $D_1D_2f(0,0)=1$.
+  \item Which hypothesis of Theorem~\ref{thm:schwarz} fails?
+\end{enumerate}
+\end{exercise}
+
+\begin{exercise}[3]
+Using the integral decomposition, write $f(x,y)=\sin(x+y)$ as $x\,g_1+y\,g_2$ with explicit
+$g_1,g_2$, and check your answer.
+\end{exercise}

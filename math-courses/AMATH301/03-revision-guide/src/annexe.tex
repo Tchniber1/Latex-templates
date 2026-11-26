@@ -1,0 +1,293 @@
+% ============================== ANNEXE ============================
+\settab{LECTURE VI}{8}
+\chapter[Multiple Integrals (Lecture VI)]{Multiple Integrals\\ (Lecture VI)}\label{ch:six}\chaptermark{Multiple Integrals}
+
+\begin{examnote}
+Lecture VI (2 November) has no TD sheet and we do not know whether it is examined. If it is,
+expect computations rather than theory: an iterated integral, a change of order, a polar,
+cylindrical or spherical integral, an area, a volume or a centre of mass. The theory of Darboux
+sums is summarised but the problems focus on calculation.
+\end{examnote}
+
+\section{Definition and properties}
+
+\begin{intuition}
+Cut the region into small rectangles, multiply the height $f$ by the area of each, and add: a
+Riemann sum. As the rectangles shrink the sum tends to the volume under the graph (or the mass,
+if $f$ is a density). Lower and upper sums trap the true value from below and above.
+\end{intuition}
+
+\begin{defi}[Double integral]
+For bounded $f$ on a rectangle $R$ and a partition $P$, $L(P,f)=\sum_S(\inf_Sf)\,\mathrm{Area}(S)$ and
+$U(P,f)=\sum_S(\sup_Sf)\,\mathrm{Area}(S)$. $f$ is integrable if $\sup_PL(P,f)=\inf_PU(P,f)$; the
+common value is $\iint_Rf\dd A$. Over a general region $A\subset R$, integrate the extension of $f$
+by $0$ outside $A$.
+\end{defi}
+
+\begin{thm}[Darboux criterion and integrable functions]
+$f$ is integrable iff for every $\varepsilon>0$ some partition has $U(P,f)-L(P,f)<\varepsilon$.
+Continuous functions on a closed rectangle are integrable, and so are bounded functions that
+are continuous except on finitely many smooth curves. The integral is linear, monotone and
+additive over regions that overlap only along their boundaries.
+\end{thm}
+
+\begin{trap}
+Bounded does not mean integrable: the function equal to $1$ on $\mathbb Q^2$ and $0$ elsewhere has
+$L=0$ and $U=1$ for every partition.
+\end{trap}
+
+\section{Fubini and the order of integration}
+
+\begin{thm}[Fubini on a rectangle, regions between graphs]
+$\iint_{[a,b]\times[c,d]}f=\int_a^b\!\int_c^df(x,y)\dd y\dd x=\int_c^d\!\int_a^bf(x,y)\dd x\dd y$ for continuous $f$.
+On $A=\{a\le x\le b,\ g_1(x)\le y\le g_2(x)\}$: $\iint_Af=\int_a^b\int_{g_1(x)}^{g_2(x)}f\dd y\dd x$.
+\end{thm}
+
+\begin{method}
+\textbf{Setting up limits.} (1) Sketch the region. (2) Choose the order: vertical slices
+($dy$ inside) or horizontal slices ($dx$ inside). (3) For the inner integral, read where a slice
+enters and leaves the region; the outer limits are constants. (4) If the inner antiderivative
+is impossible (like $e^{y^2}$), describe the same region in the other order.
+\end{method}
+
+\begin{center}
+\begin{tikzpicture}
+\begin{axis}[bp, width=5.2cm, height=5.2cm, xmin=-0.15, xmax=1.25, ymin=-0.15, ymax=1.25,
+  xtick={1}, ytick={1}, xlabel=$x$, ylabel=$y$, axis equal image]
+  \addplot[name path=lo, tealD, domain=0:1, samples=40] {x^2};
+  \addplot[name path=hi, coralD, domain=0:1] {x};
+  \addplot[aqua, fill opacity=0.35] fill between[of=lo and hi];
+  \draw[tealDD, line width=1pt, -{Stealth}] (axis cs:0.6,0.36) -- (axis cs:0.6,0.6);
+\end{axis}
+\end{tikzpicture}\hspace{5mm}
+\begin{tikzpicture}
+\begin{axis}[bp, width=5.2cm, height=5.2cm, xmin=-0.15, xmax=1.25, ymin=-0.15, ymax=1.25,
+  xtick={1}, ytick={1}, xlabel=$x$, ylabel=$y$, axis equal image]
+  \addplot[name path=d, tealD, domain=0:1] {x};
+  \addplot[name path=t, draw=none, domain=0:1] {1};
+  \addplot[blush, fill opacity=0.5] fill between[of=d and t];
+  \draw[coralD, line width=1pt, -{Stealth}] (axis cs:0,0.7) -- (axis cs:0.7,0.7);
+\end{axis}
+\end{tikzpicture}
+\figcap{Left: the region between $y=x^2$ and $y=x$, sliced vertically. Right: $0\le x\le y\le1$, the
+region of $\int_0^1\int_x^1e^{y^2}\dd y\dd x$, sliced horizontally after the change of order.}
+\end{center}
+
+\section{Polar, cylindrical and spherical coordinates}
+
+\begin{thm}[Change of variables, informal general form]
+For a smooth one-to-one map $G$ with nonzero Jacobian inside $B$:
+$\iint_{G(B)}f=\iint_Bf(G(u))\,|\det DG(u)|\dd u$.
+\begin{center}
+\begin{tabular}{@{}lll@{}}
+polar & $(r\cos\theta,r\sin\theta)$ & $dA=r\dd r\dd\theta$\\
+cylindrical & $(r\cos\theta,r\sin\theta,z)$ & $dV=r\dd z\dd r\dd\theta$\\
+spherical & $(\rho\sin\varphi\cos\theta,\rho\sin\varphi\sin\theta,\rho\cos\varphi)$ & $dV=\rho^2\sin\varphi\dd\rho\dd\varphi\dd\theta$
+\end{tabular}
+\end{center}
+with $\varphi\in[0,\pi]$ measured from the positive $z$-axis.
+\end{thm}
+
+\begin{remember}
+Useful polar curves: $r=a\cos\theta$ ($-\frac\pi2\le\theta\le\frac\pi2$) is the circle of radius $\frac a2$
+centred at $(\frac a2,0)$; $r=a\sin\theta$ ($0\le\theta\le\pi$) the one centred at $(0,\frac a2)$. Centre of
+mass: $\bar x=\frac1m\iint xf\dd A$ with $m=\iint f\dd A$.
+\end{remember}
+
+\begin{reallife}
+The Gaussian integral: $I=\int_{-\infty}^{\infty}e^{-x^2}dx$ satisfies
+$I^2=\iint_{\R^2}e^{-(x^2+y^2)}dA=\int_0^{2\pi}\!\!\int_0^\infty e^{-r^2}r\dd r\dd\theta=\pi$, so $I=\sqrt\pi$: the
+normalisation of the normal distribution in probability.
+\end{reallife}
+
+\section{Exam-style problems for Lecture VI}
+
+\begin{problem}{Lecture VI · iterated integrals}
+(a) $\int_1^2\!\int_{-3}^4x^2y\dd y\dd x$. (b) $\iint_A(x^2+y^2)\dd A$, $A$ between $y=x^2$ and $y=x$.
+(c) The area of $A$.
+\end{problem}
+\begin{solution}
+(a) Inner: $x^2\big[\tfrac{y^2}2\big]_{-3}^4=\tfrac72x^2$; outer: $\tfrac72\cdot\tfrac73=\tfrac{49}6$.
+(b) $\int_0^1\big[x^2y+\tfrac{y^3}3\big]_{x^2}^{x}\dd x=\int_0^1\big(x^3+\tfrac{x^3}3-x^4-\tfrac{x^6}3\big)\dd x
+=\tfrac14+\tfrac1{12}-\tfrac15-\tfrac1{21}=\tfrac3{35}$.
+(c) $\int_0^1(x-x^2)\dd x=\tfrac16$.
+\end{solution}
+
+\begin{problem}{Lecture VI · change of order}
+Compute $I=\int_0^1\!\int_x^1e^{y^2}\dd y\dd x$.
+\end{problem}
+\begin{hint}$e^{y^2}$ has no elementary antiderivative in $y$. Redescribe $0\le x\le y\le1$.\end{hint}
+\begin{solution}
+The region is $0\le y\le1$, $0\le x\le y$, so $I=\int_0^1\!\int_0^ye^{y^2}\dd x\dd y=\int_0^1ye^{y^2}\dd y
+=\tfrac12\big[e^{y^2}\big]_0^1=\tfrac{e-1}2$.
+\end{solution}
+
+\begin{problem}{Lecture VI · splitting a region}
+$\iint_A2xy\dd A$ over the triangle bounded by $y=0$, $y=x$, $x+y=2$.
+\end{problem}
+\begin{solution}
+Split at $x=1$: $\int_0^1\int_0^x2xy\dd y\dd x=\int_0^1x^3\dd x=\tfrac14$ and
+$\int_1^2\int_0^{2-x}2xy\dd y\dd x=\int_1^2x(2-x)^2\dd x=\tfrac5{12}$. Total $\tfrac23$. (In the other order,
+$0\le y\le1$, $y\le x\le2-y$, one integral suffices.)
+\end{solution}
+
+\begin{problem}{Lecture VI · polar}
+(a) $\iint_D(x^2+y^2)\dd A$ over the unit disc. (b) $\iint_{x^2+y^2\le4}e^{-(x^2+y^2)}\dd A$.
+(c) $\iint x^2\dd A$ inside the cardioid $r=1-\cos\theta$.
+\end{problem}
+\begin{solution}
+(a) $\int_0^{2\pi}\!\int_0^1r^2\cdot r\dd r\dd\theta=2\pi\cdot\tfrac14=\tfrac\pi2$.
+(b) $2\pi\int_0^2e^{-r^2}r\dd r=\pi(1-e^{-4})$.
+(c) $\int_0^{2\pi}\!\int_0^{1-\cos\theta}r^3\cos^2\theta\dd r\dd\theta=\tfrac14\int_0^{2\pi}(1-\cos\theta)^4\cos^2\theta\dd\theta=\tfrac{49\pi}{32}$.
+\end{solution}
+
+\begin{problem}{Lecture VI · spherical and centre of mass}
+(a) Volume inside $x^2+y^2+z^2=1$ and above the cone $z^2=x^2+y^2$, $z\ge0$.
+(b) Centre of mass of the uniform quarter disc $x,y\ge0$, $x^2+y^2\le1$.
+(c) $\bar z$ for the uniform first-octant part of the unit ball.
+\end{problem}
+\begin{solution}
+(a) The cone is $\varphi=\frac\pi4$: $V=\int_0^{2\pi}\!\int_0^{\pi/4}\!\int_0^1\rho^2\sin\varphi\dd\rho\dd\varphi\dd\theta
+=2\pi\cdot\tfrac13\big(1-\tfrac{\sqrt2}2\big)=\tfrac{\pi(2-\sqrt2)}3$.
+(b) $m=\frac\pi4$, $\iint x\dd A=\int_0^{\pi/2}\!\int_0^1r^2\cos\theta\dd r\dd\theta=\tfrac13$, so
+$\bar x=\bar y=\frac{4}{3\pi}$.
+(c) $\iiint z\dd V=\int_0^{\pi/2}\!\int_0^{\pi/2}\!\int_0^1\rho^3\cos\varphi\sin\varphi\dd\rho\dd\varphi\dd\theta=\frac\pi{16}$,
+$m=\frac\pi6$, so $\bar z=\frac38$.
+\end{solution}
+
+\begin{problem}{Lecture VI · triple integral}
+For the tetrahedron $T$: $x,y,z\ge0$, $x+y+z\le1$, compute $\mathrm{Vol}(T)$ and $\iiint_Tx\dd V$.
+\end{problem}
+\begin{solution}
+$\int_0^1\!\int_0^{1-x}\!\int_0^{1-x-y}\dd z\dd y\dd x=\tfrac16$; with $x$ inside, $\tfrac1{24}$. So the centre of
+mass has $\bar x=\frac{1/24}{1/6}=\frac14$ (and by symmetry $\bar y=\bar z=\frac14$).
+\end{solution}
+
+\begin{trap}
+The most common integration errors: forgetting $r$ in $dA=r\dd r\dd\theta$ (or $\rho^2\sin\varphi$); outer
+limits that depend on the inner variable; and splitting a region but integrating one piece twice.
+\end{trap}
+
+% ------------------------------------------------------------------
+
+\section{Quick check}
+\begin{quickcheck}
+For continuous $f$ on a rectangle, the two iterated integrals agree. & \qT & Fubini.\\
+In polar coordinates $dA=dr\,d\theta$. & \qF & $dA=r\dd r\dd\theta$.\\
+In spherical coordinates $dV=\rho^2\sin\varphi\dd\rho\dd\varphi\dd\theta$. & \qT & Determinant of the spherical map.\\
+$\int_0^1\!\int_0^xf\dd y\dd x=\int_0^1\!\int_0^yf\dd x\dd y$. & \qF & Same region is $y\le x\le1$: $\int_0^1\!\int_y^1f\dd x\dd y$.\\
+A bounded function continuous except on a curve of area $0$ is integrable. & \qT & Lecture VI criterion.\\
+$\int_{-\infty}^{\infty}e^{-x^2}\dd x=\sqrt\pi$. & \qT & Square it and go polar.\\
+\end{quickcheck}
+
+\settab{LECTURE VII}{9}
+\chapter[Change of Variables (Lecture VII)]{The Change of Variables\\ Formula (Lecture VII)}\label{ch:seven}\chaptermark{Change of Variables}
+
+\section{Determinants measure area and volume}
+
+\begin{thm}[Area and volume]
+The parallelogram spanned by $A=(a,c)$, $B=(b,d)$ has area $|ad-bc|$. The box spanned by
+$A,B,C$ in $\R^3$ has volume $|\det(A,B,C)|$. A linear map $L$ multiplies every area (volume)
+by $|\det L|$.
+\end{thm}
+
+\begin{intuition}
+Area $=|A|\,|B|\,|\sin\theta|$, and $|A|^2|B|^2-(A\cdot B)^2=(ad-bc)^2$. For a general region,
+approximate it by small squares: each one's area is multiplied by $|\det L|$, and the boundary
+squares have total area going to $0$.
+\end{intuition}
+
+\begin{center}
+\begin{tikzpicture}[scale=0.9]
+  \draw[bpgrid, step=0.5] (-0.5,-1.5) grid (6,2.5);
+  \draw[tealDD, ->] (-0.5,0) -- (6,0); \draw[tealDD, ->] (0,-1.5) -- (0,2.5);
+  \fill[aqua, opacity=0.25] (0,0) rectangle (1,1); \draw[tealD] (0,0) rectangle (1,1);
+  \node[font=\scriptsize, text=tealD] at (0.5,0.5) {$S$};
+  \fill[coral, opacity=0.3] (0,0) -- (2,1) -- (5,0) -- (3,-1) -- cycle;
+  \draw[coralD, line width=1pt] (0,0) -- (2,1) -- (5,0) -- (3,-1) -- cycle;
+  \draw[vec] (0,0) -- (2,1) node[above, font=\scriptsize]{$(2,1)$};
+  \draw[vec] (0,0) -- (3,-1) node[below, font=\scriptsize]{$(3,-1)$};
+  \node[font=\small, text=coralD] at (2.6,0) {$L(S)$};
+\end{tikzpicture}
+\figcap{The unit square maps to the parallelogram spanned by $(2,1)$ and $(3,-1)$: area
+$|2\cdot(-1)-1\cdot3|=5$.}
+\end{center}
+
+\begin{remember}
+Dilations: $(x,y)\mapsto(rx,sy)$ multiplies areas by $rs$; so the ellipse $\frac{x^2}{a^2}+\frac{y^2}{b^2}\le1$
+has area $\pi ab$ and the ellipsoid with semi-axes $a,b,c$ has volume $\frac43\pi abc$. A tetrahedron
+spanned by $A_1,A_2,A_3$ has volume $\frac16|\det(A_1,A_2,A_3)|$; with four arbitrary vertices,
+translate one to the origin first.
+\end{remember}
+
+\section{The formula}
+
+\begin{thm}[Change of variables]
+If $G$ is $C^1$-invertible on the interior of $R$ and $f$ is continuous on $G(R)$ except on finitely
+many smooth curves (surfaces), then
+\[ \iint_{G(R)}f(x,y)\dd x\dd y=\iint_Rf(G(u,v))\,|\Delta_G(u,v)|\dd u\dd v,\qquad
+\Delta_G=\det\begin{pmatrix}\partial_ug_1&\partial_vg_1\\ \partial_ug_2&\partial_vg_2\end{pmatrix}, \]
+and the same in $\R^3$ with $3\times3$ determinants.
+\end{thm}
+
+\begin{method}
+\textbf{Choosing a substitution.} (1) Pick $u,v$ that make the region a rectangle or the
+integrand simple (e.g.\ $u=x+y$, $v=x-y$). (2) Express $x,y$ in terms of $u,v$. (3) Compute
+$\Delta_G=\det\partial(x,y)/\partial(u,v)$ and take its absolute value. (4) Transform the region,
+then integrate.
+\end{method}
+
+\section{Exam-style problems for Lecture VII}
+
+\begin{problem}{Lecture VII · determinants}
+(a) Area of the parallelogram spanned by $(3,1)$ and $(2,-5)$. (b) Area of the triangle with
+vertices $(1,2)$, $(3,-1)$, $(0,0)$. (c) Volume of the parallelotope spanned by $(3,1,2)$, $(1,-1,4)$,
+$(2,1,0)$. (d) Volume of the tetrahedron spanned by $(3,1,4)$, $(-1,2,1)$, $(5,-2,1)$.
+\end{problem}
+\begin{solution}
+(a) $|3\cdot(-5)-1\cdot2|=17$. (b) $\tfrac12|1\cdot(-1)-3\cdot2|=\tfrac72$.
+(c) $\det=3(0-4)-1(0-8)+2(1+2)=2$, volume $2$ (the slide's $-4$ is a slip).
+(d) $\det=3(2+2)-1(-1-5)+4(2-10)=-14$, volume $\tfrac{14}6=\tfrac73$.
+\end{solution}
+
+\begin{problem}{Lecture VII · ellipse and ellipsoid}
+Areas and volumes of $\frac{x^2}9+\frac{y^2}{16}\le1$ and $\frac{x^2}9+\frac{y^2}{16}+\frac{z^2}{25}\le1$. Image of the
+ellipse $\frac{x^2}{a^2}+\frac{y^2}{b^2}\le1$ under $L=\begin{pmatrix}1&2\\3&-5\end{pmatrix}$.
+\end{problem}
+\begin{solution}
+$(u,v)\mapsto(3u,4v)$ maps the unit disc onto the ellipse: area $12\pi$. $F_{3,4,5}$ maps the unit ball onto
+the ellipsoid: volume $3\cdot4\cdot5\cdot\frac43\pi=80\pi$. $|\det L|=|-5-6|=11$, so the image has area $11\pi ab$.
+\end{solution}
+
+\begin{problem}{Lecture VII · nonlinear map}
+$G(u,v)=(e^u\cos v,e^u\sin v)$ on $0\le u\le1$, $0\le v\le\pi$. Compute $\iint_{G(R)}x^2\dd A$.
+\end{problem}
+\begin{solution}
+$\Delta_G=e^{2u}$ and $x^2=e^{2u}\cos^2v$, so the integral is
+$\int_0^1e^{4u}\dd u\int_0^\pi\cos^2v\dd v=\frac{e^4-1}4\cdot\frac\pi2=\frac{\pi(e^4-1)}8$. ($G(R)$ is the upper half
+of the annulus $1\le r\le e$.)
+\end{solution}
+
+\begin{problem}{Lecture VII · a rotated square}
+Compute $\iint_S(x+y)^2\dd A$ over $S=\{|x|+|y|\le1\}$ with $u=x+y$, $v=x-y$.
+\end{problem}
+\begin{solution}
+$S$ becomes the square $-1\le u,v\le1$. Since $x=\frac{u+v}2$, $y=\frac{u-v}2$,
+$\Delta=\det\begin{pmatrix}\frac12&\frac12\\ \frac12&-\frac12\end{pmatrix}=-\frac12$, so $|\Delta|=\frac12$ and
+$\iint_Su^2\cdot\frac12\dd u\dd v=\frac12\cdot\frac23\cdot2=\frac23$.
+\end{solution}
+
+\begin{trap}
+Use $|\Delta_G|$, not $\Delta_G$: orientation does not matter for area. And when the new variables
+are given as $u=u(x,y)$, either invert them or use $\Delta_{(x,y)/(u,v)}=1/\Delta_{(u,v)/(x,y)}$.
+\end{trap}
+
+\section{Quick check}
+\begin{quickcheck}
+The parallelogram spanned by $A,B$ has area $\det(A,B)$. & \qF & Area is $|\det(A,B)|$.\\
+A linear map $L$ multiplies every area by $|\det L|$. & \qT & Theorem B.1.\\
+The tetrahedron spanned by $A,B,C$ has volume $|\det(A,B,C)|$. & \qF & One sixth of it.\\
+The change of variables formula uses $|\Delta_G|$ evaluated on $R$, the source region. & \qT & $\iint_{G(R)}f=\iint_R(f\circ G)|\Delta_G|$.\\
+The region $\frac{x^2}{a^2}+\frac{y^2}{b^2}\le1$ has area $\pi ab$. & \qT & $G(u,v)=(au,bv)$, $\det=ab$.\\
+A negative Jacobian makes the integral negative. & \qF & The formula uses the absolute value.\\
+\end{quickcheck}

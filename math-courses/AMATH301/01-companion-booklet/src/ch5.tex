@@ -1,0 +1,671 @@
+% ============================== CHAPTER 5 ============================
+\clearpage
+\setlecture{Lecture V}\renewcommand{\tabname}{V}
+\chapter{Applications: the Derivative as a Linear Map}\label{ch:linear}
+
+So far our functions returned a single number. Many important objects return several
+numbers at once: a change of coordinates $(r,\theta)\mapsto(x,y)$, the position of a robot's
+hand as a function of its joint angles, a velocity field. This chapter defines the derivative
+of such a mapping $F:\R^n\to\R^m$. The answer is beautiful: the derivative is a
+\emph{linear map}, represented by the \emph{Jacobian matrix}. With it, the chain rule becomes a
+matrix product, coordinate changes become transparent, and we can prove two of the deepest
+results of the course: the inverse mapping theorem and the implicit function theorem.
+
+\section{The derivative as a linear map}
+
+\subsection{From differentiability to a linear map}
+
+Let $U\subset\R^n$ be open, $P\in U$, and $f$ differentiable at $P$. For small $H$,
+\[ f(P+H)=f(P)+A\cdot H+\norm Hg(H),\qquad \lim_{\norm H\to0}g(H)=0, \]
+where $A=\grad f(P)=\big(D_1f(P),\dots,D_nf(P)\big)$. The map $L=L_A$ defined by
+\[ L(H)=A\cdot H \]
+is \emph{linear}: $L(H+K)=L(H)+L(K)$ and $L(cH)=cL(H)$. So differentiability reads
+\[ f(P+H)=f(P)+L(H)+\norm Hg(H). \]
+
+\begin{intuition}
+In one variable, $f(a+h)=f(a)+ch+\abs h g(h)$ with $c=f'(a)$, and ``multiplication by $c$'' is a
+linear map $L_c(h)=ch$. The derivative was always secretly a linear map; for functions of one
+variable we just identified the map $h\mapsto ch$ with the number $c$. In several variables this
+identification is no longer convenient, so we keep the map itself.
+\end{intuition}
+
+\begin{definition}{Derivative of a scalar function}
+The \emph{derivative} of $f$ at $P$ is the linear map $H\mapsto\grad f(P)\cdot H$. It is
+denoted $Df(P)$ or $f'(P)$:
+\[ f(P+H)=f(P)+Df(P)H+\norm Hg(H), \]
+or equivalently
+\[ f(P+H)=f(P)+f'(P)H+\norm Hg(H). \]
+\end{definition}
+
+\subsection{Differentiable mappings}
+
+\begin{definition}{Differentiability of a mapping}
+Let $U$ be open in $\R^n$, $F:U\to\R^m$ a mapping and $P\in U$. $F$ is \emph{differentiable at
+$P$} if there exist a linear map $L:\R^n\to\R^m$ and a mapping $G$, defined for all
+sufficiently small vectors $H$, such that
+\[ F(P+H)=F(P)+LH+\norm H\,G(H)\qquad\text{and}\qquad \lim_{\norm H\to0}G(H)=O . \]
+\end{definition}
+
+\begin{definition}{Tangent map and little-o}
+A linear map $L$ as above is said to be \emph{tangent} to $F$ at $P$: it is the best linear
+approximation of $F$ near $P$. A map $\psi$ defined for small $H$ is $o(H)$ (``little oh of
+$H$'') if
+\[ \lim_{\norm H\to0}\frac{\psi(H)}{\norm H}=O . \]
+Thus differentiability says $F(P+H)=F(P)+L(H)+o(H)$.
+\end{definition}
+
+\subsection{Uniqueness}
+
+\begin{theorem}[label=thm:unique]{Uniqueness of the tangent linear map}
+If two linear maps $L$ and $M$ are both tangent to $F$ at $P$, then $L=M$.
+\end{theorem}
+
+\begin{intuition}
+Two linear maps that agree up to an error much smaller than $\norm H$ on \emph{all} small vectors
+must agree exactly. Scaling makes this precise: a linear map scales with $t$, while the error
+becomes negligible as $t\to0$.
+\end{intuition}
+
+\begin{proof}
+Write both expansions:
+\begin{align*} F(P+H)&=F(P)+LH+\norm HG_1(H),\\ F(P+H)&=F(P)+MH+\norm HG_2(H), \end{align*}
+with $G_1,G_2\to O$. Fix any vector $Y\neq O$ and evaluate both at $H=tY$, $t>0$ small. Subtracting,
+\[ O=L(tY)-M(tY)+\norm{tY}\big[G_1(tY)-G_2(tY)\big]. \]
+By linearity $L(tY)=tL(Y)$, $M(tY)=tM(Y)$, and $\norm{tY}=t\norm Y$. Dividing by $t$ and putting
+$G=G_1-G_2$,
+\[ M(Y)-L(Y)=\norm Y\,G(tY). \]
+The left side does not depend on $t$. Let $t\to0$: then $tY\to O$, so $G(tY)\to O$, and the right
+side tends to $O$. Hence $M(Y)=L(Y)$. This holds for every $Y$ (trivially for $Y=O$), so $M=L$.
+\end{proof}
+
+By uniqueness, \emph{the} tangent map is called the \textbf{derivative} of $F$ at $P$ and denoted
+$F'(P)$ or $DF(P)$:
+\[ F(P+H)=F(P)+F'(P)H+\norm H\,G(H),\qquad G(H)\to O . \]
+
+\begin{keyidea}
+The derivative of $F:\R^n\to\R^m$ at $P$ is a \textbf{linear map} $\R^n\to\R^m$: it eats a small
+displacement $H$ of the input and returns the corresponding (first-order) displacement of the
+output. It is not merely a list of partial derivatives.
+\end{keyidea}
+
+\begin{example}{linear and affine maps}
+If $F(X)=AX+B$ with $A$ an $m\times n$ matrix, then $F(P+H)=F(P)+AH$ exactly, so the remainder
+is $0$ and $F'(P)=A$ for every $P$. A linear map is its own derivative, as a straight line is its
+own tangent.
+\end{example}
+
+\section{The Jacobian matrix}
+
+\subsection{Coordinates}
+
+Let $F:\R^n\to\R^m$ have coordinate functions $f_1,\dots,f_m$:
+\[ F(X)=\begin{pmatrix}f_1(X)\\ \vdots\\ f_m(X)\end{pmatrix}=\tr\big(f_1(X),\dots,f_m(X)\big), \]
+where we view $X=\tr(x_1,\dots,x_n)$ as a column vector, and assume the partial derivatives of
+each $f_i$ exist.
+
+\begin{definition}{Jacobian matrix}
+The \emph{Jacobian matrix} of $F$ at $X$ is the $m\times n$ matrix of partial derivatives
+\[
+J_F(X)=\left(\pd{f_i}{x_j}\right)=\begin{pmatrix}D_1f_1(X)&\cdots&D_nf_1(X)\\ \vdots&&\vdots\\ D_1f_m(X)&\cdots&D_nf_m(X)\end{pmatrix}.
+\]
+Row $i$ is the gradient of $f_i$; column $j$ records how all outputs react to $x_j$. For
+$F(x,y)=(f(x,y),g(x,y))$,
+\[ J_F(x,y)=\begin{pmatrix}\pd fx&\pd fy\\[3pt] \pd gx&\pd gy\end{pmatrix}. \]
+\end{definition}
+
+\begin{center}
+\begin{tikzpicture}
+  \matrix (m) [matrix of math nodes, left delimiter=(, right delimiter=), nodes={minimum width=1.25cm, minimum height=0.7cm, font=\small}]
+  {  \partial_1 f_1 & \partial_2 f_1 & \cdots & \partial_n f_1 \\
+     \partial_1 f_2 & \partial_2 f_2 & \cdots & \partial_n f_2 \\
+     \vdots & \vdots &  & \vdots \\
+     \partial_1 f_m & \partial_2 f_m & \cdots & \partial_n f_m \\};
+  \begin{scope}[on background layer]
+   \fill[coral, opacity=0.18] (m-2-1.north west) rectangle (m-2-4.south east);
+   \fill[cyanbp, opacity=0.15] (m-1-2.north west) rectangle (m-4-2.south east);
+  \end{scope}
+  \node[font=\scriptsize, text=coraldark, anchor=west] at ([xshift=0.5cm]m-2-4.east) {row $i$ $=\nabla f_i$};
+  \node[font=\scriptsize, text=cyanbp, anchor=north] at ([yshift=-0.2cm]m-4-2.south) {column $j$: effect of $x_j$};
+\end{tikzpicture}
+\end{center}
+
+\begin{example}{a map $\R^2\to\R^2$}
+Let $F(x,y)=\begin{pmatrix}x^2+y^2\\ e^{xy}\end{pmatrix}$. Then
+\[ J_F(x,y)=\begin{pmatrix}2x&2y\\ ye^{xy}&xe^{xy}\end{pmatrix},\qquad J_F(1,1)=\begin{pmatrix}2&2\\ e&e\end{pmatrix}. \]
+\end{example}
+
+\begin{example}{a map $\R^2\to\R^3$}
+For $F(x,y)=\begin{pmatrix}xy\\ \sin x\\ x^2y\end{pmatrix}$,
+\[ J_F(x,y)=\begin{pmatrix}y&x\\ \cos x&0\\ 2xy&x^2\end{pmatrix},\qquad
+J_F\!\left(\pi,\tfrac\pi2\right)=\begin{pmatrix}\pi/2&\pi\\ -1&0\\ \pi^2&\pi^2\end{pmatrix}. \]
+A $3\times2$ matrix: three outputs, two inputs.
+\end{example}
+
+\subsection{Derivative and Jacobian}
+
+\begin{theorem}[label=thm:jac]{The derivative is the Jacobian}
+Let $U$ be open in $\R^n$ and $F:U\to\R^m$ with coordinate functions $f_1,\dots,f_m$. If each
+$f_i$ is differentiable at $X\in U$, then $F$ is differentiable at $X$ and the matrix
+representing $F'(X)=DF(X)$ is the Jacobian matrix $J_F(X)$:
+\[ F(X+H)=F(X)+J_F(X)H+o(H). \]
+\end{theorem}
+
+\begin{proof}
+\textbf{Step 1.} For each coordinate function,
+\[ f_i(X+H)=f_i(X)+\grad f_i(X)\cdot H+\norm Hg_i(H),\qquad g_i(H)\to0 . \]
+\textbf{Step 2: stack the $m$ equations into a column.} The terms $\grad f_i(X)\cdot H$ are the
+entries of the product $J_F(X)H$, since row $i$ of $J_F(X)$ is $\grad f_i(X)$. With
+$G(H)=\tr\big(g_1(H),\dots,g_m(H)\big)$,
+\[ F(X+H)=F(X)+J_F(X)H+\norm H\,G(H). \]
+\textbf{Step 3.} Each component of $G(H)$ tends to $0$, so $G(H)\to O$. Thus the linear map
+$H\mapsto J_F(X)H$ is tangent to $F$ at $X$, and by uniqueness it is $F'(X)$.
+\end{proof}
+
+\section{Differentials and coordinate changes}
+
+\subsection{The differential of a scalar function}
+
+\begin{definition}{Differential}
+Let $f:\R^n\to\R$ be differentiable at $P$. The \emph{differential} of $f$ at $P$ is the derivative
+viewed as a linear functional,
+\[ df_P:=Df(P):\R^n\to\R,\qquad df_P(H)=\sum_{i=1}^n\pd f{x_i}(P)\,h_i . \]
+\end{definition}
+
+\begin{trap}
+$df_P$ is \textbf{not} an ``infinitesimally small number''. It is a linear map that acts on an
+increment $H$ and returns a number. ``$df\approx\Delta f$'' means $df_P(H)\approx f(P+H)-f(P)$ for small $H$.
+\end{trap}
+
+For each coordinate function $x_i(X)=x_i$, the derivative is the linear functional
+$dx_i(H)=h_i$: the differentials $dx_1,\dots,dx_n$ simply \emph{extract the components} of $H$.
+
+\begin{proposition}{Coordinate expression of the differential}
+For a differentiable scalar function $f$,
+\[ df_P=\sum_{i=1}^n\pd f{x_i}(P)\,dx_i\qquad\text{as an identity of linear functionals.} \]
+In two variables: $df=f_x\,dx+f_y\,dy$.
+\end{proposition}
+
+\begin{proof}
+Apply both sides to $H$: the left gives $\sum\pd f{x_i}(P)h_i$; the right gives
+$\sum\pd f{x_i}(P)\,dx_i(H)=\sum\pd f{x_i}(P)h_i$. Equal for every $H$, so equal as maps.
+\end{proof}
+
+\begin{example}{error estimate with differentials}
+The volume of a cylinder is $V=\pi r^2h$, so $dV=2\pi rh\,dr+\pi r^2\,dh$. For $r=5$ cm,
+$h=10$ cm measured with errors $\abs{dr},\abs{dh}\le0.1$ cm:
+\[ \abs{dV}\le2\pi(5)(10)(0.1)+\pi(25)(0.1)=10\pi+2.5\pi=12.5\pi\approx39\ \text{cm}^3, \]
+out of $V=250\pi\approx785$ cm$^3$: about $5\%$. Note that the error in $r$ costs four times more
+than the error in $h$.
+\end{example}
+
+\subsection{Differentials under a change of coordinates}
+
+Let $F(u_1,\dots,u_n)=\big(x_1(u),\dots,x_m(u)\big)$. Since $J_F(u)$ represents $DF(u)$,
+\[
+dx_i=\sum_{j=1}^n\pd{x_i}{u_j}\,du_j,\qquad\text{equivalently}\qquad
+\begin{pmatrix}dx_1\\ \vdots\\ dx_m\end{pmatrix}=J_F(u)\begin{pmatrix}du_1\\ \vdots\\ du_n\end{pmatrix}.
+\]
+The Jacobian matrix tells us how coordinate differentials transform locally.
+
+\begin{example}{polar-coordinate differentials}
+For $x=r\cos\theta$, $y=r\sin\theta$:
+\[ dx=\cos\theta\,dr-r\sin\theta\,d\theta,\qquad dy=\sin\theta\,dr+r\cos\theta\,d\theta, \]
+that is
+\[
+\begin{pmatrix}dx\\dy\end{pmatrix}=\begin{pmatrix}\cos\theta&-r\sin\theta\\ \sin\theta&r\cos\theta\end{pmatrix}\begin{pmatrix}dr\\d\theta\end{pmatrix},
+\]
+and $\det J_F(r,\theta)=r\cos^2\theta+r\sin^2\theta=r$.
+\end{example}
+
+\subsection{Area and volume elements}
+
+A linear map multiplies areas (or volumes) by the absolute value of its determinant. For a
+differentiable map $x=F(u)$, a tiny box in the $u$-coordinates is mapped to an almost-box (almost a
+parallelogram) whose volume is multiplied by $\abs{\det J_F(u)}$. Hence, locally,
+\[ \boxed{\,dV_x=\abs{\det J_F(u)}\,dV_u\,} \]
+and in two dimensions $dA_x=\abs{\det J_F(u,v)}\,dA_{u,v}$.
+
+\begin{center}
+\begin{tikzpicture}[scale=1]
+  \begin{scope}
+    \draw[bpgrid, step=0.5] (-0.3,-0.3) grid (3.3,2.8);
+    \draw[navy, ->, line width=0.6pt] (-0.3,0) -- (3.3,0) node[right, font=\small]{$r$};
+    \draw[navy, ->, line width=0.6pt] (0,-0.3) -- (0,2.8) node[above, font=\small]{$\theta$};
+    \fill[coral, opacity=0.35] (1.8,1.2) rectangle (2.3,1.6);
+    \draw[coral, line width=1pt] (1.8,1.2) rectangle (2.3,1.6);
+    \node[font=\scriptsize, text=coraldark, below] at (2.05,1.2) {$dr$};
+    \node[font=\scriptsize, text=coraldark, right] at (2.3,1.4) {$d\theta$};
+  \end{scope}
+  \draw[-{Stealth[length=3mm]}, plum, line width=1.4pt] (3.7,1.3) to[bend left=20] node[above, font=\small]{$F$} (5.0,1.3);
+  \begin{scope}[xshift=7.1cm, yshift=0.2cm]
+    \draw[bpgrid, step=0.5] (-1.8,-0.5) grid (2.6,2.6);
+    \draw[navy, ->, line width=0.6pt] (-1.8,0) -- (2.6,0) node[right, font=\small]{$x$};
+    \draw[navy, ->, line width=0.6pt] (0,-0.5) -- (0,2.6) node[above, font=\small]{$y$};
+    \fill[coral, opacity=0.35] (40:1.8) arc (40:58:1.8) -- (58:2.3) arc (58:40:2.3) -- cycle;
+    \draw[coral, line width=1pt] (40:1.8) arc (40:58:1.8) -- (58:2.3) arc (58:40:2.3) -- cycle;
+    \draw[navy, dashed, line width=0.5pt] (0,0) -- (40:2.3);
+    \draw[navy, dashed, line width=0.5pt] (0,0) -- (58:2.3);
+    \node[font=\scriptsize, text=coraldark] at (49:2.75) {$r\,d\theta$};
+    \node[font=\scriptsize, text=coraldark, anchor=north west] at (40:2.05) {$dr$};
+  \end{scope}
+\end{tikzpicture}
+
+{\small\color{navy} A small rectangle $dr\times d\theta$ becomes a small polar ``rectangle'' with sides
+$dr$ and $r\,d\theta$, so $dA=r\,dr\,d\theta$, exactly $\abs{\det J_F}=r$.}
+\end{center}
+
+\begin{extra}
+One often writes $dx_1\cdots dx_n=\abs{\det J_F(u)}\,du_1\cdots du_n$, or even $dx=\abs{\det J_F(u)}\,du$.
+Here ``$dx$'' denotes the \emph{volume element}, not a single coordinate differential. This is
+exactly the change-of-variables formula you will use for multiple integrals:
+$\iint f\,dx\,dy=\iint f(r\cos\theta,r\sin\theta)\,r\,dr\,d\theta$.
+\end{extra}
+
+\begin{definition}{Jacobian determinant}
+If $F:U\to\R^n$ maps an open set of $\R^n$ into the \emph{same} dimension, $J_F(X)$ is square and
+its determinant is the \emph{Jacobian determinant} of $F$ at $X$, denoted $\Delta_F(X)$.
+\end{definition}
+
+\begin{example}{a Jacobian determinant}
+For $F(x,y)=(x^2+y^2,\;e^{xy})$,
+\[
+\Delta_F(x,y)=\begin{vmatrix}2x&2y\\ ye^{xy}&xe^{xy}\end{vmatrix}=2x^2e^{xy}-2y^2e^{xy}=2(x^2-y^2)e^{xy}.
+\]
+So $\Delta_F(1,1)=0$ and $\Delta_F(1,2)=2(1-4)e^2=-6e^2$.
+\end{example}
+
+\begin{trap}
+In the lecture slides the entries of the bottom row are printed as $ye^x$ and $xe^y$, which leads
+to the value $2e^2-8e$ at $(1,2)$. With $F_2=e^{xy}$, both entries carry $e^{xy}$, and the value is
+$-6e^2$. If you meet this on an exam, show the Jacobian matrix explicitly so the grader can follow.
+\end{trap}
+
+\begin{example}{the polar coordinate map}
+$F(r,\theta)=(r\cos\theta,\;r\sin\theta)$ is defined on all of $\R^2$, though for polar coordinates
+we take $r\ge0$. It maps a rectangle $[r_1,r_2]\times[\theta_1,\theta_2]$ onto a circular sector (an
+annular piece), as in the picture above, and $\Delta_F(r,\theta)=r$.
+\end{example}
+
+\begin{reallife}{a robot arm}
+A planar arm has two links of lengths $L_1,L_2$ and joint angles $\theta_1,\theta_2$. The hand is at
+\[ F(\theta_1,\theta_2)=\big(L_1\cos\theta_1+L_2\cos(\theta_1+\theta_2),\;L_1\sin\theta_1+L_2\sin(\theta_1+\theta_2)\big). \]
+The Jacobian maps joint speeds to hand velocity, and a short computation gives
+$\Delta_F=L_1L_2\sin\theta_2$. When $\theta_2=0$ (arm fully stretched) the determinant vanishes: the hand
+cannot move along the arm's direction, whatever the motors do. Robotics engineers call this a
+\emph{singular configuration} and design controllers to avoid it.
+\end{reallife}
+
+\begin{center}
+\begin{tikzpicture}[scale=1]
+  \draw[bpgrid, step=0.5] (-0.5,-0.4) grid (4.5,3.1);
+  \fill[navy] (-0.15,-0.15) rectangle (0.15,0);
+  \coordinate (O) at (0,0);
+  \coordinate (E) at (35:2.2);
+  \coordinate (H) at ($(E)+(85:1.6)$);
+  \draw[plum, line width=3pt, line cap=round] (O) -- (E);
+  \draw[coral, line width=3pt, line cap=round] (E) -- (H);
+  \node[pdot] at (O) {}; \node[pdot] at (E) {}; \node[dot] at (H) {};
+  \draw[navy, line width=0.5pt] (0.7,0) arc (0:35:0.7); \node[font=\scriptsize] at (17:0.95) {$\theta_1$};
+  \draw[navy, dashed, line width=0.5pt] (E) -- ++(35:0.9);
+  \draw[navy, line width=0.5pt] ($(E)+(35:0.55)$) arc (35:85:0.55); \node[font=\scriptsize] at ($(E)+(60:0.8)$) {$\theta_2$};
+  \node[font=\scriptsize, text=plum, anchor=north west] at ($(O)!0.5!(E)$) {$L_1$};
+  \node[font=\scriptsize, text=coraldark, anchor=west] at ($(E)!0.5!(H)$) {$L_2$};
+  \node[font=\scriptsize, text=navy, anchor=south] at (H) {hand $F(\theta_1,\theta_2)$};
+\end{tikzpicture}
+\end{center}
+
+\section{The chain rule for mappings}
+
+Let $U\subset\R^n$ and $V\subset\R^m$ be open, $F:U\to\R^m$ with $F(U)\subset V$, and
+$G:V\to\R^s$. If $F$ is differentiable at $X$ and $G$ at $F(X)$, the derivatives are linear maps
+\[ F'(X):\R^n\to\R^m,\qquad G'(F(X)):\R^m\to\R^s . \]
+
+\begin{center}
+\begin{tikzpicture}
+  \node[draw=plum, line width=1pt, fill=plumtint, ellipse, minimum width=2.2cm, minimum height=1.4cm] (U) at (0,0) {};
+  \node[font=\small, text=plum] at (0,-1.45) {$U\subset\R^n$};
+  \node[pdot, label={[font=\scriptsize]above:$X$}] (x) at (0,0) {};
+  \node[draw=plum, line width=1pt, fill=plumtint, ellipse, minimum width=2.2cm, minimum height=1.4cm] (V) at (4,0) {};
+  \node[font=\small, text=plum] at (4,1.1) {$V\subset\R^m$};
+  \node[pdot, label={[font=\scriptsize]above:$F(X)$}] (y) at (4,0) {};
+  \node[draw=coral, line width=1pt, fill=coraltint, ellipse, minimum width=2.2cm, minimum height=1.4cm] (W) at (8,0) {};
+  \node[font=\small, text=coraldark] at (8,-1.45) {$\R^s$};
+  \node[dot, label={[font=\scriptsize]above:$G(F(X))$}] (z) at (8,0) {};
+  \draw[-{Stealth[length=2.5mm]}, plum, line width=1.1pt] (x) to[bend left=25] node[above, font=\small]{$F$} (y);
+  \draw[-{Stealth[length=2.5mm]}, plum, line width=1.1pt] (y) to[bend left=25] node[above, font=\small]{$G$} (z);
+  \draw[-{Stealth[length=2.5mm]}, coral, line width=1.1pt, dashed] (x) to[bend right=32] node[below, font=\small, fill=white, inner sep=1pt]{$G\circ F$} (z);
+\end{tikzpicture}
+\end{center}
+
+\begin{theorem}[label=thm:chainmap]{Chain rule}
+Under these hypotheses, $G\circ F$ is differentiable at $X$ and
+\[ \boxed{\,(G\circ F)'(X)=G'(F(X))\circ F'(X)\,} \]
+In matrices: $J_{G\circ F}(X)=J_G(F(X))\,J_F(X)$, a product of an $s\times m$ and an $m\times n$ matrix.
+\end{theorem}
+
+\begin{intuition}
+Each map is approximately linear near the relevant point. Composing two approximately linear
+maps gives an approximately linear map, and its linear part is the composition of the two linear
+parts. The work is to check that the two error terms remain small after composition.
+\end{intuition}
+
+\begin{proof}
+\textbf{Step 1: the two expansions.} Write $Y=F(X)$. By differentiability,
+\begin{align*} F(X+H)&=F(X)+F'(X)H+\norm H\Phi_1(H),\\ G(Y+K)&=G(Y)+G'(Y)K+\norm K\Phi_2(K), \end{align*}
+with $\Phi_1(H)\to O$ and $\Phi_2(K)\to O$ (set $\Phi_2(O)=O$).
+
+\textbf{Step 2: choose $K$.} Put $K=F(X+H)-F(X)=F'(X)H+\norm H\Phi_1(H)$. Then
+$G(F(X+H))=G(Y+K)$, and
+\[ (G\circ F)(X+H)=(G\circ F)(X)+G'(Y)F'(X)H+R(H), \]
+using linearity of $G'(Y)$, where $R(H)=\norm H\,G'(Y)\Phi_1(H)+\norm K\Phi_2(K)$.
+
+\textbf{Step 3: the remainder is $o(H)$.} A linear map is bounded: there is $C$ with
+$\norm{G'(Y)Z}\le C\norm Z$ and $c$ with $\norm{F'(X)H}\le c\norm H$. So
+$\norm{G'(Y)\Phi_1(H)}\le C\norm{\Phi_1(H)}\to0$. Also $\norm K\le(c+\norm{\Phi_1(H)})\norm H$, which is at most
+$(c+1)\norm H$ for small $H$; hence $K\to O$ and $\norm K\norm{\Phi_2(K)}/\norm H\le(c+1)\norm{\Phi_2(K)}\to0$.
+Therefore $R(H)/\norm H\to O$.
+
+\textbf{Step 4.} So $G'(F(X))F'(X)$ is tangent to $G\circ F$ at $X$, and by uniqueness it is
+$(G\circ F)'(X)$.
+\end{proof}
+
+\begin{example}{a matrix chain rule}
+Let $F(x,y)=(x+y,\;xy)$ and $G(u,v)=(u^2,\;u+v)$. Find $J_{G\circ F}(1,2)$.
+
+\textbf{Step 1.} $F(1,2)=(3,2)$.
+
+\textbf{Step 2.} $J_F=\begin{pmatrix}1&1\\y&x\end{pmatrix}$, so $J_F(1,2)=\begin{pmatrix}1&1\\2&1\end{pmatrix}$;
+$J_G=\begin{pmatrix}2u&0\\1&1\end{pmatrix}$, so $J_G(3,2)=\begin{pmatrix}6&0\\1&1\end{pmatrix}$.
+
+\textbf{Step 3: multiply (outer map on the left).}
+\[ J_{G\circ F}(1,2)=\begin{pmatrix}6&0\\1&1\end{pmatrix}\begin{pmatrix}1&1\\2&1\end{pmatrix}=\begin{pmatrix}6&6\\3&2\end{pmatrix}. \]
+\textbf{Check.} $G\circ F=\big((x+y)^2,\;x+y+xy\big)$ has Jacobian
+$\begin{pmatrix}2(x+y)&2(x+y)\\1+y&1+x\end{pmatrix}$, which at $(1,2)$ is $\begin{pmatrix}6&6\\3&2\end{pmatrix}$.
+\end{example}
+
+\begin{keyidea}
+The chain rule of Chapter~\ref{ch:chain} is the special case $n=1$, $s=1$: for a curve $X(t)$ and a
+scalar $f$, $J_{f\circ X}=J_f\,J_X=\grad f(X(t))\cdot X'(t)$, a $1\times m$ row times an $m\times1$ column.
+\end{keyidea}
+
+\section{Inverse mappings and implicit functions}
+
+\subsection{$C^1$ maps and invertibility}
+
+\begin{definition}{$C^1$ map and $C^1$-invertibility}
+Let $U$ be open in $\R^n$ and $F:U\to\R^n$, $F=(f_1,\dots,f_n)$. If all partial derivatives of all
+$f_i$ exist and are continuous, $F$ is a \emph{$C^1$-map}. $F$ is \emph{$C^1$-invertible on $U$} if
+$V=F(U)$ is open and there is a $C^1$-map $G:V\to U$ with $G\circ F=\mathrm{id}_U$ and
+$F\circ G=\mathrm{id}_V$.
+\end{definition}
+
+\begin{example}{translations}
+For a fixed vector $A$, $F(X)=X+A$ is $C^1$-invertible on $\R^n$ with inverse $G(Y)=Y-A$.
+\end{example}
+
+\begin{example}{polar coordinates on a half-plane}
+Let $U=\{(r,\theta):r>0,\ 0<\theta<\pi\}$ and $F(r,\theta)=(r\cos\theta,r\sin\theta)$. The image is
+the upper half-plane $V=\{y>0\}$, and the inverse is
+\[ G(x,y)=\left(\sqrt{x^2+y^2},\ \arccos\frac{x}{\sqrt{x^2+y^2}}\right). \]
+\end{example}
+
+\begin{center}
+\begin{tikzpicture}[scale=0.95]
+  \begin{scope}
+    \fill[plum, opacity=0.15] (0,0) rectangle (3,2.4);
+    \draw[navy, ->, line width=0.6pt] (-0.3,0) -- (3.4,0) node[right, font=\small]{$r$};
+    \draw[navy, ->, line width=0.6pt] (0,-0.3) -- (0,2.9) node[above, font=\small]{$\theta$};
+    \draw[plum, dashed, line width=0.9pt] (0,2.4) -- (3,2.4);
+    \node[font=\scriptsize, left] at (0,2.4) {$\pi$};
+    \node[font=\small, text=plum] at (1.5,1.2) {$U$};
+  \end{scope}
+  \draw[-{Stealth[length=3mm]}, plum, line width=1.3pt] (3.8,1.6) to[bend left=20] node[above, font=\small]{$F$} (5.3,1.6);
+  \draw[-{Stealth[length=3mm]}, coral, line width=1.3pt] (5.3,0.9) to[bend left=20] node[below, font=\small]{$G$} (3.8,0.9);
+  \begin{scope}[xshift=8.2cm]
+    \fill[plum, opacity=0.15] (-2.4,0) rectangle (2.4,2.4);
+    \draw[navy, ->, line width=0.6pt] (-2.6,0) -- (2.7,0) node[right, font=\small]{$x$};
+    \draw[navy, ->, line width=0.6pt] (0,-0.3) -- (0,2.9) node[above, font=\small]{$y$};
+    \draw[plum, dashed, line width=0.9pt] (-2.4,0) -- (2.4,0);
+    \node[font=\small, text=plum] at (1.2,1.4) {$V=\{y>0\}$};
+  \end{scope}
+\end{tikzpicture}
+\end{center}
+
+\begin{definition}{Local $C^1$-invertibility}
+$F$ is \emph{locally $C^1$-invertible at $P$} if there is an open set $U_1\subset U$ containing $P$
+such that $F$ is $C^1$-invertible on $U_1$.
+\end{definition}
+
+\subsection{The inverse mapping theorem}
+
+\begin{theorem}[label=thm:inverse]{Inverse mapping theorem}
+Let $F:U\to\R^n$ be a $C^1$-map and $P\in U$. If the Jacobian determinant $\Delta_F(P)\neq0$, then
+$F$ is locally $C^1$-invertible at $P$.
+\end{theorem}
+
+\begin{intuition}
+Near $P$, $F$ looks like its derivative, a linear map. A linear map is invertible exactly when its
+determinant is nonzero. The theorem says that the nonlinear $F$ inherits this invertibility, at
+least on a small neighbourhood. (The proof uses a fixed-point argument and is beyond this course.)
+\end{intuition}
+
+\begin{itemize}
+  \item $\Delta_F(P)\neq0$ means the Jacobian matrix $J_F(P)$ is invertible.
+  \item $J_F(P)$ represents $F'(P)$.
+  \item So: \textbf{if $F'(P)$ is invertible, then $F$ is locally invertible at $P$.}
+\end{itemize}
+
+\begin{proposition}{Derivative of an inverse map}
+If $F:U\to V$ has a $C^1$-inverse $G$, then for $Y=F(X)$,
+\[ \boxed{\,G'(Y)=F'(X)^{-1}\,}\qquad\text{i.e.}\qquad J_G(Y)=J_F(X)^{-1}. \]
+\end{proposition}
+
+\begin{proof}
+$G\circ F=\mathrm{id}$ and the identity map has derivative $I$. By the chain rule,
+$I=(G\circ F)'(X)=G'(F(X))\circ F'(X)$. Similarly $F\circ G=\mathrm{id}$ gives $F'(X)\circ G'(Y)=I$.
+So $G'(Y)$ is the inverse of $F'(X)$.
+\end{proof}
+
+\begin{example}{a map that is locally but not globally invertible}
+Let $F(x,y)=\big(e^x\cos y,\;e^x\sin y\big)$. Then
+\[ J_F(x,y)=\begin{pmatrix}e^x\cos y&-e^x\sin y\\ e^x\sin y&e^x\cos y\end{pmatrix}, \]
+\[ \Delta_F(x,y)=e^{2x}(\cos^2y+\sin^2y)=e^{2x}\neq0 . \]
+So $F$ is locally invertible at \emph{every} point. But $F(x,y+2\pi)=F(x,y)$: it is not injective,
+so it has no global inverse on $\R^2$.
+
+\textbf{Derivative of the local inverse at $F(0,\frac\pi2)=(0,1)$.}
+$J_F(0,\frac\pi2)=\begin{pmatrix}0&-1\\1&0\end{pmatrix}$, so
+$J_G(0,1)=\begin{pmatrix}0&-1\\1&0\end{pmatrix}^{-1}=\begin{pmatrix}0&1\\-1&0\end{pmatrix}$.
+\end{example}
+
+\begin{trap}
+The slides write $\Delta_F(x,y)=e^x$ for this map. Computing the determinant gives
+$e^x\cos y\cdot e^x\cos y+e^x\sin y\cdot e^x\sin y=e^{2x}$. The conclusion (never zero, so locally
+invertible everywhere) is the same.
+\end{trap}
+
+\begin{reallife}{why ``locally'' matters}
+In complex numbers this map is $z\mapsto e^z$. Every nonzero complex number has a logarithm, but
+infinitely many of them (they differ by $2\pi i$). A calculator must choose one branch; this is the
+same phenomenon as choosing an angle $\theta\in(-\pi,\pi]$ in polar coordinates.
+\end{reallife}
+
+\subsection{The implicit function theorem}
+
+Consider a curve given by an equation $f(x,y)=c$, such as the circle $x^2+y^2=2$. We would like
+to describe it, near a point, as a graph $y=\varphi(x)$.
+
+\begin{definition}{Implicit function}
+Suppose $f(a,b)=c$. If there is a differentiable function $y=\varphi(x)$, defined near $x=a$,
+with $\varphi(a)=b$ and $f(x,\varphi(x))=c$, we say that $y=\varphi(x)$ is the function
+\emph{determined implicitly} by $f$.
+\end{definition}
+
+\begin{example}{a map built for implicit functions}
+Let $f:U\to\R$ be $C^1$ on an open $U\subset\R^2$, $(a,b)\in U$ with $D_2f(a,b)\neq0$. Then
+$F(x,y)=(x,\,f(x,y))$ is locally invertible at $(a,b)$. Indeed
+\[ J_F(x,y)=\begin{pmatrix}1&0\\ \pd fx&\pd fy\end{pmatrix},\qquad \Delta_F(a,b)=D_2f(a,b)\neq0, \]
+and the inverse mapping theorem applies.
+\end{example}
+
+\begin{theorem}[label=thm:implicit]{Implicit function theorem}
+Let $f$ be $C^1$ on an open set $U\subset\R^2$, $(a,b)\in U$, $f(a,b)=c$, and assume $D_2f(a,b)\neq0$.
+Then there is an implicit function $y=\varphi(x)$, $C^1$ on some interval containing $a$, with
+$\varphi(a)=b$ and $f(x,\varphi(x))=c$.
+\end{theorem}
+
+\begin{intuition}
+$D_2f(a,b)\neq0$ means that, moving vertically through $(a,b)$, the value of $f$ changes. So for
+each $x$ near $a$ there is exactly one nearby height $y$ where $f$ hits the value $c$ again. That
+height is $\varphi(x)$. The map $F(x,y)=(x,f(x,y))$ packages this: it keeps $x$ and records the
+value of $f$; inverting it means ``given $x$ and a value, find the $y$''.
+\end{intuition}
+
+\begin{proof}
+\textbf{Step 1.} Define $F(x,y)=(x,f(x,y))$. By the previous example, $F$ has a local $C^1$-inverse
+$G$ defined near $F(a,b)=(a,c)$.
+
+\textbf{Step 2.} Since $F$ does not change the first coordinate, neither does $G$: write
+$G(x,z)=(x,g(x,z))$ with $g$ of class $C^1$. Define $\varphi(x)=g(x,c)$.
+
+\textbf{Step 3.} From $F(G(x,c))=(x,c)$ we get $F(x,\varphi(x))=(x,c)$, i.e. $f(x,\varphi(x))=c$.
+
+\textbf{Step 4.} From $G(a,c)=(a,b)$ we get $\varphi(a)=b$. And $\varphi$ is $C^1$ because $g$ is.
+\end{proof}
+
+\begin{example}{the circle near $(1,1)$ and near $(-1,-1)$}
+Let $f(x,y)=x^2+y^2$, $c=2$.
+\begin{itemize}
+  \item At $(1,1)$: $D_2f(1,1)=2\neq0$, so an implicit function exists; explicitly $y=\sqrt{2-x^2}$.
+  \item At $(-1,-1)$: $D_2f(-1,-1)=-2\neq0$; explicitly $y=-\sqrt{2-x^2}$.
+  \item At $(\sqrt2,0)$: $D_2f=0$. Indeed no function $y=\varphi(x)$ describes the circle there: for
+  $x$ slightly less than $\sqrt2$ there are two values $\pm\sqrt{2-x^2}$, and for $x>\sqrt2$ none.
+\end{itemize}
+\end{example}
+
+\begin{center}
+\begin{tikzpicture}
+\begin{axis}[bp, width=6.6cm, height=6.6cm, xmin=-2, xmax=2, ymin=-2, ymax=2,
+   xtick={-1,1}, ytick={-1,1}, xlabel=$x$, ylabel=$y$, axis equal image]
+  \addplot[plum!40, line width=1.1pt, domain=0:360, samples=90] ({1.4142*cos(x)},{1.4142*sin(x)});
+  \addplot[coral, line width=2.2pt, domain=0.45:1.3, samples=30] {sqrt(2-x^2)};
+  \addplot[cyanbp, line width=2.2pt, domain=-1.3:-0.45, samples=30] {-sqrt(2-x^2)};
+  \node[dot] at (axis cs:1,1) {};
+  \node[circle, fill=cyanbp, draw=white, inner sep=1.7pt] at (axis cs:-1,-1) {};
+  \node[odot] at (axis cs:1.4142,0) {};
+  \draw[navy, dashed] (axis cs:1.4142,-1.6) -- (axis cs:1.4142,1.6);
+  \node[font=\scriptsize, text=coraldark, anchor=south west] at (axis cs:1.02,1.02) {$y=\sqrt{2-x^2}$};
+  \node[font=\scriptsize, text=cyanbp, anchor=north east] at (axis cs:-1.02,-1.02) {$y=-\sqrt{2-x^2}$};
+  \node[font=\scriptsize, text=navy, anchor=west, fill=white, inner sep=1pt] at (axis cs:1.45,0.35) {$D_2f=0$};
+\end{axis}
+\end{tikzpicture}
+
+{\small\color{navy} Near $(1,1)$ and $(-1,-1)$ the circle is locally a graph (thick arcs). At
+$(\sqrt2,0)$ the tangent is vertical and no local graph $y=\varphi(x)$ exists.}
+\end{center}
+
+\begin{keyidea}
+The representation $y=\varphi(x)$ is \textbf{local}: it describes the curve only near the chosen
+point, and it need not hold for all $x$.
+\end{keyidea}
+
+\subsection{Implicit differentiation}
+
+\begin{extra}
+Once we know $\varphi$ exists and is $C^1$, differentiate $f(x,\varphi(x))=c$ with the chain rule:
+\[ D_1f(x,\varphi(x))+D_2f(x,\varphi(x))\,\varphi'(x)=0, \]
+so
+\[ \boxed{\,\varphi'(x)=-\frac{D_1f(x,\varphi(x))}{D_2f(x,\varphi(x))}\,} \]
+The hypothesis $D_2f\neq0$ is exactly what allows the division.
+\end{extra}
+
+\begin{example}{implicit differentiation}
+Let $f(x,y)=x^2y+3y^3x^4-4$ and $(a,b)=(1,1)$. Check: $f(1,1)=1+3-4=0$. Since
+$D_2f=x^2+9y^2x^4$ gives $D_2f(1,1)=10\neq0$, an implicit function $y=\varphi(x)$ exists near $x=1$.
+Differentiating $f(x,y)=0$ with respect to $x$ (treating $y$ as $\varphi(x)$):
+\[ 2xy+x^2y'+12y^3x^3+9y^2y'x^4=0, \]
+so
+\[ \varphi'(x)=y'=-\frac{2xy+12y^3x^3}{x^2+9y^2x^4},\qquad \varphi'(1)=-\frac{2+12}{1+9}=-\frac75 . \]
+\end{example}
+
+\begin{example}{another implicit derivative}
+Suppose $x^3+4y\sin(xy)=0$. Differentiating with respect to $x$ (product and chain rules):
+\[ 3x^2+4y'\sin(xy)+4y\cos(xy)\,(y+xy')=0 . \]
+Collecting the $y'$ terms:
+\[ y'=-\frac{3x^2+4y^2\cos(xy)}{4\sin(xy)+4xy\cos(xy)} \]
+whenever $4\sin(xy)+4xy\cos(xy)\neq0$.
+\end{example}
+
+\begin{reallife}{equations of state}
+Thermodynamics is full of implicit functions. An equation of state $f(P,V,T)=0$ (for an ideal gas,
+$PV-nRT=0$) links pressure, volume and temperature. Asking ``how does volume change with
+temperature at constant pressure?'' is asking for an implicit derivative,
+$\left(\pd VT\right)_P=-\dfrac{\partial f/\partial T}{\partial f/\partial V}=\dfrac{nR}{P}$.
+\end{reallife}
+
+\section{Summary}
+
+\begin{keyidea}
+\begin{itemize}
+  \item $F$ is differentiable at $P$ if $F(P+H)=F(P)+LH+o(H)$ for a linear $L$; this $L$ is unique and is $F'(P)$.
+  \item $F'(P)$ is represented by the Jacobian matrix $J_F(P)=(\partial f_i/\partial x_j)$.
+  \item Differentials: $df=\sum f_{x_i}dx_i$; under $x=F(u)$, $dx=J_F\,du$ and
+  $dV_x=\abs{\det J_F}\,dV_u$.
+  \item Chain rule: $J_{G\circ F}(X)=J_G(F(X))\,J_F(X)$.
+  \item Inverse mapping theorem: $\Delta_F(P)\neq0\Rightarrow F$ locally invertible, and $J_G=J_F^{-1}$.
+  \item Implicit function theorem: $D_2f(a,b)\neq0\Rightarrow y=\varphi(x)$ near $a$, with $\varphi'=-D_1f/D_2f$.
+\end{itemize}
+\end{keyidea}
+
+\section{Exam-style questions}
+
+\begin{exercise}[1]
+Compute the Jacobian matrix of $F(x,y)=\big(x^2y,\;x+y^3,\;\sin(xy)\big)$ and evaluate it at $(1,0)$.
+\end{exercise}
+
+\begin{exercise}[2]
+Spherical coordinates are given by
+\[ F(\rho,\varphi,\theta)=(\rho\sin\varphi\cos\theta,\;\rho\sin\varphi\sin\theta,\;\rho\cos\varphi). \]
+Show that $\Delta_F=\rho^2\sin\varphi$, and explain what this says about the volume element.
+\end{exercise}
+
+\begin{exercise}[1]
+Let $F(x,y)=(x+y,\;x-y)$ and $G(u,v)=(uv,\;u^2-v^2)$. Compute $J_{G\circ F}(1,1)$ with the chain rule,
+then check by composing first.
+\end{exercise}
+
+\begin{exercise}[2]
+Let $z=x^2y$ with $x=r\cos\theta$, $y=r\sin\theta$. Express $dz$ in terms of $dr$ and $d\theta$ using
+differentials, and check against $z$ written in polar coordinates.
+\end{exercise}
+
+\begin{exercise}[2]
+Let $F(x,y)=(x+y^2,\;y+x^2)$.
+\begin{enumerate}[label=(\alph*)]
+  \item Find all points where the inverse mapping theorem guarantees local invertibility.
+  \item Compute the derivative of the local inverse at $F(1,1)=(2,2)$.
+\end{enumerate}
+\end{exercise}
+
+\begin{exercise}[2]
+The folium of Descartes is $x^3+y^3=6xy$.
+\begin{enumerate}[label=(\alph*)]
+  \item Show that near $(3,3)$ the curve is the graph of a $C^1$ function $y=\varphi(x)$, and find
+  the tangent line there.
+  \item Find the points of the curve where the implicit function theorem (solving for $y$) does not apply.
+\end{enumerate}
+\end{exercise}
+
+\begin{exercise}[3]
+For the polar map $F(r,\theta)=(r\cos\theta,r\sin\theta)$, use the formula $J_G=J_F^{-1}$ at
+$(r,\theta)=(2,\frac\pi2)$ to find $\pd rx,\pd ry,\pd\theta x,\pd\theta y$ at the point $(x,y)=(0,2)$. Check
+two of them by differentiating $r=\sqrt{x^2+y^2}$ and $\theta=\arccos(x/r)$ directly.
+\end{exercise}
+
+\begin{exercise}[3]
+\begin{enumerate}[label=(\alph*)]
+  \item Let $A$ be an $m\times n$ matrix, $B\in\R^m$ and $F(X)=AX+B$. Show directly from the definition
+  that $F'(P)=A$ for every $P$.
+  \item Let $f(X)=X\cdot X$ on $\R^n$. Show directly from the definition that $f'(P)H=2P\cdot H$.
+\end{enumerate}
+\end{exercise}

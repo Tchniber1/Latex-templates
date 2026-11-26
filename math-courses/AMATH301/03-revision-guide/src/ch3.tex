@@ -1,0 +1,324 @@
+% ============================== CHAPTER 3 ============================
+\settab{LECTURE III}{3}
+\chapter[Higher Derivatives and Taylor]{Higher Derivatives\\ and Taylor's Formula}\label{ch:three}
+
+\begin{examnote}
+Lecture III is mostly technique: compute second derivatives fast and without sign errors,
+expand operators like polynomials, and write Taylor polynomials, often with the shortcut of
+one-variable series. The quadratic part of Taylor's formula is the engine of Lecture IV.
+\end{examnote}
+
+\section{Mixed partials and differential operators}
+
+\begin{thm}[Schwarz]
+If $D_1f,D_2f,D_1D_2f,D_2D_1f$ exist and are continuous on an open set, then
+$D_1D_2f=D_2D_1f$. Consequently a repeated partial derivative depends only on how many times
+each variable is differentiated, not on the order.
+\end{thm}
+
+\begin{intuition}
+Take the four corners of a tiny rectangle and form $f(\text{NE})-f(\text{SE})-f(\text{NW})+f(\text{SW})$.
+Read it as ``change in $x$ of the change in $y$'' or the other way round: it is one number.
+Divide by the area and shrink: the two readings give the two mixed partials.
+\end{intuition}
+
+\begin{defi}[Differential operators]
+A simple operator is $D_1^{m_1}\cdots D_n^{m_n}$, of order $m_1+\dots+m_n$; a differential
+operator is a sum of terms $c\,D_1^{m_1}\cdots D_n^{m_n}$. It is \emph{homogeneous of degree
+$m$} if all its terms have order $m$. Products: $(DD')f=D(D'f)$.
+\end{defi}
+
+\begin{remember}
+Constant-coefficient operators add and multiply exactly like polynomials, because
+$D_iD_j=D_jD_i$. For instance $(D_1-D_2)(D_1+D_2)=D_1^2-D_2^2$ and
+$(hD_1+kD_2)^2=h^2D_1^2+2hk\,D_1D_2+k^2D_2^2$.
+\end{remember}
+
+\begin{trap}
+$\left(\pd{}{x}\right)^2f=\pdd fx$ (differentiate twice) is not $\left(\pd fx\right)^2$ (square the
+derivative). For $f=x^2y$: $2y$ versus $4x^2y^2$ (quiz Q47).
+\end{trap}
+
+\begin{prop}[Monomials at the origin]
+$D_1^rD_2^s(x^iy^j)(0,0)=i!\,j!$ if $(r,s)=(i,j)$ and $0$ otherwise. In three variables,
+$D_1^aD_2^bD_3^c$ at $O$ picks out the monomial $x^ay^bz^c$ and returns $a!\,b!\,c!$ times its
+coefficient.
+\end{prop}
+
+\section{Taylor's formula}
+
+\begin{intuition}
+Walk from $P$ to $P+H$ along the segment $P+tH$. On it, $f$ becomes the one-variable function
+$g(t)=f(P+tH)$, and the chain rule gives its derivatives: $g^{(r)}(t)=\big((H\cdot\grad)^rf\big)(P+tH)$
+where $H\cdot\grad=hD_1+kD_2$. Now use one-variable Taylor on $[0,1]$.
+\end{intuition}
+
+\begin{thm}[Taylor's formula]
+If $f$ has continuous partials up to order $r$ near the segment, then for some $\tau\in(0,1)$
+\[
+f(P+H)=\sum_{s=0}^{r-1}\frac{(H\cdot\grad)^sf(P)}{s!}+\frac{(H\cdot\grad)^rf(P+\tau H)}{r!}.
+\]
+\end{thm}
+
+\begin{method}
+\textbf{Degree-2 Taylor polynomial at $(a,b)$} (all derivatives at $(a,b)$, $h=x-a$, $k=y-b$):
+\[
+T_2=f+f_xh+f_yk+\tfrac12\big(f_{xx}h^2+2f_{xy}hk+f_{yy}k^2\big).
+\]
+\textbf{At the origin}, the coefficient of $x^iy^j$ is $c_{ij}=\dfrac{D_1^iD_2^jf(0,0)}{i!\,j!}$.
+
+\textbf{Shortcut.} By uniqueness, substitute a one-variable series and keep terms up to the
+total degree you need: $e^u$, $\sin u$, $\cos u$, $\log(1+u)$, $(1+u)^{-1}$, $\sqrt{1+u}$.
+\end{method}
+
+\begin{center}
+\begin{tikzpicture}
+\begin{axis}[bp3d, width=8.4cm, height=6.8cm, xlabel=$x$, ylabel=$y$, zlabel=$z$,
+   xmin=-1.8, xmax=1.8, ymin=-1.8, ymax=1.8, zmin=-1.6, zmax=1.3, view={-35}{25}]
+  \addplot3[surf, shader=flat, draw=coralD, fill=coral, fill opacity=0.12, draw opacity=0.6,
+     domain=-1.5:1.5, y domain=-1.5:1.5, samples=13] {1-0.5*(x^2+y^2)};
+  \addplot3[gsurf, domain=-1.5:1.5, y domain=-1.5:1.5, samples=20, opacity=0.8, fill opacity=0.8]
+     {cos(deg(x))*cos(deg(y))};
+\end{axis}
+\end{tikzpicture}
+\figcap{$\cos x\cos y$ (surface) and its degree-2 Taylor polynomial $1-\frac12(x^2+y^2)$ (coral
+mesh): they agree near $O$ and separate further out.}
+\end{center}
+
+\begin{trap}
+Two classic Taylor slips: forgetting the factor $2$ on $f_{xy}hk$, and forgetting the overall
+$\tfrac12$. Write the template first, then fill it in.
+\end{trap}
+
+\section{Integral expressions}
+
+\begin{prop}[Hadamard decomposition]
+If $f$ is $C^1$ on a disc centred at $O$, then
+\[ f(x,y)=f(0,0)+x\,g_1(x,y)+y\,g_2(x,y), \]
+\[ g_1(x,y)=\int_0^1\!f_x(tx,ty)\dd t,\qquad g_2(x,y)=\int_0^1\!f_y(tx,ty)\dd t, \]
+and $g_1,g_2$ are continuous. With $C^2$ and $\varphi(t)=f(tH)$, integration by parts gives
+$f(H)=f(0)+\grad f(0)\cdot H+\int_0^1(1-t)(H\cdot\grad)^2f(tH)\dd t$.
+\end{prop}
+
+\section{TD 3, solved}
+
+\begin{problem}{TD 3 · Ex. 1}
+All second partials and a check of $D_1D_2f=D_2D_1f$ for ten functions.
+\end{problem}
+\begin{hint}Keep $f_x$ and $f_y$ factored; compute $\partial_y(f_x)$ and $\partial_x(f_y)$ separately and
+compare. A mismatch means an error.\end{hint}
+\begin{solution}
+\begin{center}\small
+\begin{tabularx}{\linewidth}{@{}l Y Y Y@{}}
+\toprule
+$f$ & $f_{xx}$ & $f_{yy}$ & $f_{xy}=f_{yx}$\\ \midrule
+$e^{2xy}$ & $4y^2e^{2xy}$ & $4x^2e^{2xy}$ & $(2+4xy)e^{2xy}$\\
+$e^{x^2+2y^2}$ & $(2+4x^2)f$ & $(4+16y^2)f$ & $8xyf$\\
+$x^3y^2-4xy^3$ & $6xy^2$ & $2x^3-24xy$ & $6x^2y-12y^2$\\
+$x^2e^y+y^2e^x$ & $2e^y+y^2e^x$ & $x^2e^y+2e^x$ & $2xe^y+2ye^x$\\
+$\cos u$, $u=x^2{+}xy{+}y^2$ & $-2\sin u-(2x{+}y)^2\cos u$ & $-2\sin u-(x{+}2y)^2\cos u$ & $-\sin u-(2x{+}y)(x{+}2y)\cos u$\\
+$\log D$, $D=1{+}x^2{+}y^2$ & $2(1-x^2+y^2)/D^2$ & $2(1+x^2-y^2)/D^2$ & $-4xy/D^2$\\
+$\arctan(xy)$, $E=1{+}x^2y^2$ & $-2xy^3/E^2$ & $-2x^3y/E^2$ & $(1-x^2y^2)/E^2$\\
+$x/(1+y^2)$ & $0$ & $2x(3y^2-1)/(1+y^2)^3$ & $-2y/(1+y^2)^2$\\
+$S=\sqrt{1+x^2+y^2}$ & $(1+y^2)/S^3$ & $(1+x^2)/S^3$ & $-xy/S^3$\\
+$e^{x+y}\sin(x-y)$ & $2e^{x+y}\cos(x-y)$ & $-2e^{x+y}\cos(x-y)$ & $2e^{x+y}\sin(x-y)$\\
+\bottomrule
+\end{tabularx}
+\end{center}
+In every row the two mixed derivatives, computed separately, agree.
+\end{solution}
+
+\begin{problem}{TD 3 · Ex. 2}
+Third-order mixed partials in two orders: $x^2y^3z^4$, $e^{x+y+z}$, $e^{xyz}$, $\sin(xyz)$,
+$\cos(x+2y-3z)$, $(x^2+y^2+z^2)^{-1/2}$ ($D_1D_2$ only), $\log(1+x^2+y^2+z^2)$.
+\end{problem}
+\begin{solution}
+Results (both orders agree each time): $24xy^2z^3$; \ $e^{x+y+z}$; \
+$(1+3xyz+x^2y^2z^2)e^{xyz}$; \ $(1-x^2y^2z^2)\cos(xyz)-3xyz\sin(xyz)$; \ $-6\sin(x+2y-3z)$;
+\ $3xy\,r^{-5}$ with $r=\norm X$; \ $16xyz/(1+x^2+y^2+z^2)^3$.
+For instance $D_1D_2D_3(x^2y^3z^4)$: $D_3\to4x^2y^3z^3$, $D_2\to12x^2y^2z^3$, $D_1\to24xy^2z^3$;
+the other order $D_1\to2xy^3z^4$, $D_2\to6xy^2z^4$, $D_3\to24xy^2z^3$.
+\end{solution}
+
+\begin{problem}{TD 3 · Ex. 3}
+(1) Polar Laplacian $f_{xx}+f_{yy}=g_{rr}+\frac1rg_r+\frac1{r^2}g_{\theta\theta}$. (2) Radial in
+$\R^2$: $g''+\frac1rg'$. (3) Radial in $\R^3$: $g''+\frac2rg'$. (4) Euler identities of order 1
+and 2. (5) Harmonic: $x^2-y^2$, $xy$, $e^{2x}\cos2y$, $\log\sqrt{x^2+y^2}$. (6) $u=x+y$, $v=x-y$:
+$z_{xx}-z_{yy}=4f_{uv}$. (7) $z=F(u)+G(v)$ solves $z_{xx}=z_{yy}$.
+\end{problem}
+\begin{hint}(1) Compute $g_{rr}$ and $g_{\theta\theta}$ from $g_r=cf_x+sf_y$,
+$g_\theta=-rsf_x+rcf_y$ ($c=\cos\theta$, $s=\sin\theta$), then combine.\end{hint}
+\begin{solution}
+(1) $g_{rr}=c^2f_{xx}+2csf_{xy}+s^2f_{yy}$ and $g_{\theta\theta}=-rg_r+r^2(s^2f_{xx}-2csf_{xy}+c^2f_{yy})$.
+So $g_{rr}+\frac1rg_r+\frac1{r^2}g_{\theta\theta}=f_{xx}+f_{yy}$. Also $f_x=cg_r-\frac srg_\theta$,
+$f_y=sg_r+\frac crg_\theta$.
+(2) $f_x=g'\frac xr$, $f_{xx}=g''\frac{x^2}{r^2}+g'\big(\frac1r-\frac{x^2}{r^3}\big)$; add the $y$ term.
+(3) Same with three terms: $g''+g'\big(\frac3r-\frac1r\big)$.
+(4) Differentiate $f(tx,ty)=t^mf$ once and twice in $t$, then set $t=1$:
+$xf_x+yf_y=mf$ and $x^2f_{xx}+2xyf_{xy}+y^2f_{yy}=m(m-1)f$.
+(5) $2-2=0$; $0+0$; $4e^{2x}\cos2y-4e^{2x}\cos2y=0$; $\frac{y^2-x^2}{(x^2+y^2)^2}+\frac{x^2-y^2}{(x^2+y^2)^2}=0$.
+(6) $z_x=f_u+f_v$, $z_y=f_u-f_v$, $z_{xx}=f_{uu}+2f_{uv}+f_{vv}$, $z_{yy}=f_{uu}-2f_{uv}+f_{vv}$.
+(7) Here $f_{uv}=0$, so $z_{xx}-z_{yy}=0$ by (6).
+\end{solution}
+
+\begin{problem}{TD 3 · Ex. 4 and 5}
+Standard form: $(2D_1+3D_2)^2$; $(D_1-D_2)(D_1+D_2)$; $(h\partial_x+k\partial_y)^2$;
+$(aD_1+bD_2+cD_3)^2$; $(D_1+D_2)(D_1^2-D_1D_2+D_2^2)$. Apply: $(D_1-D_3)(D_2+2D_3)$ to
+$x^2yz^2$; $(D_1+D_2)^2$ to $\sin(x-y)$; $(D_1+2D_2)^2$ to $e^{2x-y}$; $D_1^2+D_2^2$ to $e^x\cos y$.
+\end{problem}
+\begin{solution}
+$4D_1^2+12D_1D_2+9D_2^2$; \ $D_1^2-D_2^2$; \ $h^2\partial_x^2+2hk\,\partial_x\partial_y+k^2\partial_y^2$;
+\ $a^2D_1^2+b^2D_2^2+c^2D_3^2+2abD_1D_2+2acD_1D_3+2bcD_2D_3$; \ $D_1^3+D_2^3$ (as $(a+b)(a^2-ab+b^2)=a^3+b^3$).
+
+Applications: $(D_2+2D_3)f=x^2z^2+4x^2yz$, then $D_1-D_3$ gives
+$2xz^2+8xyz-2x^2z-4x^2y$. \ $(D_1+D_2)\sin(x-y)=0$, so the square gives $0$. \
+$(D_1+2D_2)e^{2x-y}=(2-2)e^{2x-y}=0$, result $0$. \ $e^x\cos y-e^x\cos y=0$ (harmonic).
+\end{solution}
+
+\begin{problem}{TD 3 · Ex. 6}
+$D_1^4D_2^3(x^6y^5)$; \ $D_1^6D_2^2(5x^6y^2-3x^7y)(0,0)$; \ for
+$f=3x^2yz^3-4x^3y^2z+6x^5y^4z^2$: $D_1^2D_2D_3^3f(0)$, $D_1^3D_2^2D_3f(0)$, $D_1^5D_2^4D_3^2f(0)$.
+\end{problem}
+\begin{hint}At the origin, an operator only ``sees'' the monomial with exactly its exponents.\end{hint}
+\begin{solution}
+$D_1^4x^6=360x^2$ and $D_2^3y^5=60y^2$, so $21600\,x^2y^2$. \ $5\cdot6!\cdot2!=7200$. \
+$3\cdot2!\,1!\,3!=36$, \ $-4\cdot3!\,2!\,1!=-48$, \ $6\cdot5!\,4!\,2!=34560$.
+\end{solution}
+
+\begin{problem}{TD 3 · Ex. 7}
+(1) $f_x=-g_y$, $f_y=g_x$ imply $f,g$ harmonic. (2) $F(x+y)+G(x-y)$ solves $(D_1^2-D_2^2)f=0$.
+(3) Factor $D_1^2-4D_2^2$ and check $F(2x+y)+G(2x-y)$. (4) $P(D_1,D_2)e^{ax+by}=P(a,b)e^{ax+by}$.
+\end{problem}
+\begin{solution}
+(1) $f_{xx}=-g_{yx}$, $f_{yy}=g_{xy}$, and Schwarz gives $f_{xx}+f_{yy}=0$; same for $g$.
+(2) $D_1^2-D_2^2=(D_1-D_2)(D_1+D_2)$; $(D_1-D_2)F(x+y)=0$ and $(D_1+D_2)G(x-y)=0$, and the factors commute.
+(3) $(D_1-2D_2)(D_1+2D_2)$: $(D_1-2D_2)F(2x+y)=2F'-2F'=0$, $(D_1+2D_2)G(2x-y)=2G'-2G'=0$.
+(4) $D_1^iD_2^je^{ax+by}=a^ib^je^{ax+by}$; sum with the coefficients of $P$.
+\end{solution}
+
+\begin{problem}{TD 3 · Ex. 8 and 9}
+Taylor polynomials at $O$: degree 2 for $e^{x+2y}$, $\log(1+x^2+y^2)$, $e^x\cos y$,
+$\sin(xy+x^2)$, $\cos(xy)$, $(1+x+2y)^{-1}$, $\sqrt{1+x^2+2y^2}$; degree 3 for $e^x\cos y$,
+$e^{x+y}$, $\log(1+x+2y)$; degree 4 for $\cos x\cos y$; the degree-6 term of $e^x\cos y$; the
+degree-8 term of $x^2-3xy^3+(x-1)^2y^8$.
+\end{problem}
+\begin{hint}Substitute into one-variable series, keep total degree, discard the rest. Note
+$e^x\cos y=\operatorname{Re}e^{x+iy}$.\end{hint}
+\begin{solution}
+\begin{center}\small
+\begin{tabularx}{\linewidth}{@{}l Y@{}}
+\toprule
+$e^{x+2y}$ & $1+x+2y+\tfrac12x^2+2xy+2y^2$\\
+$\log(1+x^2+y^2)$ & $x^2+y^2$ \quad ($u^2$ has degree 4)\\
+$e^x\cos y$ & $1+x+\tfrac12x^2-\tfrac12y^2$ \quad (degree 3: $+\tfrac16x^3-\tfrac12xy^2$)\\
+$\sin(xy+x^2)$ & $x^2+xy$\\
+$\cos(xy)$ & $1$\\
+$(1+x+2y)^{-1}$ & $1-x-2y+x^2+4xy+4y^2$\\
+$\sqrt{1+x^2+2y^2}$ & $1+\tfrac12x^2+y^2$\\
+$e^{x+y}$, degree 3 & $1+x+y+\tfrac12(x+y)^2+\tfrac16(x+y)^3$\\
+$\log(1+x+2y)$, degree 3 & $x+2y-\tfrac12x^2-2xy-2y^2+\tfrac13x^3+2x^2y+4xy^2+\tfrac83y^3$\\
+$\cos x\cos y$, degree 4 & $1-\tfrac12x^2-\tfrac12y^2+\tfrac1{24}x^4+\tfrac14x^2y^2+\tfrac1{24}y^4$\\
+$e^x\cos y$, degree 6 term & $\dfrac{x^6-15x^4y^2+15x^2y^4-y^6}{720}$\\
+$x^2-3xy^3+(x-1)^2y^8$ & degree 8 term: $y^8$ (a polynomial is its own expansion)\\
+\bottomrule
+\end{tabularx}
+\end{center}
+\end{solution}
+
+\begin{problem}{TD 3 · Ex. 10}
+Degree-2 Taylor polynomial about: $e^{x+y}$ at $(1,0)$; $\sin(xy)$ at $(1,\pi)$; $\cos(x+y)$ at
+$(\frac\pi2,0)$; $\log(x+y)$ at $(1,1)$; $x^2y+y^2$ at $(1,-1)$; $e^x\sin y$ at $(0,\frac\pi2)$.
+\end{problem}
+\begin{solution}
+With $h=x-a$, $k=y-b$:
+$e\big[1+h+k+\tfrac12(h+k)^2\big]$; \ $-\pi h-k-hk$; \ $-h-k$; \
+$\log2+\tfrac12(h+k)-\tfrac18(h+k)^2$; \ $-2h-k-h^2+2hk+k^2$; \ $1+h+\tfrac12(h^2-k^2)$.
+
+Worked line for $\sin(xy)$ at $(1,\pi)$: $f=0$, $f_x=y\cos(xy)=-\pi$, $f_y=x\cos(xy)=-1$,
+$f_{xx}=-y^2\sin(xy)=0$, $f_{yy}=0$, $f_{xy}=\cos(xy)-xy\sin(xy)=-1$, so
+$T_2=-\pi h-k+\tfrac12(2\cdot(-1)hk)=-\pi h-k-hk$.
+\end{solution}
+
+\begin{problem}{TD 3 · Ex. 11}
+Limits at $O$ via Taylor: $\frac{e^{xy}-1}{xy}$, $\frac{\sin(xy)}{xy}$,
+$\frac{\cos(xy)-1}{x^2y^2}$, $\frac{\log(1+x^2+y^2)}{x^2+y^2}$,
+$\frac{e^{x+y}-1-x-y}{(x+y)^2}$, $\frac{\sin(x+y)-(x+y)}{(x+y)^3}$.
+\end{problem}
+\begin{hint}Each depends on a single quantity $u\to0$; use the one-variable series in $u$.\end{hint}
+\begin{solution}
+$1$, \ $1$, \ $-\tfrac12$, \ $1$, \ $\tfrac12$, \ $-\tfrac16$. For example with $u=x+y$:
+$\dfrac{e^u-1-u}{u^2}=\tfrac12+\tfrac u6+\dots\to\tfrac12$.
+\end{solution}
+
+\begin{problem}{TD 3 · Ex. 12}
+Expand $(H\cdot\grad)^2f$, $(H\cdot\grad)^3f$; write Taylor of order 3; show $f(0)=0$,
+$\grad f(0)=0$, $C^2$ imply $f=O(x^2+y^2)$; show $\norm{\grad f}\le M$ on convex $U$ gives
+$|f(X)-f(Y)|\le M\norm{X-Y}$.
+\end{problem}
+\begin{solution}
+$(H\cdot\grad)^2f=h^2f_{xx}+2hkf_{xy}+k^2f_{yy}$, \
+$(H\cdot\grad)^3f=h^3f_{xxx}+3h^2kf_{xxy}+3hk^2f_{xyy}+k^3f_{yyy}$, and
+$f(P+H)=\sum_{j\le3}\frac{(H\cdot\grad)^jf(P)}{j!}+\frac{(H\cdot\grad)^4f(P+\tau H)}{4!}$.
+If $f(0)=0$ and $\grad f(0)=0$: $f(X)=\tfrac12(X\cdot\grad)^2f(\tau X)$ and with second partials
+bounded by $M$, $|f|\le\tfrac12M(|x|+|y|)^2\le M(x^2+y^2)$. Last part: mean value theorem on
+$t\mapsto f(Y+t(X-Y))$ and Cauchy--Schwarz.
+\end{solution}
+
+\begin{problem}{TD 3 · Ex. 13 (selection)}
+(1) $f(x,y)-f(0,0)=x\int_0^1f_x(tx,ty)\dd t+y\int_0^1f_y(tx,ty)\dd t$.
+(7) For $f=e^{x+y}-1-x-y$ find continuous $h_1,h_2,h_3$ with $f=x^2h_1+xyh_2+y^2h_3$.
+(8) $\sin(xy)=xy\,h(x,y)$ with $h$ continuous at $O$.
+\end{problem}
+\begin{solution}
+(1) $\varphi(t)=f(tx,ty)$ has $\varphi'(t)=xf_x(tx,ty)+yf_y(tx,ty)$; integrate from 0 to 1.
+(7) With $s=x+y$ and $\psi(s)=\int_0^1(1-t)e^{ts}\dd t=\dfrac{e^s-1-s}{s^2}$ ($\psi(0)=\tfrac12$):
+$h_1=h_3=\psi(x+y)$, $h_2=2\psi(x+y)$. Check: $(x^2+2xy+y^2)\psi=s^2\psi=e^s-1-s$.
+(8) $\sin u=u\int_0^1\cos(tu)\dd t$, so $h=\int_0^1\cos(txy)\dd t$ ($=\frac{\sin xy}{xy}$ if $xy\ne0$,
+$1$ otherwise), and $|h-1|\le\tfrac16x^2y^2\to0$.
+\end{solution}
+
+\begin{trap}
+Lecture III traps: dividing by a quantity that may be $0$ in limits (state ``where the
+denominator is nonzero''); writing $\cos(xy)\approx1-\tfrac12xy$ (the variable is $u=xy$, so
+the term is $\tfrac12x^2y^2$); and forgetting that in $D_1^aD_2^b$ at $O$ every other monomial
+gives $0$.
+\end{trap}
+
+\section{More exam-style problems}
+
+\begin{problem}{Exam style · Taylor at a point, then approximate}
+Degree-2 Taylor polynomial of $f=\sqrt{x^2+y^3}$ at $(1,2)$; use it to estimate $\sqrt{1.02^2+1.97^3}$.
+\end{problem}
+\begin{hint}$f(1,2)=3$. Write $f_x=x/f$ and $f_y=3y^2/(2f)$ before differentiating again.\end{hint}
+\begin{solution}
+At $(1,2)$: $f=3$, $f_x=\tfrac13$, $f_y=2$, $f_{xx}=\tfrac8{27}$, $f_{xy}=-\tfrac29$, $f_{yy}=\tfrac23$. So
+\[ T_2=3+\tfrac13h+2k+\tfrac4{27}h^2-\tfrac29hk+\tfrac13k^2. \]
+With $h=0.02$, $k=-0.03$: $T_2\approx2.947159$; the true value is $2.947164$.
+\end{solution}
+
+\begin{problem}{Exam style · harmonic function}
+Show $u=e^x\sin y+x^3-3xy^2$ satisfies $u_{xx}+u_{yy}=0$.
+\end{problem}
+\begin{solution}
+$u_{xx}=e^x\sin y+6x$, $u_{yy}=-e^x\sin y-6x$. Sum $0$. (Both pieces are real parts or imaginary
+parts of $e^{z}$ and $z^3$.)
+\end{solution}
+
+\begin{problem}{Exam style · reading coefficients}
+Without differentiating, find $D_1^2D_2f(0,0)$ and $D_1D_2^2f(0,0)$ for $f=e^{x+y^2}$.
+\end{problem}
+\begin{solution}
+$e^{x+y^2}=1+(x+y^2)+\tfrac12(x+y^2)^2+\tfrac16(x+y^2)^3+\dots$. Degree 3 terms: $\tfrac16x^3+xy^2$ (from
+$\tfrac12\cdot2xy^2$). There is no $x^2y$ term, so $D_1^2D_2f(0,0)=0$; the $xy^2$ coefficient is $1$, so
+$D_1D_2^2f(0,0)=1!\,2!\cdot1=2$.
+\end{solution}
+
+\section{Quick check}
+\begin{quickcheck}
+If $f_{xy}$ and $f_{yx}$ exist, they are equal. & \qF & Schwarz needs them continuous.\\
+The coefficient of $x^2y$ in Taylor at $O$ is $\frac{D_1^2D_2f(0)}2$. & \qT & $c_{ij}=\frac{D_1^iD_2^jf(0)}{i!\,j!}$ with $2!\,1!=2$.\\
+$(D_1+D_2)^2=D_1^2+2D_1D_2+D_2^2$ on $C^2$ functions. & \qT & Operators commute, so expand.\\
+$T_2$ of a polynomial of degree 2 is the polynomial itself. & \qT & The remainder involves third derivatives, all $0$.\\
+The Taylor remainder is evaluated at $P$. & \qF & At $P+\tau H$ for some $0<\tau<1$.\\
+In $e^{x+y}$ at $O$, the coefficient of $xy$ is $1$. & \qT & $\frac12(x+y)^2$ contains $xy$.\\
+\end{quickcheck}

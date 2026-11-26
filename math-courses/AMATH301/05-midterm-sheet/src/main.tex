@@ -1,0 +1,34 @@
+\documentclass[lang=en,11pt,openany]{beautybook}
+\definecolor{coverbgcolor}{HTML}{E9F8FB}
+\definecolor{coverfgcolor}{HTML}{145F6E}
+\definecolor{coverbar}{HTML}{F19381}
+\definecolor{bottomcolor}{HTML}{145F6E}
+\definecolor{nuanbai}{HTML}{F7FCFD}
+\coverstyle={cover-choose=en,}
+\mathstyle={math-font=plain,}
+\input{style}
+
+\begin{document}
+\title{Midterm Sheet}
+\subtitle{The Mock, Made Simple}
+\edition{AMATH301 \quad Fall 2026}
+\bookseries{UM6P \;/\; School of Applied Science and Engineering}
+\author{Taha Chniber}
+\pressname{Recipes and proofs}
+\presslogo{inner_pics/logo.pdf}
+\makecover
+
+\makeatletter
+\oddoutermargin{\sffamily\leftmark}
+\evenoutermargin{\sffamily AMATH301 Midterm Sheet}
+\chapimage{inner_pics/chapmark.pdf}
+\makeatother
+\let\cleardoublepage\clearpage
+\mainmatter
+\pagenumbering{arabic}
+\input{c0}
+\input{c1}
+\input{c2}
+\input{c3}
+\input{c4}
+\end{document}

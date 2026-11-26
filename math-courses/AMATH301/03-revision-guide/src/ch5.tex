@@ -1,0 +1,311 @@
+% ============================== CHAPTER 5 ============================
+\settab{LECTURE V}{5}
+\chapter[Derivatives of Mappings]{Derivatives of Mappings\\ and Implicit Functions}\label{ch:five}
+
+\begin{examnote}
+Lecture V has no TD sheet yet, so the problems at the end of this chapter are written in the
+style of the TDs, using the slides' own examples where possible. Expect: a Jacobian matrix,
+a chain rule as a matrix product (order matters), the inverse mapping theorem with the
+derivative of the inverse, and the implicit function theorem with $\varphi'=-f_x/f_y$.
+\end{examnote}
+
+\section{The derivative is a linear map}
+
+\begin{intuition}
+For $f:\R\to\R$ the derivative at $a$ is really the map $h\mapsto f'(a)h$; we just identified
+it with the number $f'(a)$. For $F:\R^n\to\R^m$ we keep the map: it eats a small input
+displacement $H$ and returns the first-order output displacement.
+\end{intuition}
+
+\begin{defi}[Differentiable mapping]
+$F:U\subset\R^n\to\R^m$ is differentiable at $P$ if there is a linear map $L:\R^n\to\R^m$ with
+\[ F(P+H)=F(P)+L(H)+r(H),\qquad \frac{\norm{r(H)}}{\norm H}\to0 . \]
+$L$ is unique (test $H=tV$, let $t\to0$) and is written $DF(P)$ or $F'(P)$.
+\end{defi}
+
+\begin{defi}[Jacobian matrix]
+For $F=(f_1,\dots,f_m)$, $J_F(P)=\left(\pd{f_i}{x_j}(P)\right)$ is the $m\times n$ matrix whose
+row $i$ is $\grad f_i(P)$. If each $f_i$ is differentiable at $P$, then $DF(P)H=J_F(P)H$.
+\end{defi}
+
+\begin{thm}[Chain rule for mappings]
+$D(G\circ F)(P)=DG(F(P))\circ DF(P)$, that is $J_{G\circ F}(P)=J_G(F(P))\,J_F(P)$.
+\end{thm}
+
+\begin{trap}
+\textbf{Outer map on the left}, and \textbf{evaluate $J_G$ at $F(P)$}, not at $P$. Check sizes:
+$(s\times m)(m\times n)=s\times n$. The order $J_FJ_G$ is wrong in general.
+\end{trap}
+
+\begin{defi}[Differential]
+For scalar $f$, $df_P=Df(P)$ is a linear functional: $df_P(H)=\sum_i f_{x_i}(P)h_i$, and
+$dx_i(H)=h_i$. So $df=f_x\,dx+f_y\,dy$ is an identity of linear maps, not of ``small numbers''.
+Under $x=F(u)$: $dx=J_F(u)\,du$.
+\end{defi}
+
+\begin{center}
+\begin{tikzpicture}[scale=0.92]
+  \begin{scope}
+    \draw[bpgrid, step=0.5] (-0.3,-0.3) grid (3.3,2.8);
+    \draw[tealDD, ->] (-0.3,0) -- (3.3,0) node[right, font=\small]{$r$};
+    \draw[tealDD, ->] (0,-0.3) -- (0,2.8) node[above, font=\small]{$\theta$};
+    \fill[coral, opacity=0.35] (1.8,1.2) rectangle (2.3,1.6); \draw[coralD] (1.8,1.2) rectangle (2.3,1.6);
+  \end{scope}
+  \draw[-{Stealth[length=3mm]}, tealD, line width=1.4pt] (3.7,1.3) to[bend left=20] node[above, font=\small]{$T$} (5,1.3);
+  \begin{scope}[xshift=7.1cm, yshift=0.2cm]
+    \draw[bpgrid, step=0.5] (-1.8,-0.5) grid (2.6,2.6);
+    \draw[tealDD, ->] (-1.8,0) -- (2.6,0) node[right, font=\small]{$x$};
+    \draw[tealDD, ->] (0,-0.5) -- (0,2.6) node[above, font=\small]{$y$};
+    \fill[coral, opacity=0.35] (40:1.8) arc (40:58:1.8) -- (58:2.3) arc (58:40:2.3) -- cycle;
+    \draw[coralD] (40:1.8) arc (40:58:1.8) -- (58:2.3) arc (58:40:2.3) -- cycle;
+    \node[font=\scriptsize, text=coralD] at (49:2.75) {$r\,d\theta$};
+  \end{scope}
+\end{tikzpicture}
+\figcap{Polar map $T(r,\theta)=(r\cos\theta,r\sin\theta)$: $J_T=\begin{pmatrix}\cos\theta&-r\sin\theta\\ \sin\theta&r\cos\theta\end{pmatrix}$,
+$\det J_T=r$. A small $dr\times d\theta$ cell becomes a cell of area about $r\,dr\,d\theta$.}
+\end{center}
+
+\section{Inverse mappings}
+
+\begin{defi}[Local $C^1$ invertibility]
+A $C^1$ map $F:U\subset\R^n\to\R^n$ is locally $C^1$-invertible at $P$ if there are open sets
+$U_0\ni P$, $V_0\ni F(P)$ with $F:U_0\to V_0$ bijective and its inverse $C^1$.
+\end{defi}
+
+\begin{thm}[Inverse mapping theorem]
+If $F$ is $C^1$ and $\det J_F(P)\ne0$, then $F$ is locally $C^1$-invertible at $P$, and the
+inverse $G$ satisfies $J_G(F(P))=J_F(P)^{-1}$.
+\end{thm}
+
+\begin{intuition}
+Near $P$, $F$ looks like its linear part, and a linear map is invertible exactly when its
+determinant is nonzero. The formula for $J_G$ is the chain rule applied to $G\circ F=\mathrm{id}$.
+\end{intuition}
+
+\begin{trap}
+\textbf{Local is not global.} $F(x,y)=(e^x\cos y,e^x\sin y)$ has $\det J_F=e^{2x}\ne0$ everywhere,
+yet $F(x,y+2\pi)=F(x,y)$: no global inverse. (Older slides printed $e^x$; the determinant is
+$e^{2x}$.)
+\end{trap}
+
+\section{Implicit functions}
+
+\begin{thm}[Implicit function theorem, two variables]
+Let $f$ be $C^1$ near $(a,b)$ with $f(a,b)=c$ and $f_y(a,b)\ne0$. Then there are open intervals
+$I\ni a$, $J\ni b$ and a unique $C^1$ function $\varphi:I\to J$ with
+$f(x,y)=c\iff y=\varphi(x)$ on $I\times J$, and
+\[ \varphi'(x)=-\frac{f_x(x,\varphi(x))}{f_y(x,\varphi(x))}. \]
+\end{thm}
+
+\begin{intuition}
+$f_y\ne0$ means: moving vertically through $(a,b)$, the value of $f$ changes. So for each $x$
+near $a$ there is exactly one nearby height $y$ where $f$ hits $c$ again. The proof inverts
+$T(x,y)=(x,f(x,y))$, whose Jacobian determinant is $f_y(a,b)$.
+\end{intuition}
+
+\begin{center}
+\begin{tikzpicture}
+\begin{axis}[bp, width=5.8cm, height=5.8cm, xmin=-2, xmax=2, ymin=-2, ymax=2,
+   xtick={-1,1}, ytick={-1,1}, xlabel=$x$, ylabel=$y$, axis equal image]
+  \addplot[tealD!40, line width=1.1pt, domain=0:360, samples=90] ({1.4142*cos(x)},{1.4142*sin(x)});
+  \addplot[coral, line width=2.2pt, domain=0.45:1.3, samples=30] {sqrt(2-x^2)};
+  \node[dot] at (axis cs:1,1) {};
+  \node[odot] at (axis cs:1.4142,0) {};
+  \draw[tealDD, dashed] (axis cs:1.4142,-1.6) -- (axis cs:1.4142,1.6);
+  \node[font=\scriptsize, text=tealDD, anchor=west, fill=white, inner sep=1pt] at (axis cs:1.45,0.35) {$f_y=0$};
+\end{axis}
+\end{tikzpicture}
+\figcap{On $x^2+y^2=2$, near $(1,1)$ the curve is a graph $y=\sqrt{2-x^2}$ (coral). At $(\sqrt2,0)$,
+$f_y=0$: vertical tangent, no local graph $y=\varphi(x)$ (but $x$ as a function of $y$ works).}
+\end{center}
+
+\begin{method}
+\textbf{Implicit derivative.} (1) Check $f(a,b)=c$. (2) Check $f_y(a,b)\ne0$ (state it: this is
+what the theorem needs). (3) $\varphi'(a)=-f_x(a,b)/f_y(a,b)$, or differentiate the equation in $x$
+treating $y=\varphi(x)$. (4) Tangent line: $y-b=\varphi'(a)(x-a)$.
+
+\textbf{Sensitivity} of a root of $F(x,\mu)=0$: if $F_x\ne0$, $x'(\mu)=-F_\mu/F_x$. Same idea gives
+eigenvalue sensitivity $\lambda'=-P_t/P_\lambda$ for $P(\lambda,t)=\det(A(t)-\lambda I)$ at a simple
+root, and quantile sensitivity $q'(p)=1/f(q(p))$.
+\end{method}
+
+\begin{thm}[Why Lagrange works]
+If $g(P)=0$, $\grad g(P)\ne O$ and $f$ has a local extremum on $g=0$ at $P$, then
+$\grad f(P)=\lambda\grad g(P)$. Proof: if $g_y(P)\ne0$, write the constraint as $y=\varphi(x)$; then
+$h(x)=f(x,\varphi(x))$ has $h'(a)=0$, i.e.\ $f_x+f_y\varphi'=0$ with $\varphi'=-g_x/g_y$, so
+$f_xg_y-f_yg_x=0$: the gradients are parallel.
+\end{thm}
+
+\begin{reallife}
+Equations of state: $PV-nRT=0$ links pressure, volume and temperature. ``How does $V$ change
+with $T$ at constant $P$?'' is an implicit derivative:
+$\left(\pd VT\right)_P=-\dfrac{\partial_T(PV-nRT)}{\partial_V(PV-nRT)}=\dfrac{nR}{P}$. Robotics uses
+the Jacobian of the arm map: where $\det J=0$ (arm fully stretched), the hand cannot move in
+some direction.
+\end{reallife}
+
+\section{Exam-style problems for Lecture V}
+
+\begin{problem}{Lecture V · Jacobian}
+Compute $J_F$ for $F(x,y)=(x^2y,\;x+y^3,\;\sin(xy))$ and evaluate it at $(1,0)$.
+\end{problem}
+\begin{solution}
+Row $i$ is $\grad f_i$:
+$J_F=\begin{pmatrix}2xy&x^2\\1&3y^2\\y\cos(xy)&x\cos(xy)\end{pmatrix}$, \
+$J_F(1,0)=\begin{pmatrix}0&1\\1&0\\0&1\end{pmatrix}$, a $3\times2$ matrix (3 outputs, 2 inputs).
+\end{solution}
+
+\begin{problem}{Lecture V · from the definition}
+Let $F(x,y)=(xy,\;x-y^2)$ and $P=(2,1)$. Find $L$ and $r(H)$ with $F(P+H)=F(P)+L(H)+r(H)$, and
+prove $\norm{r(H)}/\norm H\to0$.
+\end{problem}
+\begin{hint}Expand, then sort the terms by degree in $(h,k)$.\end{hint}
+\begin{solution}
+$F(2+h,1+k)-F(2,1)=(h+2k+hk,\;h-2k-k^2)$. Linear part $L(h,k)=(h+2k,\;h-2k)$, i.e.\
+$J_F(2,1)=\begin{pmatrix}1&2\\1&-2\end{pmatrix}$; remainder $r(H)=(hk,-k^2)$. Since $|hk|\le\norm H^2$ and
+$k^2\le\norm H^2$, $\norm{r(H)}\le\sqrt2\norm H^2$, so $\norm{r(H)}/\norm H\le\sqrt2\norm H\to0$.
+\end{solution}
+
+\begin{problem}{Lecture V · chain rule}
+$F(x,y)=(x^2-y,\;xy)$, $G(u,v)=(e^u,\;u+v^2)$. Compute $J_{G\circ F}(1,1)$ with the chain rule and
+check by composing first.
+\end{problem}
+\begin{solution}
+$F(1,1)=(0,1)$. $J_F(1,1)=\begin{pmatrix}2&-1\\1&1\end{pmatrix}$, $J_G(0,1)=\begin{pmatrix}e^0&0\\1&2\end{pmatrix}=\begin{pmatrix}1&0\\1&2\end{pmatrix}$, so
+$J_{G\circ F}(1,1)=J_G(0,1)J_F(1,1)=\begin{pmatrix}2&-1\\4&1\end{pmatrix}$.
+Check: $G\circ F=(e^{x^2-y},\;x^2-y+x^2y^2)$ has Jacobian
+$\begin{pmatrix}2xe^{x^2-y}&-e^{x^2-y}\\2x+2xy^2&-1+2x^2y\end{pmatrix}$, equal to the same matrix at $(1,1)$.
+\end{solution}
+
+\begin{problem}{Lecture V · differentials}
+The volume of a cylinder is $V=\pi r^2h$. With $r=5$, $h=10$ measured to $\pm0.1$, estimate the
+maximal error on $V$.
+\end{problem}
+\begin{solution}
+$dV=2\pi rh\,dr+\pi r^2\,dh$, so $|dV|\le2\pi\cdot50\cdot0.1+25\pi\cdot0.1=12.5\pi\approx39.3$, out of
+$V=250\pi\approx785$: about $5\%$. The error on $r$ costs four times more than the error on $h$.
+\end{solution}
+
+\begin{problem}{Lecture V · inverse mapping}
+$F(x,y)=(x+y^2,\;y+x^2)$. (a) Where does the inverse mapping theorem apply? (b) Compute the
+derivative of the local inverse at $F(1,1)=(2,2)$.
+\end{problem}
+\begin{solution}
+(a) $J_F=\begin{pmatrix}1&2y\\2x&1\end{pmatrix}$, $\det J_F=1-4xy$: everywhere off the hyperbola $xy=\tfrac14$.
+(b) $J_F(1,1)=\begin{pmatrix}1&2\\2&1\end{pmatrix}$, $\det=-3$, so
+$J_G(2,2)=-\tfrac13\begin{pmatrix}1&-2\\-2&1\end{pmatrix}=\begin{pmatrix}-\frac13&\frac23\\ \frac23&-\frac13\end{pmatrix}$.
+\end{solution}
+
+\begin{problem}{Lecture V · polar inverse}
+For $T(r,\theta)=(r\cos\theta,r\sin\theta)$, use $J_{T^{-1}}=J_T^{-1}$ at $(r,\theta)=(2,\frac\pi2)$ to get
+$r_x,r_y,\theta_x,\theta_y$ at $(x,y)=(0,2)$.
+\end{problem}
+\begin{solution}
+$J_T(2,\frac\pi2)=\begin{pmatrix}0&-2\\1&0\end{pmatrix}$, inverse $\begin{pmatrix}0&1\\-\frac12&0\end{pmatrix}$:
+$r_x=0$, $r_y=1$, $\theta_x=-\tfrac12$, $\theta_y=0$. Check: $r_y=y/r=1$ and $\theta_x=-y/r^2=-\tfrac12$.
+\end{solution}
+
+\begin{problem}{Lecture V · implicit (slides)}
+Show that $x^2y+3y^3x^4=4$ defines $y=\varphi(x)$ near $(1,1)$ and compute $\varphi'(1)$.
+\end{problem}
+\begin{solution}
+$f(1,1)=1+3=4$ and $f_y=x^2+9y^2x^4=10\ne0$ at $(1,1)$, so the IFT applies.
+$f_x=2xy+12y^3x^3=14$, hence $\varphi'(1)=-\tfrac{14}{10}=-\tfrac75$.
+\end{solution}
+
+\begin{problem}{Lecture V · folium of Descartes}
+$x^3+y^3=6xy$. (a) Near $(3,3)$ the curve is a graph $y=\varphi(x)$: tangent line? (b) Where does
+solving for $y$ fail?
+\end{problem}
+\begin{solution}
+(a) $f=x^3+y^3-6xy$, $f(3,3)=0$, $f_y=3y^2-6x=9\ne0$. $\varphi'(3)=-\dfrac{3x^2-6y}{3y^2-6x}=-1$:
+tangent $x+y=6$.
+(b) $f_y=0\iff y^2=2x$; on the curve this gives $y=0$ or $y^3=16$: the points $(0,0)$ and
+$(2^{5/3},2^{4/3})\approx(3.17,2.52)$.
+\end{solution}
+
+\begin{problem}{Lecture V · sensitivity}
+$F(x,\mu)=x^3+x-\mu$. Show the root $x(\mu)$ is $C^1$, compute $x'(\mu)$, and estimate $x(2.1)$.
+\end{problem}
+\begin{solution}
+$F_x=3x^2+1>0$, so the IFT applies at every root and $x'(\mu)=\dfrac1{3x(\mu)^2+1}\in(0,1]$. At
+$\mu=2$ the root is $x=1$, $x'(2)=\tfrac14$, so $x(2.1)\approx1+0.1\cdot\tfrac14=1.025$ (true value
+$1.0245$). No cubic formula needed.
+\end{solution}
+
+\begin{problem}{Lecture V · eigenvalue sensitivity}
+$A(t)=\begin{pmatrix}t&1\\1&0\end{pmatrix}$. Show both eigenvalues are smooth near $t=0$ and compute $\lambda'(0)$.
+\end{problem}
+\begin{solution}
+$P(\lambda,t)=\lambda^2-t\lambda-1$; at $t=0$ the roots are $\pm1$, simple since
+$P_\lambda=2\lambda-t=\pm2\ne0$. $\lambda'=-P_t/P_\lambda=\lambda/(2\lambda-t)$, so $\lambda'(0)=\tfrac12$ for both.
+Check: $\lambda=\tfrac12\big(t\pm\sqrt{t^2+4}\big)$.
+\end{solution}
+
+\begin{problem}{Lecture V · quantile}
+Exponential law $F(x)=1-e^{-\alpha x}$. Compute $q'(p)$ with the IFT and check on $q(p)=-\frac{\ln(1-p)}{\alpha}$.
+\end{problem}
+\begin{solution}
+$G(q,p)=F(q)-p$, $G_q=f(q)=\alpha e^{-\alpha q}>0$, so $q'(p)=\dfrac1{f(q(p))}=\dfrac1{\alpha(1-p)}$. Direct
+derivative of $-\ln(1-p)/\alpha$: the same. Near $p=1$ the density is small and the quantile
+moves fast.
+\end{solution}
+
+\begin{trap}
+Lecture V errors that cost marks: a $2\times3$ Jacobian written as $3\times2$ (rows are
+outputs); $J_G$ evaluated at $P$ instead of $F(P)$; using the IFT without checking $f_y\ne0$;
+and claiming a global inverse from $\det J_F\ne0$.
+\end{trap}
+
+\section{More exam-style problems}
+
+\begin{problem}{Exam style · spherical Jacobian}
+Show that $F(\rho,\varphi,\theta)=(\rho\sin\varphi\cos\theta,\rho\sin\varphi\sin\theta,\rho\cos\varphi)$ has
+$\det J_F=\rho^2\sin\varphi$.
+\end{problem}
+\begin{solution}
+$J_F=\begin{pmatrix}\sin\varphi\cos\theta&\rho\cos\varphi\cos\theta&-\rho\sin\varphi\sin\theta\\
+\sin\varphi\sin\theta&\rho\cos\varphi\sin\theta&\rho\sin\varphi\cos\theta\\ \cos\varphi&-\rho\sin\varphi&0\end{pmatrix}$.
+Expanding along the last row:
+$\cos\varphi\cdot\rho^2\sin\varphi\cos\varphi+\rho\sin\varphi\cdot\rho\sin^2\varphi=\rho^2\sin\varphi$. This is the
+volume factor used in Lecture VI.
+\end{solution}
+
+\begin{problem}{Exam style · robot arm}
+Two links of lengths $L_1,L_2$ with joint angles $a,b$ put the hand at
+$F(a,b)=(L_1\cos a+L_2\cos(a+b),\;L_1\sin a+L_2\sin(a+b))$. When is $F$ locally invertible?
+\end{problem}
+\begin{solution}
+A direct computation gives $\det J_F=L_1L_2\sin b$. It vanishes when $b=0$ or $\pi$ (arm fully stretched
+or folded): there the joint speeds cannot produce every hand velocity. Elsewhere the inverse mapping
+theorem gives local joint angles for every nearby hand position.
+\begin{center}
+\begin{tikzpicture}[scale=1.45]
+  \fill[ice] (-0.35,-0.25) rectangle (0.35,0);
+  \draw[gridc] (-0.6,0)--(4.2,0);
+  \draw[tealD, line width=2.4pt, line cap=round] (0,0)--(35:2.2) coordinate (E);
+  \draw[tealD, line width=2.4pt, line cap=round] (E)--++(80:1.6) coordinate (H);
+  \draw[tealD!40, line width=2.4pt, line cap=round, dashed] (E)--++(35:1.6) coordinate (S);
+  \fill[coral] (0,0) circle (2.6pt) (E) circle (2.6pt);
+  \node[circle, fill=coralD, inner sep=2pt] at (H) {};
+  \draw[->, coralD] (0.7,0) arc (0:35:0.7); \node[font=\scriptsize, text=coralD] at (17:0.95) {$a$};
+  \draw[->, coralD] ($(E)+(35:0.55)$) arc (35:80:0.55);
+  \node[font=\scriptsize, text=coralD] at ($(E)+(58:0.8)$) {$b$};
+  \node[font=\scriptsize, text=tealDD, anchor=north west] at ($(0,0)!0.5!(E)$) {$L_1$};
+  \node[font=\scriptsize, text=tealDD, anchor=east] at ($(E)!0.5!(H)$) {$L_2$};
+  \node[font=\scriptsize, text=tealDD, anchor=south] at (H) {hand $F(a,b)$};
+  \node[font=\scriptsize, text=tealD!70, anchor=west] at (S) {$b=0$: singular};
+\end{tikzpicture}
+\figcap{Two-link arm. The dashed position, fully stretched, is where $\det J_F=0$.}
+\end{center}
+\end{solution}
+
+\section{Quick check}
+\begin{quickcheck}
+$J_{G\circ F}(P)=J_F(P)\,J_G(P)$. & \qF & $J_G(F(P))\,J_F(P)$: outer first, at $F(P)$.\\
+$\det J_F\ne0$ everywhere implies $F$ globally injective. & \qF & $e^x(\cos y,\sin y)$ is $2\pi$-periodic in $y$.\\
+The polar map has Jacobian determinant $r$. & \qT & $r\cos^2\theta+r\sin^2\theta$.\\
+$f(a,b)=0$ and $f_y(a,b)\ne0$ make the zero set a graph $y=\varphi(x)$ near $(a,b)$. & \qT & Implicit function theorem.\\
+$J_F$ has one row per input variable. & \qF & One row per output, one column per input.\\
+$J_{F^{-1}}(F(P))=J_F(P)^{-1}$. & \qT & Chain rule on $F^{-1}\circ F=\mathrm{id}$.\\
+\end{quickcheck}

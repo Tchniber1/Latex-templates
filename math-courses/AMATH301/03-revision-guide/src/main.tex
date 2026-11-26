@@ -1,0 +1,51 @@
+\documentclass[lang=en,11pt,openany]{beautybook}
+\definecolor{coverbgcolor}{HTML}{E9F8FB}
+\definecolor{coverfgcolor}{HTML}{145F6E}
+\definecolor{coverbar}{HTML}{F19381}
+\definecolor{bottomcolor}{HTML}{145F6E}
+\definecolor{nuanbai}{HTML}{F7FCFD}
+\coverstyle={cover-choose=en,}
+\mathstyle={math-font=plain,}
+\input{style}
+
+\begin{document}
+\title{Multivariate Calculus}
+\subtitle{Exam Revision Guide}
+\edition{AMATH301 \quad Fall 2026}
+\bookseries{UM6P \;/\; School of Applied Science and Engineering}
+\author{Taha Chniber}
+\pressname{Lectures I to VII}
+\presslogo{inner_pics/logo.pdf}
+\makecover
+
+\makeatletter
+\oddoutermargin{\sffamily\leftmark}
+\evenoutermargin{\sffamily AMATH301 Revision Guide}
+\chapimage{inner_pics/chapmark.pdf}
+\makeatother
+
+\let\cleardoublepage\clearpage
+\frontmatter
+\pagenumbering{roman}
+\tableofcontents
+\input{front}
+
+\mainmatter
+\pagenumbering{arabic}
+\partabstract{The five lectures that the TD sheets, the quiz and the GT4 sessions cover. Each chapter goes: intuition, definitions and theorems, method, every TD problem solved, traps.}
+\part{The Examinable Core}
+\input{ch1}
+\input{ch2}
+\input{ch3}
+\input{ch4}
+\input{ch5}
+\partabstract{Everything you need in the exam room on a few pages, then a full three-hour mock exam with solutions.}
+\settab{}{0}\part{Exam Toolkit}
+\input{toolkit}
+\input{mock}
+\appendix
+\partabstract{Lectures VI and VII have no TD sheet yet and may or may not be on the exam. This annexe gives you the essentials and exam-style problems in case they are.}
+\settab{}{0}\part{Annexe}
+\input{annexe}
+\input{formulas}
+\end{document}

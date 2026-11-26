@@ -1,0 +1,133 @@
+% ============================== PROBLEM 2 ============================
+\settab{PROBLEM 2}{3}
+\renewcommand{\chapribbontext}{Problem 2 \;·\; 7 pts}
+\chapter[Problem 2: A Function Defined by Cases]{A Function\\ Defined by Cases}\label{ch:p2}
+
+\begin{examnote}[title={The mock}]
+$g(x,y)=\dfrac{xy^2}{x^2+y^2}$ for $(x,y)\ne(0,0)$, and $g(0,0)=0$.
+\end{examnote}
+
+\begin{idea}
+This problem has \textbf{one golden rule}: away from the origin, use the normal rules; \textbf{at the
+origin, never plug into a formula, always compute a limit}. Every question is written in two
+paragraphs: ``For $(x,y)\ne(0,0)$'' and ``At $(0,0)$''.
+\end{idea}
+
+\section{The polar trick: know the answers in 30 seconds}
+
+On scrap paper, put $x=r\cos\theta$, $y=r\sin\theta$:
+\[
+  g=\frac{r\cos\theta\cdot r^2\sin^2\theta}{r^2}=r\cdot\cos\theta\sin^2\theta .
+\]
+\noindent\begin{minipage}[c]{0.53\linewidth}
+{\small
+\renewcommand{\arraystretch}{1.3}
+\begin{tabular}{@{}ll@{}}\toprule
+$g=r^n\cdot(\text{angle})$ & at the origin\\ \midrule
+$n=0$, e.g. $\frac{xy}{x^2+y^2}$ & not continuous\\[2pt]
+$n=1$, e.g. the mock & continuous, \textbf{not diff.}\\[2pt]
+$n\ge2$, e.g. $\frac{x^2y^2}{x^2+y^2}$ & differentiable (diff.)\\ \bottomrule
+\end{tabular}
+}
+\par\medskip This is not a proof, so do not write it as your answer. It tells you \emph{which} proof sentence to use.
+\end{minipage}\hfill
+\begin{minipage}[c]{0.44\linewidth}\centering
+
+\begin{tikzpicture}
+\begin{axis}[bp3d, width=6.4cm, height=5.2cm, view={-40}{26}, xlabel=$x$, ylabel=$y$, zlabel=$z$,
+   xmin=-1.25, xmax=1.25, ymin=-1.25, ymax=1.25, zmin=-0.6, zmax=0.6]
+  \addplot3[gsurf, shader=interp, domain=0:1, y domain=0:360, samples=14, samples y=56,
+     point meta=z] ({x*cos(y)},{x*sin(y)},{x*cos(y)*sin(y)^2});
+  \foreach \t in {0,35,70,110,145,180,215,250,290,325}{
+    \edef\tmp{\noexpand\addplot3[coralD, line width=0.9pt, domain=0:1, samples=2, samples y=1]
+      ({x*cos(\t)},{x*sin(\t)},{x*cos(\t)*sin(\t)^2});}\tmp}
+  \node[dot] at (axis cs:0,0,0) {};
+\end{axis}
+\end{tikzpicture}
+\figcap{The graph of $g$ is made of straight lines through the origin (coral), each with its own
+slope: a wavy cone. A cone tip has a slope in every direction but no tangent plane.}
+
+\end{minipage}
+
+
+% -------------------------------------------------------------------
+\needspace{12\baselineskip}
+\section{Q1. The partial derivatives}
+
+
+
+\begin{writethis}
+For $(x,y)\ne(0,0)$, quotient rule $\big(\frac uv\big)'=\frac{u'v-uv'}{v^2}$:
+\[
+ g_x=\frac{y^2(x^2+y^2)-xy^2\cdot2x}{(x^2+y^2)^2}=\frac{y^2(y^2-x^2)}{(x^2+y^2)^2},
+\]
+\[
+ g_y=\frac{2xy(x^2+y^2)-xy^2\cdot2y}{(x^2+y^2)^2}=\frac{2x^3y}{(x^2+y^2)^2}.
+\]
+At $(0,0)$: $g(h,0)=0$ and $g(0,k)=0$, so
+$g_x(0,0)=\lim\limits_{h\to0}\frac{0-0}{h}=0$ and $g_y(0,0)=\lim\limits_{k\to0}\frac{0-0}{k}=0$.
+\end{writethis}
+
+
+
+% -------------------------------------------------------------------
+\section{Q2. Continuity}
+
+\begin{idea}
+Squeeze $|g|$ below something that goes to $0$, using $\frac{y^2}{x^2+y^2}\le1$. (Checking lines $y=mx$ is not a proof.)
+\end{idea}
+
+\begin{writethis}
+For $(x,y)\ne(0,0)$, $g$ is a quotient of polynomials with nonzero denominator: continuous.
+
+At $(0,0)$ \seeproof{4}: \ $|g(x,y)-0|=|x|\cdot\dfrac{y^2}{x^2+y^2}\le|x|\to0$, so
+$\lim\limits_{(x,y)\to(0,0)}g=0=g(0,0)$. Hence $g$ is continuous on $\R^2$.
+\end{writethis}
+
+
+
+% -------------------------------------------------------------------
+\section{Q3. Directional derivatives at the origin}
+
+\begin{idea}
+Slope at $O$ in direction $v=(a,b)$: the limit of $\frac{g(ta,tb)-g(0,0)}{t}$. Not $\grad g\cdot v$ (only valid if differentiable).
+\end{idea}
+
+\begin{writethis}
+Let $a^2+b^2=1$. For $t\ne0$: \ $g(ta,tb)=\dfrac{t^3ab^2}{t^2(a^2+b^2)}=t\,ab^2$, so
+$\dfrac{g(ta,tb)-0}{t}=ab^2$. The limit exists: \ $\boxed{D_vg(0,0)=ab^2}$.
+\end{writethis}
+
+\begin{watch}\watchout The tempting wrong answer is $\grad g(0,0)\cdot v=0$. The true answer $ab^2$ is not $0$ (try $a=b=\frac1{\sqrt2}$).\end{watch}
+
+% -------------------------------------------------------------------
+\section{Q4. Not differentiable at the origin}
+
+\begin{idea}
+Differentiable means: near $O$, $g$ is a plane plus an error that is tiny even after dividing by the
+distance. Here the plane is $z=0$, so test $\frac{g(h,k)}{\text{distance}}\to0$. On the diagonal $h=k$ it stays constant: it fails.
+(Never test on the axes: there it is $0$, which proves nothing.)
+\end{idea}
+
+\begin{writethis}
+\seeproof{6} \ $g(0,0)=0$ and $\grad g(0,0)=(0,0)$. If $g$ were differentiable at $O$, then
+$\varepsilon(h,k)=\dfrac{g(h,k)}{\sqrt{h^2+k^2}}=\dfrac{hk^2}{(h^2+k^2)^{3/2}}\to0$.
+But for $h=k=t>0$: \ $\varepsilon(t,t)=\dfrac{t^3}{(2t^2)^{3/2}}=\dfrac{1}{2\sqrt2}\ne0$.
+So $g$ is \textbf{not differentiable} at the origin.
+\end{writethis}
+
+
+
+% -------------------------------------------------------------------
+\section{Q5. Is $g_x$ continuous? Is $g$ of class $C^1$?}
+
+\begin{writethis}
+\seeproof{7} \ On the $y$-axis ($x=0$, $y\ne0$): \ $g_x(0,y)=\dfrac{y^2\cdot y^2}{y^4}=1$, which does not tend to
+$g_x(0,0)=0$. So $g_x$ is not continuous at the origin, and $g\notin C^1(\R^2)$.
+(Consistent with Q4: $C^1$ would have forced differentiability.)
+
+\smallskip\textbf{The whole story in one sentence:} $g$ is continuous with a slope in every direction at $O$,
+but not differentiable there, so not $C^1$ either.
+\end{writethis}
+
+

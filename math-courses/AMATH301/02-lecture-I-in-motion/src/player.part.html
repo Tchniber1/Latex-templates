@@ -1,0 +1,163 @@
+<title>Lecture I in Motion</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<style>
+/* layout: one stage, a transport bar under it, chapter chips below */
+/*FONTFACES*/
+:root {
+  --bg: #0D0B1A; --panel: #161229; --ink: #F5EEF6; --dim: rgba(245,238,246,.62); --faint: rgba(245,238,246,.38);
+  --line: rgba(203,178,218,.22); --lav: #CBB2DA; --coral: #EE6A55; --cyan: #46BDE6;
+  --serif: "Pagella", "LMMath", Georgia, serif; --mono: "LMMono", "LMMath", ui-monospace, monospace;
+  color-scheme: dark;
+}
+body { background: var(--bg); color: var(--ink); font-family: var(--serif); padding-block: 28px 40px;
+  padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+.wrap { max-width: 1240px; margin: 0 auto; display: grid; gap: 18px; }
+header { display: grid; gap: 6px; }
+.eyebrow { font-family: var(--mono); font-size: 13px; letter-spacing: .32em; color: var(--coral); text-transform: uppercase; }
+h1 { margin: 0; font-weight: 400; font-size: clamp(30px, 4.4vw, 48px); line-height: 1.05; text-wrap: balance; }
+.lede { margin: 0; color: var(--dim); font-style: italic; font-size: clamp(16px, 1.9vw, 19px); max-width: 64ch; line-height: 1.45; }
+.stage { position: relative; width: 100%; max-width: 100%; aspect-ratio: 16 / 9; background: #14112A; overflow: hidden; cursor: pointer; }
+.stage::after { content: ""; position: absolute; inset: 0; pointer-events: none; box-shadow: inset 0 0 0 1px var(--line); }
+canvas { display: block; width: 100%; height: 100%; }
+.big { position: absolute; left: 50%; top: 50%; width: 84px; height: 84px; margin: -42px 0 0 -42px; border-radius: 50%;
+  border: 1.5px solid rgba(245,238,246,.7); background: rgba(13,11,26,.55); display: grid; place-items: center;
+  transition: opacity .25s, transform .25s; pointer-events: none; }
+.big svg { width: 30px; height: 30px; margin-left: 5px; fill: var(--ink); }
+.stage.playing .big { opacity: 0; transform: scale(.85); }
+.bar { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; }
+.btn { appearance: none; border: 1px solid var(--line); background: var(--panel); color: var(--ink); height: 40px; min-width: 40px;
+  display: inline-grid; place-items: center; padding: 0 12px; font: 14px var(--mono); letter-spacing: .08em; cursor: pointer; }
+.btn:hover { border-color: var(--lav); }
+.btn:focus-visible, .chip:focus-visible, input[type=range]:focus-visible { outline: 2px solid var(--coral); outline-offset: 2px; }
+.btn svg { width: 16px; height: 16px; fill: currentColor; }
+.time { font: 14px var(--mono); color: var(--dim); font-variant-numeric: tabular-nums; letter-spacing: .06em; min-width: 12ch; }
+.scrub { flex: 1 1 260px; min-width: 0; position: relative; height: 40px; display: flex; align-items: center; }
+input[type=range] { -webkit-appearance: none; appearance: none; width: 100%; height: 40px; background: transparent; margin: 0; cursor: pointer; }
+input[type=range]::-webkit-slider-runnable-track { height: 3px; background: linear-gradient(to right, var(--coral) var(--p, 0%), rgba(203,178,218,.25) var(--p, 0%)); }
+input[type=range]::-moz-range-track { height: 3px; background: rgba(203,178,218,.25); }
+input[type=range]::-moz-range-progress { height: 3px; background: var(--coral); }
+input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; width: 14px; height: 14px; margin-top: -5.5px; background: var(--ink); border: 0; border-radius: 50%; }
+input[type=range]::-moz-range-thumb { width: 14px; height: 14px; background: var(--ink); border: 0; border-radius: 50%; }
+.ticks { position: absolute; left: 0; right: 0; top: 50%; height: 0; pointer-events: none; }
+.ticks i { position: absolute; top: -6px; width: 1px; height: 12px; background: rgba(203,178,218,.55); }
+.chips { display: flex; flex-wrap: wrap; gap: 8px; }
+.chip { appearance: none; border: 1px solid var(--line); background: transparent; color: var(--dim); padding: 8px 12px; cursor: pointer;
+  font: 15px var(--serif); display: inline-flex; gap: 8px; align-items: baseline; }
+.chip b { font: 12px var(--mono); font-weight: 400; color: var(--coral); letter-spacing: .1em; }
+.chip:hover { color: var(--ink); border-color: var(--lav); }
+.chip[aria-current="true"] { color: var(--ink); border-color: var(--coral); background: rgba(238,106,85,.08); }
+.note { margin: 0; color: var(--faint); font: 12px var(--mono); letter-spacing: .08em; }
+body.rec { padding: 0; margin: 0; background: #14112A; }
+body.rec .wrap { max-width: none; display: block; }
+body.rec header, body.rec .bar, body.rec .chips, body.rec .note, body.rec .big { display: none; }
+body.rec .stage { width: 1920px; height: 1080px; aspect-ratio: auto; }
+@media (prefers-reduced-motion: reduce) { .big { transition: none; } }
+</style>
+
+<div class="wrap">
+  <header>
+    <div class="eyebrow">AMATH301 · Lecture I</div>
+    <h1>Functions of Several Variables, in motion</h1>
+    <p class="lede">Ninety-four seconds through the first lecture: the domain, the graph, level curves, open sets, partial derivatives, the gradient and the zoom test for differentiability.</p>
+  </header>
+  <div class="stage" id="stage" role="button" tabindex="0" aria-label="Play or pause the animation">
+    <canvas id="cv" width="1920" height="1080"></canvas>
+    <div class="big" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M6 4l14 8-14 8z"/></svg></div>
+  </div>
+  <div class="bar">
+    <button class="btn" id="play" aria-label="Play"><svg viewBox="0 0 24 24"><path id="playIcon" d="M6 4l14 8-14 8z"/></svg></button>
+    <button class="btn" id="restart" aria-label="Restart from the beginning"><svg viewBox="0 0 24 24"><path d="M12 5V2L7 6l5 4V7a5 5 0 1 1-5 5H5a7 7 0 1 0 7-7z"/></svg></button>
+    <div class="time" id="time">00:00 / 01:34</div>
+    <div class="scrub"><input type="range" id="scrub" min="0" max="94" step="0.01" value="0" aria-label="Position in the animation"><div class="ticks" id="ticks"></div></div>
+  </div>
+  <div class="chips" id="chips"></div>
+  <p class="note">Space plays or pauses. Left and right arrows jump five seconds.</p>
+</div>
+
+<script>
+/*ENGINE*/
+</script>
+<script>
+/*SCENES*/
+</script>
+<script>
+(async function () {
+  const REC = /[?&]record/.test(location.search);
+  const cv = document.getElementById('cv'), ctx = cv.getContext('2d');
+  const stage = document.getElementById('stage');
+  try {
+    await Promise.all(['400 40px Pagella', 'italic 400 40px Pagella', '700 40px Pagella', '400 40px LMMath', '400 40px LMMono']
+      .map(f => document.fonts.load(f, 'Aaℝ∇')));
+    await document.fonts.ready;
+  } catch (e) { /* fall back to system fonts */ }
+  buildStatic();
+  if (REC) {
+    document.body.classList.add('rec');
+    S = 1; cv.width = W; cv.height = H;
+    window.__render = T => { frame(ctx, T); return true; };
+    window.__ready = true;
+    return;
+  }
+  let T = 0, playing = false, last = null;
+  const reduce = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const scrub = document.getElementById('scrub'), time = document.getElementById('time');
+  const playBtn = document.getElementById('play'), icon = document.getElementById('playIcon');
+  const chipsEl = document.getElementById('chips'), ticks = document.getElementById('ticks');
+  const names = ['Opening', 'Domain', 'Graph', 'Level curves', 'Open sets', 'Partials', 'Gradient', 'Differentiability', 'Summary'];
+  const nums = ['', '1.1', '1.2', '1.3', '1.4', '1.5', '1.6', '1.7', ''];
+  const chips = SCENES.map((s, i) => {
+    const b = document.createElement('button'); b.className = 'chip'; b.type = 'button';
+    b.innerHTML = (nums[i] ? `<b>${nums[i]}</b>` : '') + names[i];
+    b.addEventListener('click', () => { seek(s.start + .05); if (!playing) toggle(true); });
+    chipsEl.appendChild(b);
+    const tk = document.createElement('i'); tk.style.left = (100 * s.start / DUR) + '%'; ticks.appendChild(tk);
+    return b;
+  });
+  function resize() {
+    const r = stage.getBoundingClientRect();
+    const px = Math.max(320, Math.min(W, Math.round(r.width * Math.min(2, window.devicePixelRatio || 1))));
+    if (cv.width !== px) { cv.width = px; cv.height = Math.round(px * H / W); S = px / W; draw(); }
+  }
+  const tc = v => `${String(Math.floor(v / 60)).padStart(2, '0')}:${String(Math.floor(v % 60)).padStart(2, '0')}`;
+  function ui() {
+    scrub.value = T.toFixed(2); scrub.style.setProperty('--p', (100 * T / DUR) + '%');
+    time.textContent = `${tc(T)} / 01:34`;
+    let cur = 0; SCENES.forEach((s, i) => { if (T >= s.start) cur = i; });
+    chips.forEach((c, i) => c.setAttribute('aria-current', i === cur ? 'true' : 'false'));
+  }
+  function draw() { frame(ctx, T); ui(); }
+  function toggle(on) {
+    playing = on === undefined ? !playing : on;
+    if (playing && T >= DUR - .05) T = 0;
+    stage.classList.toggle('playing', playing);
+    icon.setAttribute('d', playing ? 'M6 4h4v16H6zM14 4h4v16h-4z' : 'M6 4l14 8-14 8z');
+    playBtn.setAttribute('aria-label', playing ? 'Pause' : 'Play');
+    last = null;
+  }
+  function seek(v) { T = clamp(v, 0, DUR); draw(); }
+  function loop(now) {
+    if (playing) {
+      if (last !== null) T += Math.min(.1, (now - last) / 1000);
+      last = now;
+      if (T >= DUR) { T = DUR; toggle(false); }
+      draw();
+    }
+    requestAnimationFrame(loop);
+  }
+  playBtn.addEventListener('click', () => toggle());
+  stage.addEventListener('click', () => toggle());
+  stage.addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); toggle(); } });
+  document.getElementById('restart').addEventListener('click', () => { seek(0); toggle(true); });
+  scrub.addEventListener('input', () => seek(parseFloat(scrub.value)));
+  document.addEventListener('keydown', e => {
+    if (e.target.tagName === 'INPUT' && e.key !== ' ') return;
+    if (e.key === ' ') { e.preventDefault(); toggle(); }
+    else if (e.key === 'ArrowRight') { seek(T + 5); }
+    else if (e.key === 'ArrowLeft') { seek(T - 5); }
+  });
+  new ResizeObserver(resize).observe(stage);
+  if (reduce) { T = 31.2; } else { T = 0; toggle(true); }
+  resize(); draw();
+  requestAnimationFrame(loop);
+})();
+</script>
