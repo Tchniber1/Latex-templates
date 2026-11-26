@@ -1,0 +1,93 @@
+% ============================== CHAPTER TEMPLATE =====================
+% One file per lecture. Order inside each section: intuition, definition,
+% theorem, intuition for the proof, proof, worked examples, picture, trap,
+% real life. Close the chapter with a Summary key-idea box and 8 exercises.
+\setlecture{Lecture I}\renewcommand{\tabname}{I}
+\chapter{Chapter Title From the Lecture}\label{ch:one}
+
+Opening paragraph: a concrete situation that motivates the lecture, two or three sentences.
+
+\section{First section}
+
+\begin{intuition}
+The idea in plain words, with no formulas if possible.
+\end{intuition}
+
+\begin{definition}{name of the notion}
+The definition exactly as in the lecture.
+\end{definition}
+
+\begin{theorem}[label=thm:sample]{name of the result}
+The statement exactly as in the lecture.
+\end{theorem}
+
+\begin{intuition}
+Why the proof works, in one paragraph.
+\end{intuition}
+
+\begin{proof}
+Full proof with numbered steps. \textbf{Step 1.} \dots \textbf{Step 2.} \dots
+\end{proof}
+
+\begin{example}{short label}
+\textbf{Step 1.} \dots\quad \textbf{Step 2.} \dots\quad \textbf{Check.} \dots
+\end{example}
+
+\mnote{Short margin reminder.}
+
+\begin{center}
+\begin{tikzpicture}
+\begin{axis}[bp, width=6.2cm, height=6.2cm, xmin=-2.6, xmax=2.6, ymin=-2.6, ymax=2.6,
+   xtick={-2,-1,1,2}, ytick={-2,-1,1,2}, xlabel=$x$, ylabel=$y$, axis equal image]
+  \foreach \r in {1,1.414,1.732,2}
+    {\edef\tmp{\noexpand\addplot[primary!60!accent, domain=0:360, samples=80] ({\r*cos(x)},{\r*sin(x)});}\tmp}
+  \addplot[second, domain=-2.5:2.5] {0.5*x};
+  \node[dot] at (axis cs:1,1) {};
+\end{axis}
+\end{tikzpicture}\hspace{0.4cm}
+\begin{tikzpicture}
+\begin{axis}[bp3d, width=7cm, height=6.4cm, xlabel=$x$, ylabel=$y$, zlabel=$z$,
+   xmin=-2.3, xmax=2.3, ymin=-2.3, ymax=2.3, zmin=0, zmax=5]
+  \addplot3[surfstyle, domain=0:2, y domain=0:360, samples=14, samples y=36, z buffer=sort]
+     ({x*cos(y)},{x*sin(y)},{x^2});
+\end{axis}
+\end{tikzpicture}
+
+{\small\color{ink} Caption in ink colour: what the reader should see in the picture.}
+\end{center}
+
+\begin{trap}
+The mistake that costs the most marks here, with a two-line counterexample.
+\end{trap}
+
+\begin{reallife}{field}
+Where this shows up in physics, engineering, economics or machine learning.
+\end{reallife}
+
+\begin{recipe}
+\begin{enumerate}
+  \item Step one. \item Step two.
+\end{enumerate}
+\end{recipe}
+
+\begin{extra}
+Material beyond the slides that makes exercises easier.
+\end{extra}
+
+\section{Summary}
+\begin{keyidea}
+\begin{itemize}
+  \item One line per idea of the chapter.
+\end{itemize}
+\end{keyidea}
+
+\section{Exam-style questions}
+\begin{exercise}[1]
+Direct application.
+\end{exercise}
+\begin{exercise}[2]
+Exam standard.
+\end{exercise}
+\begin{exercise}[3]
+Challenge.
+\end{exercise}

@@ -1,0 +1,39 @@
+\documentclass[lang=en,11pt,openany]{beautybook}
+\definecolor{coverbgcolor}{HTML}{E9F8FB}
+\definecolor{coverfgcolor}{HTML}{145F6E}
+\definecolor{coverbar}{HTML}{F19381}
+\definecolor{bottomcolor}{HTML}{145F6E}
+\definecolor{nuanbai}{HTML}{F7FCFD}
+\coverstyle={cover-choose=en,}
+\mathstyle={math-font=plain,}
+\input{style}
+
+\begin{document}
+\title{The Mock Exam}
+\subtitle{Every Answer, Explained}
+\edition{AMATH301 \quad Fall 2026}
+\bookseries{UM6P \;/\; School of Applied Science and Engineering}
+\author{Taha Chniber}
+\pressname{Problems 1 to 3}
+\presslogo{inner_pics/logo.pdf}
+\makecover
+
+\makeatletter
+\oddoutermargin{\sffamily\leftmark}
+\evenoutermargin{\sffamily AMATH301 Mock Exam, Explained}
+\chapimage{inner_pics/chapmark.pdf}
+\makeatother
+
+\let\cleardoublepage\clearpage
+\frontmatter
+\pagenumbering{roman}
+\tableofcontents
+\input{front}
+
+\mainmatter
+\pagenumbering{arabic}
+\input{p1}
+\input{p2}
+\input{p3}
+\input{wrap}
+\end{document}

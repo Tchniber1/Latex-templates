@@ -1,0 +1,103 @@
+% ============================ FRONT MATTER ===========================
+% The concept map below is the AMATH301 one, kept as a layout template:
+% five lecture boxes, coral arrows with labels, one dashed blueprint arrow,
+% and a closing Key idea box. Replace the text and arrows for the new course.
+\chapter*{How to read this book}
+\markboth{How to read this book}{}
+\addcontentsline{toc}{chapter}{How to read this book}
+
+This book follows the \coursecode\ lectures in order. Every chapter starts from the
+pictures, then states the definitions and theorems exactly as they appear in the course,
+then proves them in full. Before each proof you will find a short paragraph that says,
+in plain words, \emph{why} the argument works. If you only remember that paragraph on exam
+day, you can usually rebuild the proof from it.
+
+\section*{The boxes you will meet}
+
+\begin{tcolorbox}[corners=primary,colback=primarytint,bpgridbg=primarygrid!70,title=Definition]
+Definitions sit on a faint grid. Learn them word for word: most exam
+questions start by testing whether you know exactly what is being asked.
+\end{tcolorbox}
+
+\begin{tcolorbox}[corners=accent,colback=accenttint,bpgridbg=accent!10,title=Theorem]
+Theorems carry the accent colour. Each one is followed by its proof.
+\end{tcolorbox}
+
+\begin{intuition}
+This box gives the idea behind a statement or a proof, with no formulas if possible.
+\end{intuition}
+
+\begin{trap}
+Warning boxes point to the mistakes that cost the most marks.
+\end{trap}
+
+\begin{reallife}{}
+These boxes connect the mathematics to physics, engineering, economics or machine learning.
+\end{reallife}
+
+The tinted margin on the right is for short reminders and small pictures, and it is
+also the space where you can write your own notes when you print the book. Exercises at
+the end of each chapter are rated
+{\color{accent}$\bullet$}{\color{primarygrid}$\bullet\bullet$} (direct application),
+{\color{accent}$\bullet\bullet$}{\color{primarygrid}$\bullet$} (exam standard) and
+{\color{accent}$\bullet\bullet\bullet$} (challenge). Full solutions are in
+Appendix~\ref{app:sol}, and a formula sheet closes the book.
+
+\clearpage
+\section*{The map of the course}
+\markboth{The map of the course}{}
+
+% REPLACE: one paragraph naming the single idea that ties the course together.
+The diagram below shows how the lectures build on each other. Read it from top to bottom.
+
+\begin{center}
+\begin{tikzpicture}[
+  lec/.style={draw=primary, line width=0.9pt, fill=primarytint,
+     text width=4.8cm, align=left, inner sep=6pt, font=\small},
+  head/.style={fill=primary, text=white, font=\small\bfseries\scshape, inner sep=4pt,
+     anchor=south west},
+  arr/.style={-{Stealth[length=2.6mm]}, accent, line width=1.1pt},
+  arrd/.style={-{Stealth[length=2.2mm]}, second, line width=1pt, dashed},
+  lab/.style={font=\scriptsize, text=accentdark, fill=white, inner sep=2pt},
+]
+\node[lec] (L1) at (-3.1,0) {\textbf{Functions of several variables}\\[2pt]
+  domain, graph, level curves\\ open sets, partial derivatives\\
+  gradient $\nabla f$, differentiability};
+\node[head] at (L1.north west) {Lecture I};
+\node[lec] (L2) at (3.1,0) {\textbf{Chain rule and gradient}\\[2pt]
+  $\frac{d}{dt}f(X(t))=\nabla f\cdot X'(t)$\\ tangent planes, $D_Af$\\
+  steepest ascent, energy};
+\node[head] at (L2.north west) {Lecture II};
+\node[lec] (L3) at (-3.1,-3.6) {\textbf{Higher derivatives}\\[2pt]
+  $D_1D_2f=D_2D_1f$\\ differential operators\\
+  Taylor's formula with $(H\cdot\nabla)^r$};
+\node[head] at (L3.north west) {Lecture III};
+\node[lec] (L5) at (3.1,-3.6) {\textbf{Derivative as a linear map}\\[2pt]
+  Jacobian matrix $J_F$, differentials\\ chain rule $(G\circ F)'=G'F'$\\
+  inverse and implicit functions};
+\node[head] at (L5.north west) {Lecture V};
+\node[lec, text width=6cm] (L4) at (0,-7.4) {\textbf{Maxima and minima}\\[2pt]
+  critical points $\nabla f(P)=O$, quadratic form\\ boundary, closed and bounded sets\\
+  Lagrange multipliers $\nabla f=\lambda\nabla g$};
+\node[head] at (L4.north west) {Lecture IV};
+
+\draw[arr] (L1.east) -- node[lab, above=3pt]{compose} (L2.west);
+\draw[arr] (L1.south) -- node[lab, right=2pt]{differentiate again} ([yshift=0.45cm]L3.north);
+\draw[arr] (L2.south) -- node[lab, left=2pt]{vector-valued maps} ([yshift=0.45cm]L5.north);
+\draw[arr] (L3.south) -- ++(0,-0.75) -| node[lab, pos=0.25, above]{quadratic term}
+   ([xshift=-1.6cm,yshift=0.45cm]L4.north);
+\draw[arrd] (L5.south) -- ++(0,-0.75) -| node[lab, text=second, pos=0.25, above]{constraint surfaces}
+   ([xshift=1.6cm,yshift=0.45cm]L4.north);
+\draw[arr] (L2.east) -- ++(0.3,0) |- node[lab, pos=0.78, above]{$\nabla f=O$ at extrema} (L4.east);
+\end{tikzpicture}
+\end{center}
+
+\begin{keyidea}
+Every chapter answers one question about the approximation
+\[
+ f(P+H)\;\approx\; f(P) \;+\; \underbrace{\nabla f(P)\cdot H}_{\text{Lectures I, II, V}}
+ \;+\; \underbrace{\tfrac12\,(H\cdot\nabla)^2 f(P)}_{\text{Lectures III, IV}} .
+\]
+The linear term tells us slopes, tangent planes and directions of fastest change. The
+quadratic term tells us whether a flat point is a hill top, a valley or a saddle.
+\end{keyidea}

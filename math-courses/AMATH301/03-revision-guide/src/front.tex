@@ -1,0 +1,142 @@
+% ============================ FRONT MATTER ===========================
+\settab{}{0}
+\chapter*{How to Use This Guide}
+\markboth{How to Use This Guide}{How to Use This Guide}
+\addcontentsline{toc}{chapter}{How to Use This Guide}
+
+This guide is built from the AMATH301 slides (Lectures I to VII), the four TD sheets and their
+corrections, the quiz on Lectures I to III and the GT4 board sessions of 21, 23 and 28 October
+and 4 November. Every TD exercise is solved inside the chapter it belongs to. The exam is
+\textbf{closed book}, so everything in the formula sheet at the end is marked to memorise.
+
+\section*{The boxes}
+
+\begin{intuition}
+The idea in plain words, usually with a picture or an analogy. Read it first.
+\end{intuition}
+
+{\renewcommand{\thedefi}{}\renewcommand{\thethm}{}\renewcommand{\theprob}{}
+\begin{defi}
+Stated as in the lectures. Learn them word for word: many questions start by testing them.
+\end{defi}
+
+\begin{thm}
+With their hypotheses. In the exam, always check the hypotheses before using a theorem.
+\end{thm}
+
+\begin{method}
+A step-by-step procedure that earns full marks when you follow it.
+\end{method}
+
+\begin{problem}{source}
+A TD exercise or a new exam-style problem. Try it before reading on.
+\end{problem}
+\setcounter{prob}{0}
+\begin{hint}A nudge. Read it only if you are stuck after a real attempt.\end{hint}
+\begin{solution}The full solution, written the way you would write it in the exam.\end{solution}
+}\setcounter{defi}{0}\setcounter{thm}{0}
+
+\begin{trap}
+A mistake that costs marks, often taken from the quiz or the TD corrections.
+\end{trap}
+
+\begin{reallife}
+Where the mathematics is used outside the course.
+\end{reallife}
+
+\begin{examnote}
+What the exam is likely to ask about this part, and where the slides and TDs disagree.
+\end{examnote}
+
+Small notes in the margin repeat a key fact next to where you need it. The tabs on the page edge
+show which lecture you are in.
+
+\section*{The map of the course}
+
+Multivariate calculus is one long story about one idea: \emph{near a point, a smooth function
+looks like a linear one}. Lectures I to V study that approximation; Lectures VI and VII turn
+to integration, where the same Jacobian measures how areas and volumes change.
+
+\begin{center}
+\begin{tikzpicture}[
+  lec/.style={draw=tealD, line width=0.9pt, fill=mist, text width=4.7cm, align=left,
+     inner sep=6pt, font=\small, rounded corners=1.5mm},
+  head/.style={fill=tealD, text=white, font=\sffamily\bfseries\scriptsize, inner sep=3.5pt,
+     anchor=south west, rounded corners=1mm},
+  arr/.style={-{Stealth[length=2.6mm]}, coral, line width=1.1pt},
+  arrd/.style={-{Stealth[length=2.2mm]}, aqua, line width=1pt, dashed},
+  lab/.style={font=\scriptsize, text=coralD, fill=white, inner sep=2pt},
+]
+\node[lec] (L1) at (-3.0,0) {\textbf{Functions of several variables}\\ domain, level curves, open sets\\
+  partials, $\nabla f$, differentiability};
+\node[head] at (L1.north west) {LECTURE I};
+\node[lec] (L2) at (3.0,0) {\textbf{Chain rule and gradient}\\ $\frac{d}{dt}f(X(t))=\nabla f\cdot X'$\\
+  tangent planes, $D_Af$, energy};
+\node[head] at (L2.north west) {LECTURE II};
+\node[lec] (L3) at (-3.0,-3.3) {\textbf{Higher derivatives}\\ $D_1D_2f=D_2D_1f$, operators\\
+  Taylor with $(H\cdot\nabla)^r$};
+\node[head] at (L3.north west) {LECTURE III};
+\node[lec] (L5) at (3.0,-3.3) {\textbf{Derivatives of mappings}\\ Jacobian, $(G\circ F)'=G'F'$\\
+  inverse and implicit functions};
+\node[head] at (L5.north west) {LECTURE V};
+\node[lec, text width=5.6cm] (L4) at (0,-6.8) {\textbf{Maxima and minima}\\ $\nabla f=O$, quadratic form\\
+  regions, Lagrange $\nabla f=\lambda\nabla g$};
+\node[head] at (L4.north west) {LECTURE IV};
+\node[lec, text width=5.6cm, draw=coral, fill=blush!12] (L6) at (0,-10.2) {\textbf{Multiple integrals, change of variables}\\
+  Fubini, polar, cylindrical, spherical\\ $\iint f=\iint (f\circ G)\,|\det DG|$};
+\node[head, fill=coralD] at (L6.north west) {ANNEXE: LECTURES VI, VII};
+\draw[arr] (L1.east) -- node[lab, above=3pt]{compose} (L2.west);
+\draw[arr] (L1.south) -- node[lab, right=2pt]{differentiate again} ([yshift=0.4cm]L3.north);
+\draw[arr] (L2.south) -- node[lab, left=2pt]{vector outputs} ([yshift=0.4cm]L5.north);
+\draw[arr] (L3.south) -- ++(0,-0.7) -| node[lab, pos=0.25, above]{quadratic term} ([xshift=-1.5cm,yshift=0.4cm]L4.north);
+\draw[arrd] (L5.south) -- ++(0,-0.7) -| node[lab, text=tealD, pos=0.25, above]{why Lagrange works} ([xshift=1.5cm,yshift=0.4cm]L4.north);
+\draw[arr] (L4.south) -- node[lab, right=2pt]{regions and Jacobians} ([yshift=0.4cm]L6.north);
+\end{tikzpicture}
+\end{center}
+
+\begin{remember}
+Every chapter answers one question about
+$\displaystyle f(P+H)\approx f(P)+\underbrace{\nabla f(P)\cdot H}_{\text{I, II, V}}+\underbrace{\tfrac12(H\cdot\nabla)^2f(P)}_{\text{III, IV}}$.
+The linear term gives slopes, tangent planes and steepest directions; the quadratic term
+decides whether a flat point is a top, a bottom or a saddle.
+\end{remember}
+
+\clearpage
+\section*{Answer templates}
+
+The exam rewards a clear structure. These are the skeletons of the five most common long
+questions; each chapter shows them filled in.
+
+\begin{method}
+\textbf{1. ``Is $f$ differentiable at $O$?''}\\
+(a) Continuity at $O$: squeeze, or two paths with different limits (then stop: not differentiable).\\
+(b) Partials at $O$ from the definition, e.g.\ $f_x(0,0)=\lim_{h\to0}\frac{f(h,0)-f(0,0)}{h}$.\\
+(c) Remainder $R(H)=f(H)-f(O)-\grad f(O)\cdot H$.\\
+(d) Bound $|R(H)|/\norm H$ by something $\to0$ (or find a path where it does not).\\
+(e) Conclude with a sentence.
+\end{method}
+
+\begin{method}
+\textbf{2. ``Find and classify the critical points.''}\\
+(a) Solve $f_x=f_y=0$ (factor, split into cases, never divide by zero).\\
+(b) $A=f_{xx}$, $B=f_{xy}$, $C=f_{yy}$ at each point, $\delta=AC-B^2$.\\
+(c) Table: point, $A$, $\delta$, nature, value of $f$.
+\end{method}
+
+\begin{method}
+\textbf{3. ``Absolute extrema on a region.''}\\
+(a) Existence: closed, bounded, $f$ continuous. (b) Interior critical points.\\
+(c) Each boundary piece parametrised, with endpoints and corners. (d) Compare all values.
+\end{method}
+
+\begin{method}
+\textbf{4. ``Extrema subject to $g=0$.''}\\
+(a) $\grad g\ne O$ on the constraint. (b) System $\grad f=\lambda\grad g$, $g=0$.\\
+(c) Cases, candidates. (d) Values, then max/min (justify existence if the constraint is closed and bounded).
+\end{method}
+
+\begin{method}
+\textbf{5. ``Tangent plane / directional derivative / implicit derivative.''}\\
+Write the surface as $F=c$; $N=\grad F(P)$; plane $N\cdot(X-P)=0$. Directional derivative: normalise
+first. Implicit: check $f(a,b)=c$ and $f_y(a,b)\ne0$, then $\varphi'=-f_x/f_y$.
+\end{method}

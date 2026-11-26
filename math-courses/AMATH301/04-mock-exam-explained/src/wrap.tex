@@ -1,0 +1,111 @@
+% ============================== WRAP-UP ==============================
+\settab{WRAP-UP}{4}
+\renewcommand{\chapribbontext}{Summary}
+\chapter{The Whole Paper at a Glance}\label{ch:wrap}
+
+\section{Four things to know by heart}
+
+Almost every mark in this mock comes from one of these four statements. Write them from memory
+before the real exam, until you can do it without hesitating.
+
+\begin{defi}[Differentiability]
+$f$ is differentiable at an interior point $P$ if
+$\ f(P+H)=f(P)+\grad f(P)\cdot H+\norm H\,\varepsilon(H)$ with $\varepsilon(H)\to0$ as $H\to O$.
+\end{defi}
+
+\begin{thm}[The $C^1$ theorem]
+If $f_x$ and $f_y$ exist and are continuous on an open set $U$, then $f$ is differentiable at every point of $U$.
+\end{thm}
+
+\begin{thm}[Chain rule]
+If $X$ is differentiable at $t_0$ and $f$ is differentiable at $X(t_0)$, then
+$\ \frac{d}{dt}f(X(t))\big|_{t_0}=\grad f(X(t_0))\cdot X'(t_0)$. For $u=\varphi(r(x,y))$:
+$\ u_x=\varphi'(r)\,r_x$.
+\end{thm}
+
+\begin{thm}[Directional derivative]
+If $f$ is differentiable at $P$ and $\norm u=1$, then $D_uf(P)=\grad f(P)\cdot u=\norm{\grad f(P)}\cos\theta$.
+It is largest along $\grad f(P)$, smallest along $-\grad f(P)$, and zero along the level curve.
+\end{thm}
+
+\clearpage
+\section{What the marker looks for}
+
+The answers in this mock are short. The marks go to the justifications. Before you hand in, scan
+your copy for these:
+
+\begin{center}\small
+\begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}p{0.42\linewidth}Y@{}}\toprule
+\textsf{\textbf{\color{tealDD}When you\ldots}} & \textsf{\textbf{\color{tealDD}\ldots make sure you wrote}}\\ \midrule
+say a set is open or closed & the continuous function $g$ and the form $\{g>0\}$ or $\{g\ge0\}$; for ``not open'', one explicit point\\
+square an equation & that both sides are $\ge0$\\
+claim a function is differentiable & the open set, the partials, why they are continuous, ``by the $C^1$ theorem''\\
+claim a function is \emph{not} differentiable & the candidate $\grad f(P)$, the quotient $\varepsilon(H)$, one path where $\varepsilon\not\to0$\\
+use the chain rule & that $f$ is differentiable at the point where the curve is\\
+compute a directional derivative & the unit vector; and if $f$ might not be differentiable, the limit definition instead of $\grad f\cdot u$\\
+treat a function defined by cases & ``for $(x,y)\ne(0,0)$'' and ``at $(0,0)$'' as two separate paragraphs\\
+conclude ``constant'' from a zero derivative & that the domain is an interval\\
+give a limit at the origin & the cases (sign of a parameter) and the value when it exists\\ \bottomrule
+\end{tabularx}
+\end{center}
+
+\section{Every answer in one table}
+
+\begin{center}\small
+\renewcommand{\arraystretch}{1.35}
+\begin{tabularx}{\linewidth}{@{}l Y@{}}\toprule
+\textsf{\textbf{\color{tealDD}Q}} & \textsf{\textbf{\color{tealDD}Answer}}\\ \midrule
+\multicolumn{2}{@{}l}{\textsf{\textbf{\color{coralD}Problem 1}\quad $f=\sqrt{2y-x^2}$, $P=(1,1)$}}\\
+1.1 & $D=\{y\ge\frac{x^2}2\}$, closed, not open\\
+1.2 & $\varnothing$ if $c<0$; parabola $y=\frac{x^2}2$ if $c=0$; parabola $y=\frac{x^2+c^2}2$ if $c>0$\\
+1.3 & $C^1$ on $\{2y-x^2>0\}$; $f(P)=1$, $\grad f(P)=(-1,1)$, $L(x,y)=1-x+y$\\
+1.4 & plane $x-y+z=1$; normal line $(1+s,\,1-s,\,1+s)$, $s\in\R$\\
+1.5 & $1-4t-t^2=5-(t+2)^2>0$; derivative $-2$\\
+1.6 & $D_uf(P)=0$: $(1,1)$ is tangent to $C_1$, $\grad f(P)\perp(1,1)$\\
+1.7 & increase $\frac1{\sqrt2}(-1,1)$ at rate $\sqrt2$; decrease $\frac1{\sqrt2}(1,-1)$ at rate $-\sqrt2$\\
+\midrule
+\multicolumn{2}{@{}l}{\textsf{\textbf{\color{coralD}Problem 2}\quad $g=\frac{xy^2}{x^2+y^2}$, $g(O)=0$}}\\
+2.1 & $g_x=\frac{y^2(y^2-x^2)}{(x^2+y^2)^2}$, $g_y=\frac{2x^3y}{(x^2+y^2)^2}$; $g_x(O)=g_y(O)=0$\\
+2.2 & $|g|\le|x|\to0$: continuous on $\R^2$\\
+2.3 & $D_vg(O)=ab^2$\\
+2.4 & not differentiable: $\varepsilon(t,t)=\frac1{2\sqrt2}\not\to0$\\
+2.5 & $g_x(0,y)=1\not\to0$: $g_x$ not continuous at $O$, $g\notin C^1(\R^2)$\\
+\midrule
+\multicolumn{2}{@{}l}{\textsf{\textbf{\color{coralD}Problem 3}\quad $u=\varphi(r)$ on $\Omega$}}\\
+3.1 & $u_x=\varphi'\frac xr$, $u_{xx}=\varphi''\frac{x^2}{r^2}+\varphi'\frac{y^2}{r^3}$ (and symmetric)\\
+3.2 & $\Delta u=\varphi''+\frac1r\varphi'$\\
+3.3 & $\Delta\ln r=0$; limit $-\infty$\\
+3.4 & $(r\varphi')'=0$, so $r\varphi'=A$\\
+3.5 & $u=A\ln\sqrt{x^2+y^2}+B$\\
+3.6 & finite limit iff $A=0$; the limit is $B$\\ \bottomrule
+\end{tabularx}
+\end{center}
+
+\clearpage
+\section{Your two sittings}
+
+Tick a box when you get the answer \emph{with its justification}, from blank paper, without looking.
+The second column is for the sitting two days later. Anything still empty after the second sitting
+is what you reread on the last evening.
+
+\begin{center}\small
+\renewcommand{\arraystretch}{1.5}
+\newcommand{\bx}{\tikz\draw[tealD, line width=0.6pt, rounded corners=0.6pt] (0,0) rectangle (0.32,0.32);}
+\begin{tabular}{@{}l c c @{\hspace{1.4cm}} l c c @{\hspace{1.4cm}} l c c@{}}\toprule
+\multicolumn{3}{@{}l}{\textsf{\textbf{\color{coralD}Problem 1}}} & \multicolumn{3}{l}{\textsf{\textbf{\color{coralD}Problem 2}}} & \multicolumn{3}{l@{}}{\textsf{\textbf{\color{coralD}Problem 3}}}\\
+ & \textsf{\scriptsize 1st} & \textsf{\scriptsize 2nd} & & \textsf{\scriptsize 1st} & \textsf{\scriptsize 2nd} & & \textsf{\scriptsize 1st} & \textsf{\scriptsize 2nd}\\ \midrule
+1.1 & \bx & \bx & 2.1 & \bx & \bx & 3.1 & \bx & \bx\\
+1.2 & \bx & \bx & 2.2 & \bx & \bx & 3.2 & \bx & \bx\\
+1.3 & \bx & \bx & 2.3 & \bx & \bx & 3.3 & \bx & \bx\\
+1.4 & \bx & \bx & 2.4 & \bx & \bx & 3.4 & \bx & \bx\\
+1.5 & \bx & \bx & 2.5 & \bx & \bx & 3.5 & \bx & \bx\\
+1.6 & \bx & \bx &     &     &     & 3.6 & \bx & \bx\\
+1.7 & \bx & \bx &     &     &     &     &     &    \\ \bottomrule
+\end{tabular}
+\end{center}
+
+\begin{remember}[title={The last evening}]
+Do not learn anything new. Reread the four boxes at the top of this chapter, the ``lesson'' box of
+any question you did not tick twice, and the ``What the marker looks for'' table. Then stop. You have
+already sat this paper twice: in the exam room, it is the third time.
+\end{remember}

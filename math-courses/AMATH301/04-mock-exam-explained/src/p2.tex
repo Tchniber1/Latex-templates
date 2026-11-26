@@ -1,0 +1,422 @@
+% ============================== PROBLEM 2 ============================
+\settab{PROBLEM 2}{2}
+\chapter[Problem 2: The Counterexample]{The Counterexample}\label{ch:p2}
+
+\begin{examnote}[title={Problem 2 \;·\; 7 points}]
+Define
+\[
+  g(x,y)=\begin{cases}\dfrac{xy^2}{x^2+y^2}, & (x,y)\ne(0,0),\\[6pt] 0, & (x,y)=(0,0).\end{cases}
+\]
+\end{examnote}
+
+\section{What this problem is about}
+
+The course has a chain of implications that you have seen many times:
+\[
+  g\in C^1\ \Longrightarrow\ g\ \text{differentiable}\ \Longrightarrow\
+  \begin{cases}g\ \text{continuous},\\ \text{all directional derivatives exist and } D_vg=\grad g\cdot v.\end{cases}
+\]
+None of these arrows can be reversed, and Problem 2 is a proof of that by example. The function
+$g$ will turn out to be continuous, to have a directional derivative in every direction, and still
+\emph{not} be differentiable at the origin. Every question is a step in that story.
+
+\begin{center}
+\begin{tikzpicture}[
+   bx/.style={draw=tealD, rounded corners=2mm, fill=ice!25, font=\sffamily\scriptsize,
+     inner sep=5pt, align=center, line width=0.7pt},
+   ok/.style={draw=tealD, fill=tealD, text=white, rounded corners=1mm, font=\sffamily\bfseries\tiny, inner sep=2pt},
+   no/.style={draw=coralD, fill=coralD, text=white, rounded corners=1mm, font=\sffamily\bfseries\tiny, inner sep=2pt},
+   arr/.style={-{Stealth[length=2.2mm]}, tealDD, line width=0.9pt}]
+  \node[bx] (c1) at (0,0) {$C^1$\\ (Q5)};
+  \node[bx] (d) at (3.3,0) {differentiable\\ at $O$ (Q4)};
+  \node[bx] (c) at (7.2,0.75) {continuous (Q2)};
+  \node[bx] (v) at (7.2,-0.75) {all $D_vg(O)$ exist (Q3)};
+  \draw[arr] (c1) -- (d);
+  \draw[arr] (d.east) -- (c.west);
+  \draw[arr] (d.east) -- (v.west);
+  \node[no, anchor=south] at (c1.north) {NO};
+  \node[no, anchor=south] at (d.north) {NO};
+  \node[ok, anchor=west] at (c.east) {YES};
+  \node[ok, anchor=west] at (v.east) {YES};
+\end{tikzpicture}
+\figcap{What Problem 2 proves about $g$ at the origin. The arrows go only one way.}
+\end{center}
+
+\section{The one picture that explains everything}
+
+Write a point in polar coordinates, $x=r\cos\theta$, $y=r\sin\theta$ with $r>0$. Then
+\[
+  g(r\cos\theta,r\sin\theta)=\frac{r\cos\theta\cdot r^2\sin^2\theta}{r^2}=r\,\cos\theta\sin^2\theta .
+\]
+So along each ray leaving the origin (fixed $\theta$), $g$ is a \emph{straight line} in $r$, with slope
+$h(\theta)=\cos\theta\sin^2\theta$. The graph of $g$ is made entirely of straight lines through the
+origin, each with its own slope. It looks like a cone with a wavy edge.
+
+\begin{center}
+\begin{tikzpicture}
+\begin{axis}[bp3d, width=9.4cm, height=7.2cm, view={-40}{26}, xlabel=$x$, ylabel=$y$, zlabel=$z$,
+   xmin=-1.25, xmax=1.25, ymin=-1.25, ymax=1.25, zmin=-0.6, zmax=0.6]
+  \addplot3[gsurf, shader=interp, domain=0:1, y domain=0:360, samples=14, samples y=56,
+     point meta=z]
+     ({x*cos(y)},{x*sin(y)},{x*cos(y)*sin(y)^2});
+  \foreach \t in {0,35,70,110,145,180,215,250,290,325}{
+    \edef\tmp{\noexpand\addplot3[coralD, line width=0.9pt, domain=0:1, samples=2, samples y=1]
+      ({x*cos(\t)},{x*sin(\t)},{x*cos(\t)*sin(\t)^2});}\tmp}
+  \node[dot] at (axis cs:0,0,0) {};
+\end{axis}
+\end{tikzpicture}
+\figcap{The graph of $g$ over the unit disc. Every coral line is a ray from the origin, and on each
+one $g$ is linear. The slopes differ from ray to ray: $h(\theta)=\cos\theta\sin^2\theta$.}
+\end{center}
+
+Keep this formula next to you while reading. It predicts every answer:
+\begin{itemize}
+  \item $|g|=r\,|h(\theta)|\le r$, so $g\to0$ at the origin: \textbf{continuous}.
+  \item On each ray $g$ is a line through $0$ with slope $h(\theta)$: \textbf{every directional derivative exists}.
+  \item A plane through the origin would have slopes of the form $A\cos\theta+B\sin\theta$, and
+        $\cos\theta\sin^2\theta$ is not of that form: \textbf{not differentiable}.
+\end{itemize}
+On the exam you are asked to prove these things with the definitions, which is what the answers below
+do. The polar picture is how you \emph{know} what you are trying to prove.
+
+% -------------------------------------------------------------------
+\section{Question 1: the partial derivatives everywhere}
+
+\begin{question}{Problem 2 \;·\; partials}
+Compute $\dfrac{\partial g}{\partial x}$ and $\dfrac{\partial g}{\partial y}$ at every point of $\R^2$.
+\end{question}
+
+\begin{lesson}
+A function defined ``by cases'' has two kinds of points, and you treat them differently.
+
+\textbf{Away from the special point,} the formula $\frac{xy^2}{x^2+y^2}$ holds on a whole open
+neighbourhood, so you can differentiate it with the usual rules (quotient rule).
+
+\textbf{At the special point $(0,0)$,} the value is defined separately, so no formula applies. You
+must go back to the \textbf{definition} of a partial derivative:
+\[
+  g_x(0,0)=\lim_{h\to0}\frac{g(h,0)-g(0,0)}{h},\qquad g_y(0,0)=\lim_{k\to0}\frac{g(0,k)-g(0,0)}{k}.
+\]
+This two-case structure is the most common pattern in Lecture I exercises. Learn it as a reflex.
+\end{lesson}
+
+\begin{howto}
+Write ``For $(x,y)\ne(0,0)$:'' and use the quotient rule $\big(\frac uv\big)'=\frac{u'v-uv'}{v^2}$.
+Then write ``At $(0,0)$:'' and compute $g(h,0)$ and $g(0,k)$ first. Here both are $0$.
+\end{howto}
+
+\begin{answer}
+\textbf{For $(x,y)\ne(0,0)$.} With $u=xy^2$ and $v=x^2+y^2$:
+\[
+  \pd gx=\frac{y^2(x^2+y^2)-xy^2\cdot2x}{(x^2+y^2)^2}=\frac{y^2(y^2-x^2)}{(x^2+y^2)^2},
+\]
+\[
+  \pd gy=\frac{2xy\,(x^2+y^2)-xy^2\cdot2y}{(x^2+y^2)^2}=\frac{2x^3y}{(x^2+y^2)^2}.
+\]
+\textbf{At $(0,0)$.} For $h\ne0$, $g(h,0)=\frac{h\cdot0}{h^2}=0$, and for $k\ne0$, $g(0,k)=\frac{0}{k^2}=0$. So
+\[
+  g_x(0,0)=\lim_{h\to0}\frac{0-0}{h}=0,\qquad g_y(0,0)=\lim_{k\to0}\frac{0-0}{k}=0 .
+\]
+Hence both partial derivatives exist at every point of $\R^2$, and $\grad g(0,0)=(0,0)$.
+\end{answer}
+
+\mnote{Expand carefully: $y^2x^2+y^4-2x^2y^2=y^4-x^2y^2=y^2(y^2-x^2)$.}
+
+\begin{trap}
+\begin{itemize}
+  \item Plugging $(0,0)$ into the formula for $g_x$. You get $\frac00$, which means nothing. At the
+        origin, use the definition.
+  \item Concluding that the partials do not exist at $O$ because the formula breaks down there. They
+        do exist; they are both $0$.
+  \item Quotient rule sign: it is $u'v-uv'$, not $uv'-u'v$.
+\end{itemize}
+\end{trap}
+
+% -------------------------------------------------------------------
+\section{Question 2: continuity}
+
+\begin{question}{Problem 2 \;·\; continuity}
+Prove that $g$ is continuous on $\R^2$.
+\end{question}
+
+\begin{lesson}
+$g$ is continuous at $P$ if $\displaystyle\lim_{X\to P}g(X)=g(P)$.
+
+\textbf{Away from the origin:} sums, products and quotients of continuous functions are continuous
+wherever the denominator is nonzero. That settles every point except $O$.
+
+\textbf{At the origin:} to \emph{prove} a limit is $0$, find a bound
+\[
+  |g(x,y)-0|\le(\text{something that tends to }0).
+\]
+This is the squeeze (sandwich) principle. The standard inequalities from the course:
+\[
+  |x|\le\sqrt{x^2+y^2},\qquad |y|\le\sqrt{x^2+y^2},\qquad \frac{y^2}{x^2+y^2}\le1 .
+\]
+\end{lesson}
+
+\begin{intuition}
+Checking the limit along lines $y=mx$ can only ever \emph{disprove} continuity (two paths, two limits).
+It can never prove it, because there are infinitely many other ways to approach $O$ (parabolas,
+spirals). To prove continuity you need one inequality that works for all $(x,y)$ at once.
+\end{intuition}
+
+\begin{howto}
+Split into ``$(x,y)\ne(0,0)$'' and ``at $(0,0)$''. At the origin, isolate the fraction that is at
+most $1$: $\ |g|=|x|\cdot\frac{y^2}{x^2+y^2}$.
+\end{howto}
+
+\begin{answer}
+\textbf{On $\R^2\setminus\{(0,0)\}$:} $g$ is a quotient of polynomials whose denominator $x^2+y^2$
+does not vanish, so $g$ is continuous there.
+
+\textbf{At $(0,0)$:} for $(x,y)\ne(0,0)$, since $0\le y^2\le x^2+y^2$,
+\[
+  |g(x,y)-g(0,0)|=|x|\cdot\frac{y^2}{x^2+y^2}\le|x|\le\sqrt{x^2+y^2}\ \xrightarrow[(x,y)\to(0,0)]{}\ 0 .
+\]
+By the squeeze principle, $\displaystyle\lim_{(x,y)\to(0,0)}g(x,y)=0=g(0,0)$, so $g$ is continuous at
+the origin.
+
+Hence $g$ is continuous on $\R^2$.
+\end{answer}
+
+\begin{trap}
+\begin{itemize}
+  \item ``The limit along every line $y=mx$ is $0$, so $g$ is continuous.'' Not a proof. (Mock B in
+        the revision guide has a function where all lines give $0$ and a parabola gives $\frac12$.)
+  \item Forgetting the points away from the origin. ``Continuous on $\R^2$'' means at every point.
+  \item Writing the bound the wrong way round, like $\frac{y^2}{x^2+y^2}\ge1$. Check it with $x=0$.
+\end{itemize}
+\end{trap}
+
+% -------------------------------------------------------------------
+\section{Question 3: every directional derivative exists}
+
+\begin{question}{Problem 2 \;·\; directional derivatives}
+For a unit vector $v=(a,b)$, show that the directional derivative
+\[
+  D_vg(0,0)=\lim_{t\to0}\frac{g(ta,tb)-g(0,0)}{t}
+\]
+exists for every unit vector $v$.
+\end{question}
+
+\begin{lesson}
+The formula $D_vg=\grad g\cdot v$ is a \emph{consequence} of differentiability. Here we do not know
+whether $g$ is differentiable at $O$ (and in question 4 we will see it is not), so the formula is
+off limits. You must use the limit written in the question.
+
+``Exists'' means: compute the limit and show it is a finite number. A unit vector satisfies
+$a^2+b^2=1$, and you will need that.
+\end{lesson}
+
+\begin{howto}
+Compute $g(ta,tb)$ for $t\ne0$. Factor the powers of $t$ out of the numerator and the denominator.
+Use $a^2+b^2=1$. Divide by $t$.
+\end{howto}
+
+\begin{answer}
+Let $v=(a,b)$ with $a^2+b^2=1$. For $t\ne0$, $(ta,tb)\ne(0,0)$ and
+\[
+  g(ta,tb)=\frac{(ta)(tb)^2}{(ta)^2+(tb)^2}=\frac{t^3ab^2}{t^2(a^2+b^2)}=t\,ab^2 .
+\]
+Hence
+\[
+  \frac{g(ta,tb)-g(0,0)}{t}=\frac{t\,ab^2-0}{t}=ab^2\qquad\text{for every }t\ne0,
+\]
+so the limit as $t\to0$ exists and
+\[
+  \boxed{\,D_vg(0,0)=ab^2\,}.
+\]
+Check: $v=(1,0)$ gives $0=g_x(0,0)$, and $v=(0,1)$ gives $0=g_y(0,0)$, as in question 1.
+\end{answer}
+
+\begin{center}
+\begin{tikzpicture}
+\begin{axis}[bp, width=10cm, height=5cm, xmin=0, xmax=372, ymin=-0.5, ymax=0.55,
+   xlabel=$\theta$, ylabel={rate}, xtick={90,180,270,360},
+   xticklabels={$90^\circ$,$180^\circ$,$270^\circ$,$360^\circ$}, ytick={-0.385,0.385},
+   yticklabels={$-0.38$,$0.38$}, minor tick num=0]
+  \addplot[coralD, dashed, line width=1.1pt, domain=0:360] {0};
+  \addplot[tealD, line width=1.4pt, domain=0:360, samples=150] {cos(x)*sin(x)^2};
+  \node[pdot] at (axis cs:45,0.3536) {};
+  \node[font=\tiny, text=tealDD, anchor=south west] at (axis cs:47,0.36) {$v=\frac{(1,1)}{\sqrt2}$: $\frac1{2\sqrt2}$};
+  \node[font=\tiny, text=coralD, anchor=north, fill=white, inner sep=1pt] at (axis cs:215,-0.04) {what $\grad g(O)\cdot v$ would give: $0$};
+  \node[font=\tiny, text=tealD, anchor=south, fill=white, inner sep=1pt] at (axis cs:300,0.15) {true $D_vg(O)=\cos\theta\sin^2\theta$};
+\end{axis}
+\end{tikzpicture}
+\figcap{For $v=(\cos\theta,\sin\theta)$, the true directional derivative $ab^2=\cos\theta\sin^2\theta$
+(teal) against what the gradient formula would predict (dashed). They disagree, and that disagreement
+is the proof of question 4.}
+\end{center}
+
+\begin{trap}
+The big one: writing $D_vg(0,0)=\grad g(0,0)\cdot v=(0,0)\cdot(a,b)=0$. It looks natural and it is
+wrong. That formula only holds for differentiable functions, and $g$ is not. Here it would give $0$
+for every $v$, while the true answer is $ab^2$.
+\end{trap}
+
+% -------------------------------------------------------------------
+\section{Question 4: not differentiable at the origin}
+
+\begin{question}{Problem 2 \;·\; differentiability}
+Is $g$ differentiable at the origin? Justify your answer using the definition of differentiability.
+\end{question}
+
+\begin{lesson}
+\textbf{Definition.} $g$ is differentiable at $O$ if
+\[
+  g(H)=g(O)+\grad g(O)\cdot H+\norm H\,\varepsilon(H)\qquad\text{with }\varepsilon(H)\to0 .
+\]
+The vector in front of $H$ has no choice: if $g$ is differentiable, it must be the gradient
+(Lecture I). So you know the only candidate, $\grad g(O)=(0,0)$ from question 1, and the whole
+question reduces to one limit:
+\[
+  g\ \text{differentiable at }O\iff
+  \varepsilon(H)=\frac{g(H)-g(O)-\grad g(O)\cdot H}{\norm H}\ \longrightarrow\ 0 .
+\]
+\textbf{To prove it fails,} find one path along which $\varepsilon$ does not tend to $0$.
+\end{lesson}
+
+\begin{intuition}
+``Differentiable'' means: zoom in on the graph near the point and it looks more and more like a
+plane. Now zoom in on $g$: since $g(\lambda x,\lambda y)=\lambda\,g(x,y)$, zooming in by any factor gives
+\emph{exactly the same surface}, the wavy cone. It never flattens into a plane, no matter how far you
+zoom. That is why $g$ is not differentiable at $O$.
+\end{intuition}
+
+\begin{howto}
+Write the candidate: $\grad g(O)=(0,0)$. Write $\varepsilon(h,k)=\dfrac{g(h,k)}{\sqrt{h^2+k^2}}$.
+Try the diagonal $h=k=t$, $t>0$ (it is the direction where $ab^2$ was largest in question 3).
+\end{howto}
+
+\begin{answer}
+By question 1, $\grad g(0,0)=(0,0)$. If $g$ were differentiable at $O$, the definition would give,
+for $H=(h,k)\ne(0,0)$,
+\[
+  \varepsilon(h,k)=\frac{g(h,k)-g(0,0)-(0,0)\cdot(h,k)}{\sqrt{h^2+k^2}}
+  =\frac{hk^2}{(h^2+k^2)^{3/2}}\ \longrightarrow\ 0\quad\text{as }(h,k)\to(0,0).
+\]
+Take $h=k=t$ with $t>0$:
+\[
+  \varepsilon(t,t)=\frac{t^3}{(2t^2)^{3/2}}=\frac{t^3}{2\sqrt2\,t^3}=\frac1{2\sqrt2}\ne0 .
+\]
+So $\varepsilon(t,t)$ is constant and does not tend to $0$ as $t\to0^+$. Hence $g$ is
+\textbf{not differentiable} at the origin.
+
+\emph{Second argument (also valid).} If $g$ were differentiable at $O$, then $D_vg(O)=\grad g(O)\cdot v=0$
+for every unit $v$. But question 3 with $v=\frac1{\sqrt2}(1,1)$ gives $D_vg(O)=ab^2=\frac1{2\sqrt2}\ne0$.
+Contradiction.
+\end{answer}
+
+\begin{center}
+\begin{tikzpicture}
+\begin{axis}[width=6.4cm, height=6.4cm, view={0}{90}, axis equal image, axis lines=none,
+   colormap name=guidemap, colorbar, colorbar style={width=0.25cm, ytick={-0.38,0,0.38},
+   yticklabel style={font=\tiny, text=tealDD}}, point meta min=-0.385, point meta max=0.385]
+  \addplot3[surf, shader=flat, draw=none, domain=0.02:1, y domain=0:360, samples=12, samples y=120,
+     point meta={x*y^2/((x^2+y^2)^1.5)}] ({x*cos(y)},{x*sin(y)},{0});
+  \draw[white, line width=0.6pt] (axis cs:0,0,0) -- (axis cs:0.71,0.71,0);
+  \node[circle, fill=white, inner sep=1.2pt] at (axis cs:0,0,0) {};
+  \node[font=\scriptsize, text=tealDD, fill=white, inner sep=1.5pt, rounded corners=1pt, anchor=south west] at (axis cs:0.68,0.74,0) {$\varepsilon=\frac1{2\sqrt2}$ on this ray};
+\end{axis}
+\end{tikzpicture}
+\figcap{The ratio $\varepsilon=\frac{g(H)}{\norm H}$ over the unit disc. In polar form it is
+$\cos\theta\sin^2\theta$: constant along each ray. Going into the centre along the white diagonal it
+stays at $\frac1{2\sqrt2}$. For differentiability it would have to fade to $0$ at the centre.}
+\end{center}
+
+\begin{reallife}
+Think of the tip of a pointed roof or the apex of a cone. Walk straight over the apex in any
+direction and you go up and down at a perfectly definite slope: every directional derivative
+exists. But there is no tangent plane at the apex: no flat sheet of paper sits on it. Problem 2 is
+the mathematical version of that tip.
+\end{reallife}
+
+\begin{trap}
+\begin{itemize}
+  \item ``$g$ is continuous and its partials exist, so it is differentiable.'' This is exactly the
+        false reverse arrow the problem is built to break.
+  \item Using a candidate other than $\grad g(O)$ in the definition. The linear part must be the
+        gradient, which you computed in question 1.
+  \item Dividing by $\norm H^2$ instead of $\norm H$. The definition divides by the distance $\norm H$.
+  \item Testing only the axes. On the axes $\varepsilon=0$, which proves nothing. Choose a path where
+        both $h$ and $k$ move, like $h=k$.
+\end{itemize}
+\end{trap}
+
+% -------------------------------------------------------------------
+\section{Question 5: the partial $g_x$ is not continuous}
+
+\begin{question}{Problem 2 \;·\; class $C^1$}
+Is $g_x$ continuous at the origin? Justify your answer by examining the $y$-axis. Deduce whether
+$g\in C^1(\R^2)$.
+\end{question}
+
+\begin{lesson}
+\textbf{$C^1$} means: the partial derivatives exist \emph{and are continuous}. The $C^1$ theorem
+says $C^1\Rightarrow$ differentiable. So the contrapositive is: \emph{not differentiable $\Rightarrow$ not $C^1$}.
+
+To show that a function (here $g_x$) is \emph{not} continuous at $O$, one path is enough: find a way
+of approaching $O$ along which $g_x$ tends to something other than $g_x(0,0)$.
+\end{lesson}
+
+\begin{howto}
+Take the formula for $g_x$ from question 1 and put $x=0$, $y\ne0$. Compare with $g_x(0,0)=0$.
+\end{howto}
+
+\begin{answer}
+On the $y$-axis, at $(0,y)$ with $y\ne0$, the formula of question 1 gives
+\[
+  g_x(0,y)=\frac{y^2(y^2-0)}{(0+y^2)^2}=\frac{y^4}{y^4}=1 .
+\]
+So $g_x(0,y)\to1$ as $y\to0$, while $g_x(0,0)=0$. Since $1\ne0$, $g_x$ is \textbf{not continuous}
+at the origin.
+
+Therefore $g$ is \textbf{not of class $C^1$} on $\R^2$ (its partial $g_x$ is not continuous at $O$).
+This agrees with question 4: if $g$ were $C^1$, the $C^1$ theorem would make it differentiable at
+$O$, which it is not.
+\end{answer}
+
+\begin{center}
+\begin{tikzpicture}
+\begin{axis}[bp, width=9cm, height=4.8cm, xmin=-1.1, xmax=1.15, ymin=-0.35, ymax=1.45,
+   xlabel={$s$}, ylabel={}, xtick={-1,1}, ytick={1}, minor tick num=0]
+  \addplot[tealD, line width=1.5pt, domain=-1:-0.02] {1};
+  \addplot[tealD, line width=1.5pt, domain=0.02:1] {1};
+  \addplot[coralD, line width=1.5pt, domain=-1:1] {0.004};
+  \node[odot] at (axis cs:0,1) {};
+  \node[dot] at (axis cs:0,0) {};
+  \node[font=\scriptsize, text=tealD, anchor=south] at (axis cs:0.55,1.03) {$g_x(0,s)=1$ (along the $y$-axis)};
+  \node[font=\scriptsize, text=coralD, anchor=north] at (axis cs:0.55,-0.03) {$g_x(s,0)=0$ (along the $x$-axis)};
+  \node[font=\scriptsize, text=coralD, anchor=north east] at (axis cs:-0.03,-0.03) {$g_x(0,0)=0$};
+\end{axis}
+\end{tikzpicture}
+\figcap{Approach the origin along the $y$-axis and $g_x$ stays at $1$; along the $x$-axis it stays at
+$0$. Two paths, two limits: $g_x$ has no limit at $O$.}
+\end{center}
+
+\begin{intuition}
+In polar coordinates, $g_x=\sin^2\theta\,(\sin^2\theta-\cos^2\theta)$: it depends only on the angle, not
+on the distance. So on every small circle around $O$, however tiny, $g_x$ takes every value between
+$-\frac18$ and $1$. It cannot settle down to one value at the centre.
+\end{intuition}
+
+\begin{trap}
+The order of the logic matters. A discontinuous partial derivative does \emph{not}, on its own,
+prove that a function is not differentiable (there are differentiable functions whose partials are
+not continuous). The correct chain here is: question 4 shows $g$ is not differentiable at $O$
+(definition); question 5 shows $g_x$ is not continuous, hence $g$ is not $C^1$. Do not write
+``$g_x$ is not continuous, therefore $g$ is not differentiable''.
+\end{trap}
+
+\section{Problem 2 in five lines}
+
+\begin{remember}[unbreakable]
+\begin{enumerate}
+  \item $g_x=\frac{y^2(y^2-x^2)}{(x^2+y^2)^2}$, $g_y=\frac{2x^3y}{(x^2+y^2)^2}$ off the origin; at $O$, by the definition, $g_x=g_y=0$.
+  \item $|g|\le|x|\cdot\frac{y^2}{x^2+y^2}\le|x|\to0$: continuous everywhere.
+  \item $g(ta,tb)=t\,ab^2$, so $D_vg(O)=ab^2$ exists for every unit $v$. Never use $\grad g\cdot v$ here.
+  \item $\varepsilon(t,t)=\frac1{2\sqrt2}\not\to0$: not differentiable at $O$.
+  \item $g_x(0,y)=1\not\to0$: $g_x$ not continuous, $g\notin C^1$.
+\end{enumerate}
+\end{remember}

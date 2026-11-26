@@ -1,0 +1,92 @@
+% ============================== COVER ================================
+\begin{titlepage}
+\thispagestyle{empty}
+\begin{tikzpicture}[remember picture,overlay]
+  \fill[covernight] (current page.south west) rectangle (current page.north east);
+  \draw[white, opacity=0.05, line width=0.3pt, step=5mm]
+    (current page.south west) grid (current page.north east);
+  \draw[white, opacity=0.10, line width=0.5pt, step=2.5cm]
+    (current page.south west) grid (current page.north east);
+  % plum band at the top
+  \fill[plum] (current page.north west) rectangle ([yshift=-0.55cm]current page.north east);
+  \fill[coral] ([yshift=-0.55cm]current page.north west) rectangle ([yshift=-0.7cm]current page.north east);
+  % course tag
+  \node[anchor=north west, draw=coral, line width=0.9pt, text=coral,
+        font=\small\bfseries\scshape, inner sep=5pt]
+     at ([xshift=2.1cm,yshift=-2.1cm]current page.north west) {AMATH301};
+  \node[anchor=north west, text=white!75!plum, font=\small\scshape]
+     at ([xshift=4.6cm,yshift=-2.22cm]current page.north west)
+     {University Mohammed VI Polytechnic \quad Fall 2026};
+  % title
+  \node[anchor=north west, text=white, font=\fontsize{46}{50}\selectfont\scshape,
+        align=left, text width=17cm]
+     at ([xshift=2.0cm,yshift=-3.3cm]current page.north west)
+     {Multivariate\\[-2pt]Calculus};
+  \node[anchor=north west, text=peach, font=\Large\itshape, align=left, text width=16cm]
+     at ([xshift=2.1cm,yshift=-6.75cm]current page.north west)
+     {An illustrated companion: theory, proofs, pictures and exam practice};
+  % bottom strip with name
+  \fill[plum] (current page.south west) rectangle ([yshift=3.3cm]current page.south east);
+  \fill[coral] ([yshift=3.3cm]current page.south west) rectangle ([yshift=3.45cm]current page.south east);
+  \node[anchor=south west, text=white, font=\LARGE\scshape]
+     at ([xshift=2.1cm,yshift=1.75cm]current page.south west) {Taha Chniber};
+  \node[anchor=south west, text=white!75!plum, font=\normalsize\scshape]
+     at ([xshift=2.1cm,yshift=1.05cm]current page.south west)
+     {UM6P \;\textcolor{coral}{/}\; School of Applied Science and Engineering};
+  \node[anchor=south east, text=white!75!plum, font=\normalsize\scshape, align=right]
+     at ([xshift=-2.1cm,yshift=1.8cm]current page.south east) {Lectures I to V};
+  % hero surface
+  \node[anchor=center] at ([yshift=-1.3cm]current page.center) {%
+  \begin{tikzpicture}
+  \begin{axis}[
+     width=19.5cm, height=16cm,
+     view={-38}{26},
+     axis lines=none,
+     colormap name=plumcoralcover,
+     domain=-2:2, y domain=-2:2,
+     zmin=-6.5, zmax=4.5,
+     clip=false,
+  ]
+   % contour shadow on the floor
+   \foreach \c/\T in {0.5/1.7000,1.5/1.0730,2.5/0.7127} {
+     \edef\tmp{%
+     \noexpand\addplot3[cyanbp, opacity=0.8, line width=0.7pt, samples=40, samples y=1,
+        domain=-\T:\T]
+        ({sqrt(\c)*cosh(x)}, {sqrt(\c)*sinh(x)}, -6.5);
+     \noexpand\addplot3[cyanbp, opacity=0.8, line width=0.7pt, samples=40, samples y=1,
+        domain=-\T:\T]
+        ({-sqrt(\c)*cosh(x)}, {sqrt(\c)*sinh(x)}, -6.5);
+     \noexpand\addplot3[coral, opacity=0.8, line width=0.7pt, samples=40, samples y=1,
+        domain=-\T:\T]
+        ({sqrt(\c)*sinh(x)}, {sqrt(\c)*cosh(x)}, -6.5);
+     \noexpand\addplot3[coral, opacity=0.8, line width=0.7pt, samples=40, samples y=1,
+        domain=-\T:\T]
+        ({sqrt(\c)*sinh(x)}, {-sqrt(\c)*cosh(x)}, -6.5);}
+     \tmp }
+   \addplot3[white, opacity=0.5, line width=0.6pt, dashed, samples=2, samples y=1, domain=-2:2] (x,x,-6.5);
+   \addplot3[white, opacity=0.5, line width=0.6pt, dashed, samples=2, samples y=1, domain=-2:2] (x,-x,-6.5);
+   % floor grid
+   \foreach \t in {-2,-1.5,...,2} {
+     \edef\tmp{\noexpand\addplot3[white, opacity=0.13, line width=0.3pt, samples=2, domain=-2:2]
+        (\t, x, -6.5);
+        \noexpand\addplot3[white, opacity=0.13, line width=0.3pt, samples=2, domain=-2:2]
+        (x, \t, -6.5);}
+     \tmp
+   }
+   % the saddle
+   \addplot3[surf, shader=faceted interp, faceted color=white!60!plum,
+       line width=0.15pt, samples=34, opacity=0.97] {x^2-y^2};
+   % gradient arrows lifted onto the surface
+   \addplot3[-{Stealth[length=2.2mm]}, cyanbp!60!white, line width=1.0pt,
+       quiver={u={0.09*2*x}, v={0.09*(-2*y)}, w={0.09*(4*x^2+4*y^2)}},
+       samples=7, domain=-1.75:1.75, y domain=-1.75:1.75]
+       (x, y, {x^2-y^2+0.04});
+   % saddle point
+   \addplot3[only marks, mark=*, mark size=3pt, color=white] coordinates {(0,0,0)};
+  \end{axis}
+  \end{tikzpicture}};
+  \node[text=white!70!plum, font=\footnotesize\itshape, anchor=east]
+     at ([xshift=-2.1cm,yshift=4.2cm]current page.south east)
+     {$z=x^2-y^2$ \;with its gradient field and level curves};
+\end{tikzpicture}
+\end{titlepage}

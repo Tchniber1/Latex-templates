@@ -1,0 +1,89 @@
+% ============================== FORMULA SHEET ========================
+\clearpage
+\setlecture{Appendix B}\renewcommand{\tabname}{B}
+\chapter{Formula Sheet}\label{app:formulas}
+
+\newtcolorbox{fsheet}[1]{corners=plum, colback=plumtint, title={#1}, unbreakable,
+  left=5pt, right=5pt, top=2pt, bottom=3pt, fontupper=\footnotesize\raggedright, fonttitle=\small\scshape\bfseries}
+\begin{tcbraster}[raster columns=2, raster equal height=rows, raster column skip=4mm, raster row skip=4mm]
+\begin{fsheet}{1. Basics}
+Domain: \emph{denominators $\neq0$, even roots $\ge0$, $\log>0$.}\\
+Level curve: $\{f(x,y)=c\}$; close curves $=$ steep.\\
+Open: every $P\in U$ has a ball $\norm{X-P}<a$ in $U$.\\
+$D_if(X)=\lim\limits_{h\to0}\dfrac{f(X+hE_i)-f(X)}{h}$\\[2pt]
+$\grad f=(D_1f,\dots,D_nf)$
+\end{fsheet}
+\begin{fsheet}{2. Differentiability}
+$f(X+H)-f(X)=\grad f(X)\cdot H+\norm H\,g(H)$, $g\to0$\\[2pt]
+$C^1\Rightarrow$ differentiable $\Rightarrow$ continuous and partials exist.\\
+Tools: $\abs h,\abs k\le\norm H$;\\ $hg_1+kg_2=\norm H\,g$ with $g\to0$.\\
+Counterexample: $\dfrac{xy}{x^2+y^2}$ (partials exist, not continuous).
+\end{fsheet}
+\begin{fsheet}{3. Chain rule}
+$\dfrac{d}{dt}f(X(t))=\grad f(X(t))\cdot X'(t)=\sum_i f_{x_i}\dfrac{dx_i}{dt}$\\[3pt]
+$g(t,u)=f(x(t,u),y(t,u))$:\\ $g_t=f_xx_t+f_yy_t$, \ $g_u=f_xx_u+f_yy_u$\\[2pt]
+$\grad\big(g\circ h\big)=g'(h)\grad h$
+\end{fsheet}
+\begin{fsheet}{4. Tangent planes}
+Level surface $f=c$ at $P$: $(X-P)\cdot\grad f(P)=0$\\[2pt]
+Graph $z=g(x,y)$ at $(a,b)$:\\
+$z=g+g_x(x-a)+g_y(y-b)$\\
+$\grad f\perp$ level curves and surfaces.
+\end{fsheet}
+\begin{fsheet}{5. Directional derivative}
+$D_Af(P)=\grad f(P)\cdot A$, \ $\norm A=1$ (normalise!)\\
+$D_Af=\norm{\grad f}\cos\theta\in\big[-\norm{\grad f},\norm{\grad f}\big]$\\
+Steepest ascent: $\grad f/\norm{\grad f}$, rate $\norm{\grad f}$.
+\end{fsheet}
+\begin{fsheet}{6. Energy}
+$F=-\grad\Phi$ (conservative), $mX''=F(X)$\\
+$\tfrac12m\norm{X'}^2+\Phi(X)=$ const.\\
+Spring $\Phi=\tfrac12kx^2$; $\grad\frac1r=-\frac{X}{r^3}$;\\ $F=C\frac{X}{r^3}\Rightarrow\Phi=\frac Cr$.
+\end{fsheet}
+\begin{fsheet}{7. Higher derivatives}
+$C^2\Rightarrow D_1D_2f=D_2D_1f$\\
+$\left(\pd{}{x}\right)^2f\neq\left(\pd fx\right)^2$\\
+Operators multiply like polynomials.\\
+$D_1^rD_2^s(x^iy^j)(0,0)=i!\,j!$ if $(r,s)=(i,j)$, else $0$.
+\end{fsheet}
+\begin{fsheet}{8. Taylor}
+$g(t)=f(P+tH)$: $g^{(r)}(t)=(H\cdot\grad)^rf(P+tH)$\\[2pt]
+$f(P+H)=\sum\limits_{s=0}^{r-1}\dfrac{(H\cdot\grad)^sf(P)}{s!}+\dfrac{(H\cdot\grad)^rf(P+\tau H)}{r!}$\\[3pt]
+Order 2: $f+f_xh+f_yk+\tfrac12(f_{xx}h^2+2f_{xy}hk+f_{yy}k^2)$\\
+At $O$: $c_{ij}=\dfrac{D_1^iD_2^jf(0,0)}{i!\,j!}$
+\end{fsheet}
+\begin{fsheet}{9. Extrema}
+Critical point: $\grad f(P)=O$.\\
+$A=f_{xx}$, $B=f_{xy}$, $C=f_{yy}$, $\delta=AC-B^2$:\\
+$\delta>0,A>0$ min; $\delta>0,A<0$ max;\\ $\delta<0$ saddle; $\delta=0$ ?\\
+Closed $+$ bounded $+$ continuous $\Rightarrow$ max and min exist.\\
+Region: interior critical points, boundary, compare.
+\end{fsheet}
+\begin{fsheet}{10. Lagrange}
+Extremum of $f$ on $g=0$ with $\grad g\neq O$:\\
+$\grad f=\lambda\grad g$, \ $g=0$.\\
+Solve by cases; never divide by something that may be $0$; compare values.
+\end{fsheet}
+\begin{fsheet}{11. Jacobian}
+$F(P+H)=F(P)+F'(P)H+o(H)$, $F'(P)$ unique.\\
+$J_F=\left(\pd{f_i}{x_j}\right)$ ($m\times n$), rows $=\grad f_i$.\\
+$df=\sum f_{x_i}dx_i$, \ $dx=J_F\,du$\\
+$dV_x=\abs{\det J_F}\,dV_u$; polar: $dA=r\,dr\,d\theta$\\
+spherical: $\rho^2\sin\varphi\,d\rho\,d\varphi\,d\theta$
+\end{fsheet}
+\begin{fsheet}{12. Chain rule, inverse, implicit}
+$J_{G\circ F}(X)=J_G(F(X))\,J_F(X)$\\
+$\Delta_F(P)\neq0\Rightarrow$ locally invertible; $J_{F^{-1}}(F(X))=J_F(X)^{-1}$\\
+$f(a,b)=c$, $D_2f(a,b)\neq0\Rightarrow y=\varphi(x)$ near $a$,\\
+$\varphi'(x)=-\dfrac{D_1f}{D_2f}$
+\end{fsheet}
+\end{tcbraster}
+
+\begin{trap}
+The ten most expensive mistakes: forgetting to normalise the direction; writing
+$\grad(f(P))$ for $(\grad f)(P)$; dropping the factor $2$ on $hk$ in Taylor; concluding from
+$\delta=0$; forgetting the boundary in region problems; dividing by a variable that may be zero in
+Lagrange systems; using $\partial f/\partial x$ when $x$ is already an outer variable; testing a limit
+only along lines; multiplying Jacobians in the wrong order (outer map on the left); and claiming
+``partials exist, so differentiable''.
+\end{trap}

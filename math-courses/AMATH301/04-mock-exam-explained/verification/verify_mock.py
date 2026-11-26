@@ -1,0 +1,16 @@
+import sympy as sp
+x,y,t,a,b,r=sp.symbols('x y t a b r',real=True)
+f=sp.sqrt(2*y-x**2); P={x:1,y:1}
+fx,fy=f.diff(x),f.diff(y); print('P1 f(P)',f.subs(P),'grad',fx.subs(P),fy.subs(P))
+print('expr',sp.expand(2*(1-t)-(1+t)**2), sp.solve(1-4*t-t**2,t))
+h=f.subs({x:1+t,y:1-t}); print('d/dt',sp.simplify(h.diff(t).subs(t,0)))
+print('Du',(fx+fy).subs(P)/sp.sqrt(2),'norm',sp.sqrt(fx.subs(P)**2+fy.subs(P)**2))
+g=x*y**2/(x**2+y**2)
+gx=sp.factor(g.diff(x)); gy=sp.factor(g.diff(y)); print('P2 gx',gx,'gy',gy)
+print('Dv',sp.simplify(g.subs({x:t*a,y:t*b})/t))
+print('gx on y-axis',sp.simplify(gx.subs(x,0)))
+print('R/|H| on h=k',sp.simplify((g/sp.sqrt(x**2+y**2)).subs(y,x).subs(x,t)), sp.N(1/(2*sp.sqrt(2))))
+phi=sp.Function('phi'); R=sp.sqrt(x**2+y**2); u=phi(R)
+lap=sp.simplify(u.diff(x,2)+u.diff(y,2)); print('lap',lap)
+v=sp.log(R); print('lap ln',sp.simplify(v.diff(x,2)+v.diff(y,2)))
+A,B=sp.symbols('A B'); print('ode',sp.dsolve(phi(r).diff(r,2)+phi(r).diff(r)/r,phi(r)))

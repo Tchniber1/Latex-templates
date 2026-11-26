@@ -1,0 +1,339 @@
+% ============================== CHAPTER 2 ============================
+\settab{LECTURE II}{2}
+\chapter[The Chain Rule and the Gradient]{The Chain Rule\\ and the Gradient}\label{ch:two}
+
+\begin{examnote}
+This is the most ``computational'' lecture and the one the quiz tests most (Q21 to Q40).
+Expect: a chain rule along a curve, partials of a composite with careful variable names, a
+tangent plane, a directional derivative (with normalisation!), the direction of steepest
+ascent, and a potential or energy question.
+\end{examnote}
+
+\section{The chain rule}
+
+\begin{intuition}
+A drone flies through a room where the temperature varies. Its thermometer records
+$T(X(t))$. How fast does the reading change? It depends on how temperature varies in space
+($\grad T$) and how the drone moves ($X'$). Change travels along paths: multiply the rates
+along each path from $t$ to $f$, then add the paths.
+\end{intuition}
+
+\begin{center}
+\begin{tikzpicture}[v/.style={circle, draw=tealD, line width=1pt, fill=mist, minimum size=0.9cm, font=\small},
+  e/.style={-{Stealth[length=2.3mm]}, line width=1.1pt}, lb/.style={font=\scriptsize, fill=white, inner sep=1.5pt}]
+  \node[v] (t) at (0,0) {$t$};
+  \node[v] (x) at (3.2,1) {$x(t)$};
+  \node[v] (y) at (3.2,-1) {$y(t)$};
+  \node[v, draw=coral, fill=blush!20] (f) at (6.4,0) {$f$};
+  \draw[e, aqua] (t) -- node[lb, above left]{$\frac{dx}{dt}$} (x);
+  \draw[e, aqua] (t) -- node[lb, below left]{$\frac{dy}{dt}$} (y);
+  \draw[e, coral] (x) -- node[lb, above right]{$\frac{\partial f}{\partial x}$} (f);
+  \draw[e, coral] (y) -- node[lb, below right]{$\frac{\partial f}{\partial y}$} (f);
+\end{tikzpicture}
+\[
+\frac{d}{dt}f(X(t))=\grad f(X(t))\cdot X'(t)=\pd fx\frac{dx}{dt}+\pd fy\frac{dy}{dt}.
+\]
+\end{center}
+
+\begin{thm}[Chain rule]
+If $f$ is differentiable on an open set $U$ and $X:I\to U$ is a differentiable curve, then
+$\dfrac{d}{dt}f(X(t))=\grad f(X(t))\cdot X'(t)$. For $g(t,u)=f(x(t,u),y(t,u))$:
+\[ g_t=f_x\,x_t+f_y\,y_t,\qquad g_u=f_x\,x_u+f_y\,y_u, \]
+with $f_x,f_y$ evaluated at the inner point $(x(t,u),y(t,u))$.
+\end{thm}
+
+\begin{intuition}
+Proof idea: differentiability says $f$ changes by about $\grad f\cdot K$ when the input
+moves by $K$. Along the curve, $K=X(t+h)-X(t)\approx hX'(t)$. Divide by $h$; the error
+term vanishes in the limit.
+\end{intuition}
+
+\begin{method}
+\textbf{Chain rule along a curve.} (1) Compute $\grad f(x,y)$ and $X'(t)$.
+(2) Evaluate $\grad f$ \emph{at $X(t)$}. (3) Dot product. (4) Check by substituting first.
+
+\textbf{Composite partials.} Draw the dependency tree, one term per path. If the outer
+variables already use the letters $x,y$, rename the slots of $f$ ($s,t$) or write
+$D_1f,D_2f$, and say where they are evaluated.
+\end{method}
+
+\begin{trap}
+In $u=f(x^2-y,xy)$, writing ``$\partial f/\partial x$'' for the derivative of $f$ in its
+first slot is ambiguous and loses marks. Use $f_s,f_t$ or $D_1f,D_2f$ evaluated at
+$(x^2-y,xy)$ (quiz Q28).
+\end{trap}
+
+\section{Tangent planes and the geometry of the gradient}
+
+If a curve $X(t)$ stays on the level set $f=c$, then $f(X(t))=c$ and the chain rule gives
+$\grad f(X(t))\cdot X'(t)=0$. Every tangent direction is perpendicular to the gradient.
+
+\begin{thm}[Gradient is normal to level sets]
+If $\grad f(P)\ne O$, the tangent plane to $f=c$ at $P$ is $\grad f(P)\cdot(X-P)=0$, and
+the normal line is $X=P+s\grad f(P)$. For a graph $z=g(x,y)$ at $(a,b)$:
+\[ z=g(a,b)+g_x(a,b)(x-a)+g_y(a,b)(y-b). \]
+\end{thm}
+
+\begin{center}
+\begin{tikzpicture}
+\begin{axis}[bp, width=6cm, height=5.3cm, xmin=-0.2, xmax=3.6, ymin=-0.2, ymax=3.0,
+   xtick=\empty, ytick=\empty, xlabel=$x$, ylabel=$y$]
+  \foreach \c in {1.5,3,4.5} {\edef\tmp{\noexpand\addplot[tealD!55, domain=0.25:3.5, samples=60] {\c/x};}\tmp}
+  \addplot[tealD, line width=1.6pt, domain=0.6:3.5, samples=60] {3/x};
+  \addplot[aqua, dashed, line width=1pt, domain=0.6:3.0] {-1.3333*(x-1.5)+2};
+  \draw[vec] (axis cs:1.5,2) -- (axis cs:2.3,2.6) node[right, font=\small]{$\nabla f(P)$};
+  \node[dot] at (axis cs:1.5,2) {};
+  \node[font=\small, below left, text=tealDD] at (axis cs:1.5,2) {$P$};
+\end{axis}
+\end{tikzpicture}\hspace{3mm}
+\begin{tikzpicture}
+\begin{axis}[bp3d, width=6.6cm, height=6cm, xlabel=$x$, ylabel=$y$, zlabel=$z$,
+   xmin=-0.5, xmax=2.4, ymin=-0.5, ymax=2.4, zmin=-1, zmax=8.5, view={-48}{20}]
+  \addplot3[gsurf, domain=0:2, y domain=0:2, samples=14, opacity=0.85, fill opacity=0.85] {x^2+y^2};
+  \addplot3[surf, shader=flat, draw=coralD, fill=coral, fill opacity=0.35, draw opacity=0.8,
+     domain=0.35:1.65, y domain=0.35:1.65, samples=5] {2*x+2*y-2};
+  \addplot3[only marks, mark=*, mark size=2.6pt, coralD] coordinates {(1,1,2)};
+\end{axis}
+\end{tikzpicture}
+\figcap{Left: $\nabla f$ crosses the level curve of $f=xy$ at a right angle. Right: the
+tangent plane $z=2x+2y-2$ to $z=x^2+y^2$ at $(1,1,2)$.}
+\end{center}
+
+\section{Directional derivative and steepest ascent}
+
+\begin{defi}[Directional derivative]
+For a \emph{unit} vector $A$: $D_Af(P)=\dfrac{d}{dt}f(P+tA)\Big|_{t=0}=\grad f(P)\cdot A$.
+\end{defi}
+
+\begin{thm}[Meaning of the gradient]
+If $\grad f(P)\ne O$ and $\theta$ is the angle between $A$ and $\grad f(P)$, then
+$D_Af(P)=\norm{\grad f(P)}\cos\theta$. So $f$ increases fastest in the direction
+$\grad f/\norm{\grad f}$, at rate $\norm{\grad f(P)}$; decreases fastest along $-\grad f$;
+and does not change to first order along the level curve ($\theta=\pi/2$).
+\end{thm}
+
+\begin{trap}
+\textbf{Normalise first.} For a direction given by $B=(3,4)$, use $A=B/\norm B=(3,4)/5$.
+Forgetting this multiplies the answer by $\norm B$ (quiz Q34: the answer is $52/\sqrt5$,
+not $52$).
+\end{trap}
+
+\begin{reallife}
+Gradient descent, the way almost every machine-learning model is trained, is the step
+$w\leftarrow w-\eta\grad C(w)$: by the theorem above, $-\grad C$ is the direction of fastest
+decrease of the cost. A heat-seeking robot does the opposite and climbs $+\grad T$.
+\end{reallife}
+
+\section{Conservative fields and energy}
+
+\begin{defi}[Conservative field]
+A vector field $F$ is conservative if $F=-\grad\Phi$ for a differentiable potential $\Phi$.
+\end{defi}
+
+\begin{thm}[Conservation of energy]
+If $mX''=-\grad\Phi(X)$, then $E=\tfrac12m\norm{X'}^2+\Phi(X)$ is constant.
+\end{thm}
+
+\begin{proof}
+$\dfrac{d}{dt}\tfrac12m\,X'\cdot X'=m\,X'\cdot X''$ and, by the chain rule,
+$\dfrac{d}{dt}\Phi(X(t))=\grad\Phi(X)\cdot X'$. Adding: $E'=X'\cdot\big(mX''+\grad\Phi(X)\big)=0$.
+\end{proof}
+
+\begin{remember}
+Radial functions: if $h(X)=q(\norm X)$ then $\grad h=q'(r)\,\dfrac{X}{r}$. In particular
+$\grad\dfrac1r=-\dfrac{X}{r^3}$, so $F=C\dfrac{X}{r^3}$ has potential $\Phi=\dfrac Cr$ (with
+$F=-\grad\Phi$).
+\end{remember}
+
+\section{TD 2, solved}
+
+\begin{problem}{TD 2 · Ex. 1 (GT4, 28 Oct.)}
+(1) $f=e^{x+y}$, $x=\cos t$, $y=\sin t$: $\frac{d}{dt}f$ two ways.
+(2) $f=x^2y+\sin(xy)$, $X(t)=(t^2+1,e^t)$.
+(3) $u=f(x^2-y,xy)$: $u_x,u_y$.
+(4) Drone on $X(t)=(t,\sin t,1+t)$ in $T=20+x^2-yz$: rate at $t=0$.
+\end{problem}
+\begin{hint}In (3), name $s=x^2-y$, $t=xy$ and draw two paths from $x$.\end{hint}
+\begin{solution}
+(1) Substituting: $F(t)=e^{\cos t+\sin t}$, $F'(t)=(\cos t-\sin t)e^{\cos t+\sin t}$. Chain rule:
+$f_x=f_y=e^{x+y}$, $X'=(-\sin t,\cos t)$, so $\frac{df}{dt}=e^{\cos t+\sin t}(-\sin t+\cos t)$. Same.
+
+(2) $\grad f=(2xy+y\cos(xy),\;x^2+x\cos(xy))$, $X'=(2t,e^t)$. With $x=t^2+1$, $y=e^t$:
+\[
+\frac{d}{dt}f(X(t))=e^t\Big[(t^2+1)^2+4t(t^2+1)+(t+1)^2\cos\big((t^2+1)e^t\big)\Big].
+\]
+(3) $s_x=2x$, $t_x=y$, $s_y=-1$, $t_y=x$:
+$u_x=2x\,f_s+y\,f_t$ and $u_y=-f_s+x\,f_t$, all derivatives of $f$ at $(x^2-y,xy)$.
+
+(4) $\grad T=(2x,-z,-y)$, $X'=(1,\cos t,1)$, $X(0)=(0,0,1)$:
+$\frac{d}{dt}T\big|_{0}=(0,-1,0)\cdot(1,1,1)=-1$. The drone cools at one degree per unit time.
+Check: $T(X(t))=20+t^2-(1+t)\sin t$ has derivative $-1$ at $0$.
+\end{solution}
+
+\begin{problem}{TD 2 · Ex. 2 (GT4, 28 Oct.)}
+$g(r,\theta)=f(r\cos\theta,r\sin\theta)$. Show $g_r=\grad f\cdot e_r$,
+$\frac1rg_\theta=\grad f\cdot e_\theta$, deduce $g_r^2+\frac1{r^2}g_\theta^2=\norm{\grad f}^2$, and
+apply to $\log(1+x^2+y^2)$.
+\end{problem}
+\begin{solution}
+$x_r=\cos\theta$, $y_r=\sin\theta$, $x_\theta=-r\sin\theta$, $y_\theta=r\cos\theta$, so
+$g_r=f_x\cos\theta+f_y\sin\theta=\grad f\cdot e_r$ and $g_\theta=r(-f_x\sin\theta+f_y\cos\theta)
+=r\,\grad f\cdot e_\theta$, with $e_r=(\cos\theta,\sin\theta)$, $e_\theta=(-\sin\theta,\cos\theta)$.
+These are unit vectors with $e_r\cdot e_\theta=0$: an orthonormal basis. Hence
+$\grad f=g_re_r+\frac{g_\theta}{r}e_\theta$ and Pythagoras gives the identity.
+For $f=\log(1+x^2+y^2)$: $g=\log(1+r^2)$, $g_r=\dfrac{2r}{1+r^2}$, $g_\theta=0$. The function is
+constant on circles, so its gradient is radial and points outward.
+\end{solution}
+
+\begin{problem}{TD 2 · Ex. 3}
+(1) $\grad q(\norm X)=q'(r)X/r$. (2) Gradients of $1/\norm X$ and $e^{-\norm X^2}$.
+(3) Euler: $f(tX)=t^mf(X)\Rightarrow X\cdot\grad f=mf$. (4) Check on $x^2y+xyz+z^3$.
+\end{problem}
+\begin{solution}
+(1) $\partial r/\partial x_i=x_i/r$, so $\partial h/\partial x_i=q'(r)x_i/r$.
+(2) $\grad\frac1{\norm X}=-\dfrac{X}{\norm X^3}$; \ $\grad e^{-\norm X^2}=-2e^{-\norm X^2}X$.
+(3) Differentiate $f(tX)=t^mf(X)$ in $t$: $\grad f(tX)\cdot X=mt^{m-1}f(X)$; put $t=1$.
+(4) Each monomial has degree 3. $\grad f=(2xy+yz,\;x^2+xz,\;xy+3z^2)$ and
+$X\cdot\grad f=3x^2y+3xyz+3z^3=3f$.
+\end{solution}
+
+\begin{problem}{TD 2 · Ex. 4 (GT4, 4 Nov.)}
+$f=x^2+2y^2$, level curve $f=8$: parametrise it, check $\grad f(X(t))\cdot X'(t)=0$, tangent
+line at $P=(2,\sqrt2)$.
+\end{problem}
+\begin{solution}
+$\frac{x^2}{8}+\frac{y^2}{4}=1$, so $X(t)=(2\sqrt2\cos t,\,2\sin t)$. Then
+$\grad f(X(t))=(4\sqrt2\cos t,\,8\sin t)$, $X'(t)=(-2\sqrt2\sin t,\,2\cos t)$, and the dot
+product is $-16\cos t\sin t+16\sin t\cos t=0$: the gradient is normal to the curve. At $P$,
+$\grad f=(4,4\sqrt2)$ and the tangent line is $4(x-2)+4\sqrt2(y-\sqrt2)=0$, i.e.
+$x+\sqrt2\,y=4$.
+\end{solution}
+
+\begin{problem}{TD 2 · Ex. 5 (GT4, 4 Nov.)}
+(1) Tangent plane and normal line to $x^2+y^2+z^2=14$ at $(1,2,3)$. (2) Tangent plane to
+$z=e^{xy}$ at $(1,0,1)$. (3) Points of $z=x^2+y^2$ where the tangent plane is parallel to
+$z=4x-2y+7$. (4) Tangent line to $x^2+y^2+z^2=6$, $z=x+y$ at $(1,1,2)$.
+\end{problem}
+\begin{hint}(3) Normals must be parallel. (4) The tangent is perpendicular to both normals:
+cross product.\end{hint}
+\begin{solution}
+(1) $\grad F=(2,4,6)$: plane $x+2y+3z=14$; normal line $(1,2,3)+s(1,2,3)$, through the centre.
+(2) $g=e^{xy}-z$, $\grad g(1,0,1)=(0,1,-1)$: plane $y-z+1=0$, i.e.\ $z=1+y$.
+(3) Normal $(2a,2b,-1)$ parallel to $(4,-2,-1)$ forces $a=2$, $b=-1$: the point $(2,-1,5)$, where
+the plane is $z=4x-2y-5$.
+(4) $n_1=(2,2,4)$, $n_2=(-1,-1,1)$, $n_1\times n_2=(6,-6,0)$: direction $(1,-1,0)$, line
+$(1,1,2)+s(1,-1,0)$.
+\end{solution}
+
+\begin{problem}{TD 2 · Ex. 6 (GT4, 4 Nov.)}
+(1) $D_Af$ for $x^2y+y^3$ at $(1,-1)$ towards $(3,4)$. (2) $g=x^2+4y^2$ at $(1,-2)$: directions
+and rates of fastest increase and decrease. (3) Directions with zero rate. (4) $T=30+4x-2y^2$ at
+$(1,2)$: fastest increase, rate, and rate towards the origin.
+\end{problem}
+\begin{solution}
+(1) $\grad f=(2xy,x^2+3y^2)$, $\grad f(1,-1)=(-2,4)$, $A=(3,4)/5$: $D_Af=\frac{-6+16}{5}=2$.
+(2) $\grad g(1,-2)=(2,-16)$, $\norm{\cdot}=2\sqrt{65}$: increase along $(1,-8)/\sqrt{65}$ at rate
+$2\sqrt{65}$, decrease along $(-1,8)/\sqrt{65}$ at rate $-2\sqrt{65}$.
+(3) $2a-16b=0$, $a^2+b^2=1$: $A=\pm(8,1)/\sqrt{65}$, tangent to the level curve.
+(4) $\grad T(1,2)=(4,-8)$: fastest along $(1,-2)/\sqrt5$ at rate $4\sqrt5$. Towards the origin,
+$u=(-1,-2)/\sqrt5$ and $D_uT=12/\sqrt5>0$: it gets warmer, but more slowly than possible.
+\end{solution}
+
+\begin{problem}{TD 2 · Ex. 7}
+With $F=-\grad\Phi$: potentials for $(-4x,-9y)$ and $(-yz,-xz,-xy)$; for $CX/\norm X^3$; for
+$X/\norm X^k$ ($k\ne2$ and $k=2$).
+\end{problem}
+\begin{hint}Integrate the first component, then fix the ``constant'' with the others.\end{hint}
+\begin{solution}
+$\Phi_1=2x^2+\tfrac92y^2$; $\Phi_2=xyz$ (check $-\grad\Phi$ in both). For $CX/r^3$:
+$\Phi=C/r$. For $X/r^k$, look for $\Phi=q(r)$ with $-q'(r)=r^{1-k}$:
+$\Phi=\dfrac{r^{2-k}}{k-2}$ if $k\ne2$, and $\Phi=-\log r$ if $k=2$ (plus any constant).
+\end{solution}
+
+\begin{problem}{TD 2 · Ex. 8}
+(1) Prove $E=\tfrac12m\norm{X'}^2+\Phi(X)$ is constant. (2) Deduce $\Phi(X(t))\le E$.
+(3) $x''=-4x$, $x(0)=1$, $x'(0)=0$, $m=1$, $\Phi(0)=0$: potential, energy, maximal speed,
+turning points.
+\end{problem}
+\begin{solution}
+(1) See the theorem above; the chain rule is used for $\frac{d}{dt}\Phi(X(t))$.
+(2) $E-\Phi(X)=\tfrac12m\norm{X'}^2\ge0$.
+(3) $\Phi'(x)=4x$, so $\Phi=2x^2$; $E=0+2=2$; $\tfrac12x'^2+2x^2=2$ gives $|x'|=2\sqrt{1-x^2}\le2$,
+maximal speed $2$ at $x=0$; turning points $x=\pm1$. Indeed $x(t)=\cos2t$.
+\end{solution}
+
+\begin{trap}
+Sign of the potential: with $F=-\grad\Phi$, the field $CX/r^3$ has $\Phi=+C/r$. Check every
+potential by computing $-\grad\Phi$ at the end.
+\end{trap}
+
+\section{More exam-style problems}
+
+\begin{problem}{Exam style · tangent plane to a graph}
+Find the tangent plane to $z=\log(x^2+y^2)$ at $(1,0,0)$, and a normal vector.
+\end{problem}
+\begin{solution}
+$g=\log(x^2+y^2)$: $g(1,0)=0$, $g_x=\frac{2x}{x^2+y^2}=2$, $g_y=\frac{2y}{x^2+y^2}=0$. Plane $z=2(x-1)$;
+normal $(2,0,-1)$.
+\end{solution}
+
+\begin{problem}{Exam style · which way up the hill}
+A hill has height $h=100-x^2-2y^2$. A hiker stands at $(2,1)$. Steepest direction and slope?
+Slope going east? Directions of zero slope?
+\end{problem}
+\begin{solution}
+$\grad h(2,1)=(-4,-4)$: steepest ascent along $\frac1{\sqrt2}(-1,-1)$ with slope $4\sqrt2\approx5.66$.
+East: $(-4,-4)\cdot(1,0)=-4$, downhill. Zero slope along $\pm\frac1{\sqrt2}(1,-1)$, tangent to the
+contour.
+\begin{center}
+\begin{tikzpicture}
+\begin{axis}[bp, width=6.4cm, height=5.2cm, xmin=-3.2, xmax=3.2, ymin=-2.3, ymax=2.3,
+   xtick={-2,2}, ytick={-1,1}, xlabel=$x$, ylabel=$y$, axis equal image]
+  \foreach \c in {1,2,...,8} {\edef\tmp{\noexpand\addplot[tealD!\the\numexpr 30+8*\c\relax!coral, domain=0:360, samples=80]
+      ({sqrt(\c)*cos(x)},{sqrt(\c/2)*sin(x)});}\tmp }
+  \node[dot] at (axis cs:2,1) {};
+  \draw[vec] (axis cs:2,1) -- (axis cs:1.2,0.2);
+  \draw[vecc] (axis cs:2,1) -- (axis cs:2.9,1);
+\end{axis}
+\end{tikzpicture}
+\figcap{Contours of $100-x^2-2y^2$. Coral: steepest ascent, perpendicular to the contour. Teal: east.}
+\end{center}
+\end{solution}
+
+\begin{problem}{Exam style · variable names}
+$g(t,x,y)=f(t^2x,\;ty)$. Write $\partial g/\partial t$.
+\end{problem}
+\begin{solution}
+$g_t=D_1f(t^2x,ty)\cdot2tx+D_2f(t^2x,ty)\cdot y$. Writing ``$\partial f/\partial x$'' would be ambiguous,
+because $x$ is an outer variable.
+\end{solution}
+
+\begin{problem}{Exam style · energy picture}
+A mass $m$ on a spring: $F=-kx$. Find $\Phi$ and the maximal speed if the amplitude is $x_{\max}$.
+\end{problem}
+\begin{solution}
+$\Phi=\tfrac12kx^2$, $E=\tfrac12m\dot x^2+\tfrac12kx^2=\tfrac12kx_{\max}^2$ (speed $0$ at the turning points),
+so $\dot x_{\max}=x_{\max}\sqrt{k/m}$, reached at $x=0$.
+\begin{center}
+\begin{tikzpicture}
+\begin{axis}[bp, width=7cm, height=4.6cm, xmin=-2.6, xmax=2.6, ymin=-0.3, ymax=3.4,
+   xtick={-2,2}, xticklabels={$-x_{\max}$,$x_{\max}$}, ytick=\empty, xlabel=$x$, ylabel={energy}]
+  \addplot[name path=phi, tealD, line width=1.5pt, domain=-2.45:2.45, samples=60] {0.5*x^2};
+  \addplot[name path=E, coralD, line width=1.2pt, domain=-2:2] {2};
+  \addplot[aqua, fill opacity=0.3, draw=none] fill between[of=E and phi, soft clip={domain=-2:2}];
+  \node[font=\scriptsize, text=coralD, anchor=south] at (axis cs:0,2.05) {total energy $E$};
+  \node[font=\scriptsize, text=tealDD] at (axis cs:0,1.1) {kinetic};
+\end{axis}
+\end{tikzpicture}
+\end{center}
+\end{solution}
+
+\section{Quick check}
+\begin{quickcheck}
+$D_Af(P)=\grad f(P)\cdot A$ for any vector $A$. & \qF & Only for $\norm A=1$: normalise first.\\
+$\grad f(P)$ is perpendicular to the level set through $P$. & \qT & Chain rule along a curve in the level set (when $\grad f(P)\ne O$).\\
+The largest rate of increase at $P$ is $\norm{\grad f(P)}$. & \qT & $D_Af=\norm{\grad f}\cos\theta$.\\
+$\grad f=O$ on an open connected set forces $f$ constant. & \qT & Mean value along segments.\\
+$(g_x,g_y,1)$ is normal to the graph $z=g(x,y)$. & \qF & The normal is $(g_x,g_y,-1)$.\\
+For $F=-\grad\Phi$, kinetic plus potential energy is constant. & \qT & Conservation law of Lecture II.\\
+\end{quickcheck}

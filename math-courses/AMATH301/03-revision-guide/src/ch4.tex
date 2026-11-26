@@ -1,0 +1,372 @@
+% ============================== CHAPTER 4 ============================
+\settab{LECTURE IV}{4}
+\chapter{Maxima and Minima}\label{ch:four}
+
+\begin{examnote}
+The classic long exam question lives here: find and classify critical points, find the
+absolute extrema on a closed bounded region, or optimise under a constraint with Lagrange
+multipliers. The marks are in the method: interior, boundary, compare; and for Lagrange,
+careful case analysis.
+\end{examnote}
+
+\section{Critical points and the quadratic form}
+
+\begin{defi}[Critical point, local extremum]
+$P$ is a critical point of $f$ (differentiable on an open $U$) if $\grad f(P)=O$. It is a local
+maximum if some open ball $B$ around $P$ has $f(X)\le f(P)$ for all $X\in B$ (local minimum:
+$\ge$).
+\end{defi}
+
+\begin{thm}[Fermat]
+An interior local extremum of a differentiable function is a critical point.
+\end{thm}
+
+\begin{proof}
+For any $H$, $g(t)=f(P+tH)$ has a local extremum at $t=0$, so $0=g'(0)=\grad f(P)\cdot H$. Take
+$H=\grad f(P)$: $\norm{\grad f(P)}^2=0$.
+\end{proof}
+
+\begin{trap}
+The converse is false: $x^3$ at $0$, and the saddle $x^2-y^2$ at $O$. And Fermat needs $P$ in
+the \emph{interior}: on a boundary an extremum can have a nonzero gradient.
+\end{trap}
+
+\begin{defi}[Quadratic form at a critical point]
+At a critical point $P$, Taylor's formula gives $f(P+H)-f(P)\approx q(H)$ with
+\[ q(x,y)=\tfrac12\big(Ax^2+2Bxy+Cy^2\big),\qquad A=f_{xx}(P),\ B=f_{xy}(P),\ C=f_{yy}(P). \]
+\end{defi}
+
+\begin{thm}[Second derivative test]
+Let $\delta=AC-B^2$.
+\begin{center}
+\begin{tabular}{@{}ll@{}}
+$\delta>0$, $A>0$ & strict local minimum (bowl)\\
+$\delta>0$, $A<0$ & strict local maximum (upside-down bowl)\\
+$\delta<0$ & saddle point (neither)\\
+$\delta=0$ & no conclusion: study $f$ directly
+\end{tabular}
+\end{center}
+\end{thm}
+
+\begin{intuition}
+Complete the square: $Ax^2+2Bxy+Cy^2=A\big[(x+\tfrac BAy)^2+\tfrac{\delta}{A^2}y^2\big]$. If
+$\delta>0$ the bracket is a sum of squares and $q$ has the sign of $A$; if $\delta<0$ the
+bracket takes both signs. Near $P$ the cubic remainder is too small to change the sign.
+\end{intuition}
+
+\begin{examnote}
+\textbf{Two conventions, one test.} The slides write $q=\tfrac12(Ax^2+2Bxy+Cy^2)$ and test
+$AC-B^2$. TD 4 Ex.~6 writes a form as $ax^2+bxy+cy^2$ and tests $4ac-b^2$. They agree: with
+$a=A/2$, $b=B$, $c=C/2$ you get $4ac-b^2=AC-B^2$. The TD correction also displays the full
+Hessian form $Q=2q$; the sign, and so the classification, is the same.
+\end{examnote}
+
+\begin{center}
+\newcommand{\qfig}[4]{\begin{tikzpicture}\begin{axis}[bp3d, width=4.4cm, height=4cm,
+  xmin=-1.4, xmax=1.4, ymin=-1.4, ymax=1.4, zmin=#3, zmax=#4, view={-35}{26},
+  title={\scriptsize\color{tealDD}#2}]
+  \addplot3[gsurf, domain=-1.1:1.1, y domain=-1.1:1.1, samples=13] {#1};
+\end{axis}\end{tikzpicture}}
+\qfig{x^2+y^2}{min: $x^2+y^2$}{0}{2.6}\qfig{-(x^2+y^2)}{max: $-(x^2+y^2)$}{-2.6}{0.4}%
+\qfig{x^2-y^2}{saddle: $x^2-y^2$}{-1.4}{1.4}\qfig{x*y}{saddle: $xy$}{-1.4}{1.4}
+\figcap{The four model quadratic forms. Circles or ellipses as level curves: one sign, so an
+extremum. Hyperbolas: both signs, so a saddle.}
+\end{center}
+
+\section{Extrema on a region}
+
+\begin{defi}[Interior, boundary, closed, bounded]
+$P\in S$ is interior if some open ball around it lies in $S$. $P$ is a boundary point if every
+ball around it meets $S$ and its complement. $S$ is closed if it contains its boundary, bounded
+if $\norm X\le b$ on $S$ for some $b$.
+\end{defi}
+
+\begin{thm}[Existence]
+A continuous function on a closed and bounded set attains a maximum and a minimum.
+\end{thm}
+
+\begin{method}
+\textbf{Absolute extrema on a closed bounded region $S$.}
+\begin{enumerate}
+  \item \textbf{Interior}: solve $\grad f=O$, keep the points inside $S$, evaluate $f$.
+  \item \textbf{Boundary}: parametrise each piece (segment: one variable; circle:
+  $(r\cos t,r\sin t)$) and solve a one-variable problem, \emph{including the corners}. Or use
+  Lagrange on a curved piece.
+  \item \textbf{Compare} all candidate values. Largest is the max, smallest the min.
+\end{enumerate}
+On an unbounded set, reduce to a large closed disc and use behaviour at infinity.
+\end{method}
+
+\section{Lagrange multipliers}
+
+\begin{intuition}
+Walk along the constraint curve on a contour map of $f$. While you cross contour lines, $f$ is
+still changing. At a constrained extremum you stop crossing them: your path just touches a
+contour line, so the two curves have the same normal. The normals are $\grad f$ and $\grad g$.
+\end{intuition}
+
+\begin{thm}[Lagrange]
+If $f,g$ are $C^1$, $P$ is an extremum of $f$ on $\{g=0\}$ and $\grad g(P)\ne O$, then
+$\grad f(P)=\lambda\grad g(P)$ for some number $\lambda$.
+\end{thm}
+
+\begin{center}
+\begin{tikzpicture}
+\begin{axis}[bp, width=6.2cm, height=6.2cm, xmin=-2.1, xmax=2.1, ymin=-2.1, ymax=2.1,
+   xtick={-1,1}, ytick={-1,1}, xlabel=$x$, ylabel=$y$, axis equal image]
+  \foreach \c in {-2.1,-1.4142,-0.7,0,0.7,1.4142,2.1} {\edef\tmp{\noexpand\addplot[tealD!35, line width=0.8pt, domain=-2.1:2.1] {\c-x};}\tmp}
+  \addplot[tealD, line width=1.4pt, domain=-2.1:2.1] {1.4142-x};
+  \addplot[coral, line width=1.5pt, domain=0:360, samples=90] ({cos(x)},{sin(x)});
+  \draw[vec] (axis cs:0.7071,0.7071) -- (axis cs:1.25,1.25);
+  \node[dot] at (axis cs:0.7071,0.7071) {};
+  \node[font=\scriptsize, text=coralD, anchor=west] at (axis cs:1.2,1.35) {$\nabla f\parallel\nabla g$};
+\end{axis}
+\end{tikzpicture}
+\figcap{Maximise $x+y$ on the unit circle: the last level line to touch the circle is tangent to
+it at $(\frac1{\sqrt2},\frac1{\sqrt2})$.}
+\end{center}
+
+\begin{method}
+\textbf{Lagrange in practice.}
+\begin{enumerate}
+  \item Write $\grad f=\lambda\grad g$ component by component, plus $g=0$ ($n+1$ equations).
+  \item Eliminate $\lambda$: divide equations, or split into cases ``this variable is $0$ / is
+  not''. \textbf{Never divide by something that may be $0$.}
+  \item Check $\grad g\ne O$ on the constraint, evaluate $f$ at every candidate, compare. On a
+  closed bounded constraint the largest and smallest values are the answers.
+\end{enumerate}
+\end{method}
+
+\begin{trap}
+Lagrange gives \emph{candidates}, not answers. It does not say which is a max, nor that one
+exists. On an unbounded constraint (a hyperboloid) there may be no maximum at all.
+\end{trap}
+
+\begin{reallife}
+The cheapest closed can of volume $V$: minimise $2\pi r^2+2\pi rh$ subject to $\pi r^2h=V$.
+Lagrange gives $h=2r$: the best can is as tall as it is wide (Problem~\ref{p:can}). The
+multiplier has a meaning too: it is the rate at which the optimum improves when the constraint
+is relaxed, which economists call a shadow price.
+\end{reallife}
+
+\section{TD 4, solved}
+
+\begin{problem}{TD 4 · Ex. 1}
+Critical points of (a) $x^2+6xy+5y^2-8x-4y$, (b) $(x+y)e^{-x^2-y^2}$, (c) $xyz-x-y-z$.
+\end{problem}
+\begin{hint}(b) Factor out the exponential, which never vanishes. (c) No coordinate can be $0$.\end{hint}
+\begin{solution}
+(a) $2x+6y-8=0$, $6x+10y-4=0$, i.e.\ $x+3y=4$, $3x+5y=2$: the point $(-\tfrac72,\tfrac52)$.
+(b) $f_x=e^{-x^2-y^2}\big[1-2x(x+y)\big]$, $f_y=e^{-x^2-y^2}\big[1-2y(x+y)\big]$. So
+$2x(x+y)=2y(x+y)=1$, hence $x+y\ne0$ and $x=y$, $4x^2=1$: $(\tfrac12,\tfrac12)$ and $(-\tfrac12,-\tfrac12)$.
+(c) $yz=xz=xy=1$, so $x=y=z$ and $x^2=1$: $(1,1,1)$ and $(-1,-1,-1)$.
+\end{solution}
+
+\begin{problem}{TD 4 · Ex. 2}
+Classify by inspection the critical points of $x^4+y^4$, $x^4-y^4$, $x^2y^2$.
+\end{problem}
+\begin{solution}
+$x^4+y^4$: only $O$, and $f>0$ elsewhere: strict minimum. $x^4-y^4$: only $O$; $f(t,0)>0>f(0,t)$:
+saddle. $x^2y^2$: every point of both axes is critical, $f=0$ there and $f\ge0$: non-strict
+minima. All three have $\delta=0$ at $O$, so the second derivative test is silent here.
+\end{solution}
+
+\begin{problem}{TD 4 · Ex. 3}
+$f=\varphi(x^2+y^2)$. When is $(x,y)\ne O$ critical?
+\end{problem}
+\begin{solution}
+$\grad f=2\varphi'(r^2)(x,y)$, so $(x,y)\ne O$ is critical iff $\varphi'(r^2)=0$. Each positive root
+$s$ of $\varphi'$ gives a whole circle $x^2+y^2=s$ of critical points.
+\end{solution}
+
+\begin{problem}{TD 4 · Ex. 4}
+Quadratic forms: (a) $e^{-(2x^2+y^2)}$ at $O$; (b) $x^3-3x+y^2$ at its critical points.
+\end{problem}
+\begin{solution}
+(a) $f_{xx}(O)=-4$, $f_{xy}=0$, $f_{yy}=-2$: $q=-2x^2-y^2$, negative definite, strict maximum
+(value $1$, also the absolute max).
+(b) $\grad f=(3x^2-3,2y)$: $(1,0)$ and $(-1,0)$; $A=6x$, $B=0$, $C=2$.
+At $(1,0)$: $q=3x^2+y^2$, $\delta=12>0$, $A>0$: local min, $f=-2$.
+At $(-1,0)$: $q=-3x^2+y^2$, $\delta=-12<0$: saddle, $f=2$.
+\end{solution}
+
+\begin{problem}{TD 4 · Ex. 5}
+Level curves and nature of $O$ for (a) $x^2+4xy+3y^2$, (b) $2x^2+2xy+2y^2$, (c) $x^2-2xy+y^2$.
+\end{problem}
+\begin{solution}
+(a) $(x+2y)^2-y^2=(x+y)(x+3y)$: hyperbolas with asymptotes $x=-y$, $x=-3y$; saddle (take $(t,0)$
+and $(-2t,t)$).
+(b) With $u=\frac{x+y}{\sqrt2}$, $v=\frac{x-y}{\sqrt2}$: $3u^2+v^2$, ellipses along $y=\pm x$;
+strict minimum.
+(c) $(x-y)^2$: pairs of parallel lines $x-y=\pm\sqrt c$; non-strict minimum along $y=x$.
+\begin{center}
+\begin{tikzpicture}
+\begin{axis}[bp, width=4.3cm, height=4.3cm, xmin=-2.5, xmax=2.5, ymin=-2.5, ymax=2.5,
+  xtick=\empty, ytick=\empty, axis equal image, title={\scriptsize (a) saddle}]
+  \addplot[tealD, domain=-2.5:2.5] {-x}; \addplot[tealD, domain=-2.5:2.5] {-x/3};
+  \addplot[coral, domain=-1.2:1.2, samples=50] ({sqrt(1+x^2)-2*x},{x});
+  \addplot[coral, domain=-1.2:1.2, samples=50] ({-sqrt(1+x^2)-2*x},{x});
+\end{axis}\end{tikzpicture}
+\begin{tikzpicture}
+\begin{axis}[bp, width=4.3cm, height=4.3cm, xmin=-2.5, xmax=2.5, ymin=-2.5, ymax=2.5,
+  xtick=\empty, ytick=\empty, axis equal image, title={\scriptsize (b) minimum}]
+  \foreach \c in {1,4} {\edef\tmp{\noexpand\addplot[tealD, domain=0:360, samples=80]
+   ({(sqrt(\c/3)*cos(x)+sqrt(\c)*sin(x))/sqrt(2)},{(sqrt(\c/3)*cos(x)-sqrt(\c)*sin(x))/sqrt(2)});}\tmp}
+\end{axis}\end{tikzpicture}
+\begin{tikzpicture}
+\begin{axis}[bp, width=4.3cm, height=4.3cm, xmin=-2.5, xmax=2.5, ymin=-2.5, ymax=2.5,
+  xtick=\empty, ytick=\empty, axis equal image, title={\scriptsize (c) degenerate}]
+  \addplot[coral, dashed, domain=-2.5:2.5] {x};
+  \addplot[tealD, domain=-2.5:2.5] {x-1}; \addplot[tealD, domain=-2.5:2.5] {x+1};
+  \addplot[tealD, domain=-2.5:2.5] {x-2}; \addplot[tealD, domain=-2.5:2.5] {x+2};
+\end{axis}\end{tikzpicture}
+\end{center}
+\end{solution}
+
+\begin{problem}{TD 4 · Ex. 6}
+$q=ax^2+bxy+cy^2$: complete the square, find conditions for a strict local min, a strict local
+max, and classify $q_t=x^2+2txy+y^2$.
+\end{problem}
+\begin{solution}
+$q=a\big(x+\frac b{2a}y\big)^2+\frac{4ac-b^2}{4a}y^2$. Strict min iff $a>0$ and $4ac-b^2>0$;
+strict max iff $a<0$ and $4ac-b^2>0$. For $q_t=(1+t)u^2+(1-t)v^2$: strict min if $|t|<1$;
+non-strict min if $t=\pm1$; saddle if $|t|>1$; never a max since $q_t(x,0)=x^2$.
+\end{solution}
+
+\begin{problem}{TD 4 · Ex. 7}
+Interior, boundary, open/closed/bounded: $1<x^2+y^2<4$; $y\ge x^2$; $xy=0$.
+\end{problem}
+\begin{solution}
+Annulus: interior itself, boundary the two circles; open, bounded, not closed.
+$\{y\ge x^2\}$: interior $y>x^2$, boundary the parabola; closed, unbounded, not open.
+Axes: empty interior, boundary the set itself; closed, unbounded, not open.
+\end{solution}
+
+\begin{problem}{TD 4 · Ex. 8}
+Absolute extrema of (a) $x^2+y^2-2x$ on $[0,2]\times[-1,1]$, (b) $x^2+xy+y^2$ on the triangle
+$(0,0),(2,0),(0,2)$.
+\end{problem}
+\begin{solution}
+(a) $f=(x-1)^2+y^2-1$ with $0\le(x-1)^2\le1$, $0\le y^2\le1$: min $-1$ at $(1,0)$; max $1$ at the
+four corners $(0,\pm1),(2,\pm1)$.
+(b) Interior: $\grad f=O$ only at $O$, on the boundary. Edges: $y=0$ gives $x^2\in[0,4]$; $x=0$
+gives $y^2\in[0,4]$; $y=2-x$ gives $(x-1)^2+3\in[3,4]$. Min $0$ at $(0,0)$; max $4$ at $(2,0)$
+and $(0,2)$.
+\end{solution}
+
+\begin{problem}{TD 4 · Ex. 9}
+On $\R^2$: extrema of (a) $e^{x-y}$, (b) $(x^2+y^2)e^{-(x^2+y^2)}$.
+\end{problem}
+\begin{solution}
+(a) Positive, tends to $0$ and to $+\infty$ along $(t,0)$: no max, no min (infimum $0$ not attained).
+(b) $s=x^2+y^2$, $g(s)=se^{-s}$, $g'=(1-s)e^{-s}$: min $0$ only at $O$; max $e^{-1}$ on the whole
+unit circle.
+\end{solution}
+
+\begin{problem}{TD 4 · Ex. 10}
+(a) Extrema of $xy$ on $x^2+y^2=2$. (b) Nearest and farthest points of $x^2+xy+y^2=3$ from $O$.
+\end{problem}
+\begin{hint}(b) Optimise $F=x^2+y^2$, then add and subtract the two Lagrange equations.\end{hint}
+\begin{solution}
+(a) $y=2\lambda x$, $x=2\lambda y$, so $4\lambda^2=1$. $\lambda=\tfrac12$: $y=x$, points $(1,1),(-1,-1)$,
+value $1$; $\lambda=-\tfrac12$: $(1,-1),(-1,1)$, value $-1$. Max $1$, min $-1$.
+(b) $2x=\lambda(2x+y)$, $2y=\lambda(x+2y)$ give $(2-3\lambda)(x+y)=0$ and $(2-\lambda)(x-y)=0$.
+$x=y$: $x=\pm1$, $F=2$; $x=-y$: $x=\pm\sqrt3$, $F=6$. Nearest $(1,1),(-1,-1)$ at distance
+$\sqrt2$; farthest $(\sqrt3,-\sqrt3),(-\sqrt3,\sqrt3)$ at distance $\sqrt6$.
+\end{solution}
+
+\begin{problem}{TD 4 · Ex. 11}
+Extrema of $x^2+2y^2+3z^2$ on the unit sphere.
+\end{problem}
+\begin{solution}
+$(1-\lambda)x=(2-\lambda)y=(3-\lambda)z=0$: only one coordinate can be nonzero. Candidates
+$(\pm1,0,0)$, $(0,\pm1,0)$, $(0,0,\pm1)$ with values $1,2,3$. Min $1$, max $3$. Check:
+$1\le f\le3$ on the sphere.
+\end{solution}
+
+\begin{problem}{TD 4 · Ex. 12}\label{p:can}
+A closed can of volume $V$: relation between $r$ and $h$ minimising the area.
+\end{problem}
+\begin{solution}
+$A=2\pi r^2+2\pi rh$, $g=\pi r^2h=V$. Lagrange: $4\pi r+2\pi h=2\lambda\pi rh$ and $2\pi r=\lambda\pi r^2$,
+so $\lambda=2/r$ and $4\pi r+2\pi h=4\pi h$: $h=2r$, $r=(V/2\pi)^{1/3}$. Global check:
+$A(r)=2\pi r^2+2V/r$ has $A''=4\pi+4V/r^3>0$ and blows up at both ends.
+\end{solution}
+
+\begin{trap}
+In region problems, the most common lost marks: forgetting the corners of a rectangle or
+triangle, keeping a critical point that is outside the region, and in Lagrange, dividing by
+$x$ without the case $x=0$.
+\end{trap}
+
+\section{More exam-style problems}
+
+\begin{problem}{Exam style · region with a curved boundary}
+Absolute extrema of $f=x^2+y^2-x$ on the closed unit disc.
+\end{problem}
+\begin{solution}
+Existence: closed, bounded, continuous. Interior: $\grad f=(2x-1,2y)=O$ at $(\tfrac12,0)$, inside,
+$f=-\tfrac14$. Boundary: $(\cos t,\sin t)$ gives $f=1-\cos t\in[0,2]$: $0$ at $(1,0)$, $2$ at $(-1,0)$.
+Compare: max $2$ at $(-1,0)$ (boundary), min $-\tfrac14$ at $(\tfrac12,0)$ (interior).
+\begin{center}
+\begin{tikzpicture}
+\begin{axis}[bp, width=5.4cm, height=5.4cm, xmin=-1.5, xmax=1.5, ymin=-1.5, ymax=1.5,
+   xtick={-1,1}, ytick={-1,1}, xlabel=$x$, ylabel=$y$, axis equal image]
+  \addplot[draw=tealD, line width=1.2pt, fill=aqua, fill opacity=0.12, domain=0:360, samples=80] ({cos(x)},{sin(x)}) -- cycle;
+  \foreach \r in {0.3,0.6,0.9,1.2,1.5} {\edef\tmp{\noexpand\addplot[tealD!45, domain=0:360, samples=70] ({0.5+\r*cos(x)},{\r*sin(x)});}\tmp}
+  \node[dot] at (axis cs:0.5,0) {};
+  \node[circle, fill=tealD, draw=white, inner sep=1.7pt] at (axis cs:-1,0) {};
+  \node[font=\scriptsize, text=coralD, anchor=south] at (axis cs:0.5,0.05) {min};
+  \node[font=\scriptsize, text=tealD, anchor=east, fill=white, inner sep=1pt] at (axis cs:-1.05,0.3) {max};
+\end{axis}
+\end{tikzpicture}
+\figcap{Level curves of $f=(x-\frac12)^2+y^2-\frac14$: circles centred at $(\frac12,0)$.}
+\end{center}
+\end{solution}
+
+\begin{problem}{Exam style · quartic}
+Find and classify the critical points of $f=x^4+y^4-4xy$.
+\end{problem}
+\begin{solution}
+$4x^3-4y=0$, $4y^3-4x=0$ give $y=x^3$, $x=x^9$: $x\in\{0,1,-1\}$. Points $(0,0)$, $(1,1)$, $(-1,-1)$.
+$A=12x^2$, $B=-4$, $C=12y^2$. At $O$: $\delta=-16<0$, saddle. At $\pm(1,1)$: $\delta=128>0$, $A>0$: local
+minima with $f=-2$ (in fact global, since $f\to+\infty$).
+\end{solution}
+
+\begin{problem}{Exam style · closest point}
+Find the point of the plane $x+2y+2z=9$ closest to the origin.
+\end{problem}
+\begin{solution}
+Minimise $x^2+y^2+z^2$: $(2x,2y,2z)=\lambda(1,2,2)$, so $(x,y,z)=\tfrac\lambda2(1,2,2)$; the constraint gives
+$\tfrac{9\lambda}2=9$, $\lambda=2$: the point $(1,2,2)$, at distance $3$. (Check: distance formula
+$\frac{|9|}{\sqrt{1+4+4}}=3$.)
+\end{solution}
+
+\begin{problem}{Exam style · open box}
+An open-top box has surface $xy+2xz+2yz=12$. Maximise its volume $xyz$.
+\end{problem}
+\begin{solution}
+$(yz,xz,xy)=\lambda(y+2z,\,x+2z,\,2x+2y)$. Multiply by $x,y,z$: $\lambda(xy+2xz)=\lambda(xy+2yz)=\lambda(2xz+2yz)$,
+so $x=y$ and $xy=2xz$, i.e.\ $y=2z$. Then $4z^2+4z^2+4z^2=12$: $z=1$, box $2\times2\times1$, volume $4$.
+\end{solution}
+
+\begin{problem}{Slides · Lagrange on a hyperboloid}
+Extrema of $x^2+y^2+z^2$ on $x^2+2y^2-z^2=1$.
+\end{problem}
+\begin{solution}
+$2x=2\lambda x$, $2y=4\lambda y$, $2z=-2\lambda z$. If $z\ne0$: $\lambda=-1$, then $x=y=0$ and $-z^2=1$,
+impossible; so $z=0$. If $x\ne0$: $\lambda=1$, $y=0$, $x=\pm1$, value $1$. If $y\ne0$: $\lambda=\tfrac12$,
+$x=0$, $y=\pm\frac1{\sqrt2}$, value $\tfrac12$. The surface is unbounded: no maximum. Minimum $\tfrac12$ at
+$(0,\pm\frac1{\sqrt2},0)$. The points $(\pm1,0,0)$ are neither (along $z$ the distance grows, along $y$ it
+shrinks).
+\end{solution}
+
+\section{Quick check}
+\begin{quickcheck}
+Every critical point is a local extremum. & \qF & Saddles, e.g.\ $x^2-y^2$.\\
+$\delta=0$ means a saddle. & \qF & No conclusion: $x^4+y^4$, $x^4-y^4$.\\
+A continuous $f$ on a closed bounded set has a max and a min. & \qT & Extreme value theorem.\\
+At a constrained extremum with $\grad g\ne O$, $\grad f\parallel\grad g$. & \qT & Lagrange.\\
+In two variables, a unique critical point that is a local min is a global min. & \qF & $x^2+y^2(1-x)^3$: only $O$, yet $f(4,1)=-11$.\\
+On a closed disc, the absolute max can sit on the boundary circle. & \qT & $x^2+y^2-x$: max $2$ at $(-1,0)$.\\
+\end{quickcheck}

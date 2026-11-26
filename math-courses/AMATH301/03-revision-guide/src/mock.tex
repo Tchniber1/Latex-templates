@@ -1,0 +1,291 @@
+% ============================== MOCK EXAM ============================
+\settab{MOCK EXAM}{7}
+\chapter{Mock Exam}\label{ch:mock}
+
+\begin{examnote}
+Three hours, closed book, no calculator. Six exercises on Lectures I to V for 20 points, plus a
+bonus on Lectures VI and VII. Do it in one sitting, under exam conditions, before reading the
+solutions on the following pages.
+\end{examnote}
+
+\section*{Questions}
+
+\begin{problem}{Exercise 1 · 3.5 pts · Lecture I}
+\begin{enumerate}[label=(\alph*)]
+  \item Find and sketch the domain of $g(x,y)=\log(x+y)+\sqrt{4-x^2-y^2}$. Is it open, closed, neither?
+  \item Let $f(x,y)=\dfrac{xy^2}{x^2+y^2}$ for $(x,y)\ne(0,0)$ and $f(0,0)=0$. Prove that $f$ is continuous at $O$.
+  \item Compute $f_x(0,0)$ and $f_y(0,0)$.
+  \item Is $f$ differentiable at $O$? Justify.
+\end{enumerate}
+\end{problem}
+
+\begin{problem}{Exercise 2 · 4 pts · Lecture II}
+Let $f(x,y)=x^2y-y^3+2x$ and $P=(1,2)$.
+\begin{enumerate}[label=(\alph*)]
+  \item Compute $\grad f(P)$ and the directional derivative of $f$ at $P$ in the direction of $(3,4)$.
+  \item In which unit direction does $f$ increase fastest at $P$? At what rate?
+  \item Find the tangent line at $P$ to the level curve of $f$ through $P$.
+  \item A particle moves along $X(t)=(e^t,2+\sin t)$. Find $\frac{d}{dt}f(X(t))$ at $t=0$.
+  \item Find the tangent plane to $x^2+2y^2+3z^2=6$ at $(1,1,1)$.
+\end{enumerate}
+\end{problem}
+
+\begin{problem}{Exercise 3 · 3 pts · Lecture III}
+\begin{enumerate}[label=(\alph*)]
+  \item Find the Taylor polynomial of degree 2 of $f(x,y)=e^x\log(1+y)$ at $(0,0)$ and deduce
+  $D_1D_2f(0,0)$ without differentiating.
+  \item Write $(D_1-D_2)^2$ in standard form and apply it to $x^3y$.
+  \item Compute $\displaystyle\lim_{(x,y)\to(0,0)}\frac{\cos(xy)-1}{x^2y^2}$ (for $xy\ne0$).
+\end{enumerate}
+\end{problem}
+
+\begin{problem}{Exercise 4 · 4 pts · Lecture IV}
+\begin{enumerate}[label=(\alph*)]
+  \item Find and classify all critical points of $f(x,y)=x^3+y^3-3x-12y+20$.
+  \item Find the absolute extrema of $g(x,y)=x^2+y^2-2x+4y$ on the closed disc $x^2+y^2\le20$.
+\end{enumerate}
+\end{problem}
+
+\begin{problem}{Exercise 5 · 2.5 pts · Lecture IV}
+Find the maximum of $xyz$ for $x,y,z>0$ subject to $x+2y+3z=18$, using Lagrange multipliers.
+Explain why a maximum exists.
+\end{problem}
+
+\begin{problem}{Exercise 6 · 3 pts · Lecture V}
+\begin{enumerate}[label=(\alph*)]
+  \item Let $F(x,y)=(x^2-y^2,\;2xy)$. Compute $\det J_F$. Where is $F$ locally invertible? Is it
+  globally injective on $\R^2\setminus\{O\}$?
+  \item Compute the Jacobian matrix of the local inverse of $F$ at $F(1,1)$.
+  \item Show that $e^{xy}+x+y^2=2$ defines $y=\varphi(x)$ near $(0,1)$ and find the tangent line there.
+\end{enumerate}
+\end{problem}
+
+\begin{problem}{Bonus · 2 pts · Lectures VI and VII}
+\begin{enumerate}[label=(\alph*)]
+  \item Compute $\iint_D xy\dd A$ over the quarter disc $D=\{x\ge0,\,y\ge0,\,x^2+y^2\le4\}$.
+  \item Find the area of the triangle with vertices $(0,0)$, $(1,2)$, $(3,-1)$.
+\end{enumerate}
+\end{problem}
+
+\clearpage
+\section*{Solutions}
+
+\textbf{Exercise 1.}
+(a) $x+y>0$ and $x^2+y^2\le4$: the part of the closed disc of radius 2 strictly above the line
+$y=-x$. Neither open (points of the arc are in it, with no ball inside) nor closed (points of the
+diameter on $y=-x$ are limits of points in it but excluded). \hfill\emph{[1]}
+
+(b) $\dfrac{y^2}{x^2+y^2}\le1$, so $|f(x,y)|\le|x|\to0=f(0,0)$. Continuous by the squeeze. \hfill\emph{[0.75]}
+
+(c) $f(h,0)=0$ and $f(0,k)=0$, so $f_x(0,0)=f_y(0,0)=0$. \hfill\emph{[0.75]}
+
+(d) If $f$ were differentiable, $R(H)=f(H)$ would satisfy $f(H)/\norm H\to0$. Along $H=(t,t)$,
+$\dfrac{f(t,t)}{\norm{(t,t)}}=\dfrac{t/2}{\sqrt2\,|t|}=\pm\dfrac{\sqrt2}{4}\not\to0$. So $f$ is
+continuous at $O$, has both partials, and is \textbf{not differentiable} there. \hfill\emph{[1]}
+
+\textbf{Exercise 2.}
+(a) $\grad f=(2xy+2,\;x^2-3y^2)$, $\grad f(1,2)=(6,-11)$. With $A=(3,4)/5$:
+$D_Af(P)=\frac{18-44}{5}=-\frac{26}{5}$. \hfill\emph{[1]}
+(b) Along $(6,-11)/\sqrt{157}$, at rate $\sqrt{157}$. \hfill\emph{[0.75]}
+(c) $f(P)=-4$; tangent line $6(x-1)-11(y-2)=0$, i.e.\ $6x-11y+16=0$. \hfill\emph{[0.75]}
+(d) $X(0)=(1,2)$, $X'(0)=(1,1)$: $\frac{d}{dt}f(X(t))\big|_0=(6,-11)\cdot(1,1)=-5$. \hfill\emph{[0.75]}
+(e) $\grad=(2x,4y,6z)=(2,4,6)$: $x+2y+3z=6$. \hfill\emph{[0.75]}
+
+\textbf{Exercise 3.}
+(a) $e^x=1+x+\dots$, $\log(1+y)=y-\tfrac12y^2+\dots$, product up to degree 2:
+$T_2=y+xy-\tfrac12y^2$. The coefficient of $xy$ is $c_{11}=1$, so $D_1D_2f(0,0)=1!\,1!\cdot1=1$. \hfill\emph{[1.25]}
+(b) $D_1^2-2D_1D_2+D_2^2$; applied to $x^3y$: $6xy-2\cdot3x^2+0=6xy-6x^2$. \hfill\emph{[1]}
+(c) With $u=xy$: $\dfrac{\cos u-1}{u^2}=-\tfrac12+\tfrac{u^2}{24}-\dots\to-\tfrac12$. \hfill\emph{[0.75]}
+
+\textbf{Exercise 4.}
+(a) $f_x=3x^2-3$, $f_y=3y^2-12$: four critical points $(\pm1,\pm2)$. $A=6x$, $B=0$, $C=6y$,
+$\delta=36xy$. \hfill\emph{[2]}
+\begin{center}\small
+\begin{tabular}{@{}lcccc@{}}\toprule
+point & $A$ & $\delta$ & nature & $f$\\ \midrule
+$(1,2)$ & $6$ & $72$ & local min & $2$\\
+$(-1,-2)$ & $-6$ & $72$ & local max & $38$\\
+$(1,-2)$ & $6$ & $-72$ & saddle & $34$\\
+$(-1,2)$ & $-6$ & $-72$ & saddle & $6$\\ \bottomrule
+\end{tabular}
+\end{center}
+(b) $g=(x-1)^2+(y+2)^2-5$: the squared distance to $C=(1,-2)$, minus $5$. The disc is closed and
+bounded, so extrema exist. $C$ is inside ($1+4\le20$): min $-5$ at $(1,-2)$. The max is at the
+point of the circle farthest from $C$, opposite to $C$ through the origin:
+$-\frac{\sqrt{20}}{\sqrt5}(1,-2)=(-2,4)$, with $g(-2,4)=40$. (Lagrange on $x^2+y^2=20$ gives the
+same two candidates $\pm(2,-4)$, with values $0$ and $40$.) \hfill\emph{[2]}
+
+\textbf{Exercise 5.}
+$\grad(xyz)=\lambda\grad(x+2y+3z)$: $yz=\lambda$, $xz=2\lambda$, $xy=3\lambda$. Multiplying by $x,y,z$:
+$xyz=\lambda x=2\lambda y=3\lambda z$, and $\lambda\ne0$ since $x,y,z>0$, so $x=2y=3z$. Then $3x=18$:
+$(x,y,z)=(6,3,2)$, $xyz=36$. Existence: on the closed bounded triangle $x,y,z\ge0$, $x+2y+3z=18$,
+the continuous function $xyz$ has a max; it is positive inside and $0$ on the edges, so the
+max is interior and is the Lagrange point. Maximum $36$. \hfill\emph{[2.5]}
+
+\textbf{Exercise 6.}
+(a) $J_F=\begin{pmatrix}2x&-2y\\2y&2x\end{pmatrix}$, $\det J_F=4(x^2+y^2)\ne0$ off $O$: locally invertible
+on $\R^2\setminus\{O\}$. Not injective: $F(-X)=F(X)$. (In complex form, $F$ is $z\mapsto z^2$.) \hfill\emph{[1]}
+(b) $F(1,1)=(0,2)$, $J_F(1,1)=\begin{pmatrix}2&-2\\2&2\end{pmatrix}$, so
+$J_{F^{-1}}(0,2)=\begin{pmatrix}\frac14&\frac14\\-\frac14&\frac14\end{pmatrix}$. \hfill\emph{[1]}
+(c) $f=e^{xy}+x+y^2$, $f(0,1)=2$, $f_y=xe^{xy}+2y=2\ne0$: the IFT applies. $f_x=ye^{xy}+1=2$, so
+$\varphi'(0)=-1$ and the tangent is $y=1-x$. \hfill\emph{[1]}
+
+\textbf{Bonus.}
+(a) Polar: $\int_0^{\pi/2}\!\!\int_0^2 r\cos\theta\,r\sin\theta\,r\dd r\dd\theta=\frac{2^4}{4}\cdot\frac12=2$.
+(b) $\tfrac12\left|\det\begin{pmatrix}1&3\\2&-1\end{pmatrix}\right|=\tfrac12|-7|=\tfrac72$.
+
+% ============================== MOCK EXAM B ==========================
+\chapter{Mock Exam B}\label{ch:mockb}
+
+\begin{examnote}
+A second paper with the same shape and weighting, for a second timed sitting a few days after the
+first. Every exercise targets a different trap from the one in Mock Exam A.
+\end{examnote}
+
+\section*{Questions}
+
+\begin{problem}{Exercise 1 · 3.5 pts · Lecture I}
+\begin{enumerate}[label=(\alph*)]
+  \item Find and sketch the domain of $g(x,y)=\dfrac{\sqrt{4-x^2-y^2}}{\log(y-x)}$. Is it open, closed, neither?
+  \item Let $f(x,y)=\dfrac{x^2y}{x^4+y^2}$ for $(x,y)\ne(0,0)$ and $f(0,0)=0$. Compute the limit of $f$ along
+  every line $y=mx$ and along the parabola $y=x^2$. Is $f$ continuous at $O$?
+  \item For a unit vector $A=(a,b)$, compute the directional derivative $D_Af(0,0)$.
+  \item What does this example say about the implication ``all directional derivatives exist
+  $\Rightarrow$ differentiable''?
+\end{enumerate}
+\end{problem}
+
+\begin{problem}{Exercise 2 · 4 pts · Lecture II}
+Let $f(x,y,z)=xe^{yz}$ and $P=(2,0,1)$.
+\begin{enumerate}[label=(\alph*)]
+  \item Compute $\grad f(P)$ and the directional derivative of $f$ at $P$ towards the point $Q=(4,1,3)$.
+  \item What is the largest rate of increase of $f$ at $P$?
+  \item Find the tangent plane at $P$ to the surface $xe^{yz}=2$.
+  \item Let $h(x,y)=x^2y$ and $g(u,v)=h(u+v,uv)$. Compute $g_u(1,1)$ with the chain rule, then check
+  by direct substitution.
+\end{enumerate}
+\end{problem}
+
+\begin{problem}{Exercise 3 · 3 pts · Lecture III}
+Let $f(x,y)=e^x\cos y$.
+\begin{enumerate}[label=(\alph*)]
+  \item Find the Taylor polynomial of degree 2 of $f$ at $(0,0)$ and use it to estimate $e^{0.1}\cos0.2$.
+  \item Show that $f_{xx}+f_{yy}=0$ and compute $(D_1+D_2)^2f(0,0)$.
+  \item Show that $\displaystyle\lim_{(x,y)\to(0,0)}\frac{e^x\cos y-1-x}{x^2+y^2}$ does not exist.
+\end{enumerate}
+\end{problem}
+
+\begin{problem}{Exercise 4 · 4 pts · Lecture IV}
+Let $f(x,y)=x^3-3x+y^2-2y$.
+\begin{enumerate}[label=(\alph*)]
+  \item Find and classify all critical points of $f$ on $\R^2$.
+  \item Find the absolute extrema of $f$ on the closed square $[0,2]\times[0,2]$.
+\end{enumerate}
+\end{problem}
+
+\begin{problem}{Exercise 5 · 2.5 pts · Lecture IV}
+\begin{enumerate}[label=(\alph*)]
+  \item Find the extreme values of $x+2y$ on the ellipse $x^2+4y^2=8$.
+  \item Find the largest rectangle, with sides parallel to the axes, inscribed in the ellipse
+  $\frac{x^2}9+\frac{y^2}4=1$.
+\end{enumerate}
+\end{problem}
+
+\begin{problem}{Exercise 6 · 3 pts · Lecture V}
+\begin{enumerate}[label=(\alph*)]
+  \item Let $F(x,y)=(x+y,\;x^2-y)$. Where is $F$ locally invertible? Compute the Jacobian matrix of
+  the local inverse at $F(1,1)$.
+  \item Show that $x^2+yz+z^3=3$ defines $z=\varphi(x,y)$ near $(1,1,1)$ and compute
+  $\varphi_x(1,1)$ and $\varphi_y(1,1)$.
+\end{enumerate}
+\end{problem}
+
+\begin{problem}{Bonus · 2 pts · Lectures VI and VII}
+\begin{enumerate}[label=(\alph*)]
+  \item Compute $\iint_De^{x^2+y^2}\dd A$ over the unit disc.
+  \item Compute $\int_0^1\!\int_x^1\sin(y^2)\dd y\dd x$.
+\end{enumerate}
+\end{problem}
+
+\clearpage
+\section*{Solutions}
+
+\textbf{Exercise 1.}
+(a) Three conditions: $x^2+y^2\le4$, $y-x>0$, and $\log(y-x)\ne0$, i.e.\ $y\ne x+1$. The domain is
+the closed disc of radius 2, strictly above the line $y=x$, with the chord on $y=x+1$ removed.
+Neither open (points of the arc have no ball inside) nor closed (points of $y=x$ are limits of
+points in it but excluded). \hfill\emph{[1]}
+\begin{center}
+\begin{tikzpicture}
+\begin{axis}[bp, width=5.6cm, height=5.6cm, xmin=-2.6, xmax=2.6, ymin=-2.6, ymax=2.6,
+   xtick={-2,2}, ytick={-2,2}, xlabel=$x$, ylabel=$y$, axis equal image]
+  \addplot[fill=aqua, fill opacity=0.25, draw=none, domain=45:225, samples=60]
+     ({2*cos(x)},{2*sin(x)}) -- cycle;
+  \addplot[tealD, line width=1.1pt, domain=45:225, samples=60] ({2*cos(x)},{2*sin(x)});
+  \addplot[coralD, dashed, line width=1pt, domain=-1.414:1.414] {x};
+  \addplot[coralD, dashed, line width=1pt, domain=-1.823:0.823] {x+1};
+  \node[font=\scriptsize, text=coralD, fill=white, inner sep=1pt] at (axis cs:1.55,0.75) {$y=x$};
+  \node[font=\scriptsize, text=coralD, fill=white, inner sep=1pt] at (axis cs:0.25,2.05) {$y=x+1$};
+\end{axis}
+\end{tikzpicture}
+\figcap{Solid arc included, dashed lines excluded.}
+\end{center}
+(b) Along $y=mx$: $f=\dfrac{mx^3}{x^4+m^2x^2}=\dfrac{mx}{x^2+m^2}\to0$ (and $f=0$ on both axes).
+Along $y=x^2$: $f=\dfrac{x^4}{2x^4}=\tfrac12$. Two paths, two limits: $f$ is \textbf{not continuous} at $O$. \hfill\emph{[1]}
+
+(c) $\dfrac{f(ta,tb)}t=\dfrac{a^2b}{t^2a^4+b^2}$. If $b\ne0$ this tends to $\dfrac{a^2}b$; if $b=0$ it is
+$0$. Every directional derivative exists. \hfill\emph{[1]}
+
+(d) The implication is false: a function can have all directional derivatives at $O$ and not
+even be continuous there, so certainly not differentiable. \hfill\emph{[0.5]}
+
+\textbf{Exercise 2.}
+(a) $\grad f=(e^{yz},\,xze^{yz},\,xye^{yz})$, $\grad f(P)=(1,2,0)$. Direction
+$\overrightarrow{PQ}=(2,1,2)$, length $3$, so $A=\frac13(2,1,2)$ and $D_Af(P)=\frac{2+2+0}3=\frac43$. \hfill\emph{[1.25]}
+(b) $\norm{\grad f(P)}=\sqrt5$. \hfill\emph{[0.5]}
+(c) $f(P)=2$, so $P$ is on the surface; plane $(x-2)+2y=0$, i.e.\ $x+2y=2$. \hfill\emph{[1]}
+(d) $h_x=2xy$, $h_y=x^2$; at $(u,v)=(1,1)$ the point is $(2,1)$: $g_u=h_x\cdot1+h_y\cdot v=4+4=8$.
+Directly, $g=(u+v)^2uv$, $g_u=2(u+v)uv+(u+v)^2v=4+4=8$. \hfill\emph{[1.25]}
+
+\textbf{Exercise 3.}
+(a) $(1+x+\frac{x^2}2)(1-\frac{y^2}2)$ up to degree 2: $T_2=1+x+\frac12x^2-\frac12y^2$. With
+$x=0.1$, $y=0.2$: $T_2=1.085$; the true value is $1.08314$. \hfill\emph{[1]}
+(b) $f_{xx}=e^x\cos y$, $f_{yy}=-e^x\cos y$: sum $0$. $(D_1+D_2)^2=D_1^2+2D_1D_2+D_2^2$ and
+$f_{xy}=-e^x\sin y$, so the value at $O$ is $1+0-1=0$. \hfill\emph{[1]}
+(c) $e^x\cos y-1-x=\frac12(x^2-y^2)+(\text{degree}\ge3)$. The quotient is
+$\dfrac{x^2-y^2}{2(x^2+y^2)}+o(1)$: along the $x$-axis it tends to $\frac12$, along the $y$-axis to $-\frac12$. \hfill\emph{[1]}
+
+\textbf{Exercise 4.}
+(a) $f_x=3x^2-3$, $f_y=2y-2$: points $(1,1)$ and $(-1,1)$. $A=6x$, $B=0$, $C=2$, $\delta=12x$.
+At $(1,1)$: $\delta=12>0$, $A>0$, local min, $f=-3$. At $(-1,1)$: $\delta<0$, saddle, $f=1$. \hfill\emph{[1.5]}
+
+(b) Closed, bounded, continuous: extrema exist. Interior candidate: $(1,1)$, $f=-3$. Edges: \hfill\emph{[2.5]}
+\begin{center}\small
+\begin{tabular}{@{}lll@{}}\toprule
+edge & restriction & candidates\\ \midrule
+$x=0$ & $y^2-2y$ & $(0,1)\colon-1$\\
+$x=2$ & $2+y^2-2y$ & $(2,1)\colon1$\\
+$y=0$ and $y=2$ & $x^3-3x$ & $(1,0),(1,2)\colon-2$\\
+corners & & $(0,0),(0,2)\colon0$; \ $(2,0),(2,2)\colon2$\\ \bottomrule
+\end{tabular}
+\end{center}
+Compare: absolute max $2$ at $(2,0)$ and $(2,2)$; absolute min $-3$ at $(1,1)$.
+
+\textbf{Exercise 5.}
+(a) $(1,2)=\lambda(2x,8y)$ gives $x=2y$; then $8y^2=8$, $y=\pm1$. Points $\pm(2,1)$: max $4$ at
+$(2,1)$, min $-4$ at $(-2,-1)$ (the ellipse is closed and bounded). \hfill\emph{[1.25]}
+(b) Maximise $4xy$ with $x,y>0$: $(4y,4x)=\lambda(\frac{2x}9,\frac{y}2)$. Dividing,
+$\frac yx=\frac{4x/9}{y}$, so $\frac{x^2}9=\frac{y^2}4=\frac12$: $x=\frac3{\sqrt2}$, $y=\sqrt2$, area $12$
+(that is $2ab$ for semi-axes $a=3$, $b=2$). \hfill\emph{[1.25]}
+
+\textbf{Exercise 6.}
+(a) $J_F=\begin{pmatrix}1&1\\2x&-1\end{pmatrix}$, $\det J_F=-1-2x$: locally invertible wherever
+$x\ne-\frac12$. At $(1,1)$, $\det=-3$, $F(1,1)=(2,0)$ and
+$J_{F^{-1}}(2,0)=\frac1{-3}\begin{pmatrix}-1&-1\\-2&1\end{pmatrix}=\begin{pmatrix}\frac13&\frac13\\[2pt]\frac23&-\frac13\end{pmatrix}$. \hfill\emph{[1.5]}
+(b) $G=x^2+yz+z^3$, $G(1,1,1)=3$, $G_z=y+3z^2=4\ne0$: the implicit function theorem applies.
+$\varphi_x=-\frac{G_x}{G_z}=-\frac24=-\frac12$, \ $\varphi_y=-\frac{G_y}{G_z}=-\frac14$. \hfill\emph{[1.5]}
+
+\textbf{Bonus.}
+(a) Polar: $\int_0^{2\pi}\!\!\int_0^1e^{r^2}r\dd r\dd\theta=2\pi\cdot\frac{e-1}2=\pi(e-1)$.
+(b) $\sin(y^2)$ has no elementary antiderivative in $y$: swap the order. The region is
+$0\le x\le y\le1$, so $\int_0^1\!\int_0^y\sin(y^2)\dd x\dd y=\int_0^1y\sin(y^2)\dd y=\frac{1-\cos1}2$.

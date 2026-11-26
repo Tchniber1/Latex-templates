@@ -1,0 +1,71 @@
+% ============================== PROOFS ===============================
+\settab{PROOFS}{1}
+\renewcommand{\chapribbontext}{Start here}
+\chapter[Proofs Without Fear]{Proofs Without Fear}\label{ch:proofs}
+
+\textbf{How to read this sheet.} Each question of the mock gets three short boxes: \emph{the idea}
+(what is going on, in plain words), \emph{the recipe} (the steps), and \emph{write this} (exactly what
+goes on your copy). The real midterm will have other functions; the recipes do not change.
+
+\begin{remember}[title={In the exam room}]
+\begin{enumerate}
+  \item Start with the formula questions: Problem 1 Q3, Q4, Q6, Q7, then Problem 3 Q2 to Q6.
+  \item Stuck? Write the formula or the proof sentence anyway. It earns marks and often unlocks the next line.
+  \item Last 10 minutes: no question left blank.
+\end{enumerate}
+\end{remember}
+
+\section{A proof is just a sentence you copy}
+
+In this course, a ``proof'' on the midterm is almost always one of the eight sentences below. You
+do not invent them. You copy the sentence and change only the \slot{highlighted} parts for the
+function in front of you. When a question in this sheet needs one, you will see a tag like
+\seeproof{3}.
+
+\begin{proofsentence}{A set is closed}
+The function $g(x,y)=\slot{$2y-x^2$}$ is continuous (it is a polynomial), and
+$D=\{g\slot{$\ge$}0\}$. So $D$ is closed.
+\usage $D=\{2y-x^2\ge0\}$. \quad Same sentence with $>$ or $\ne$ proves a set is \textbf{open}.
+\end{proofsentence}
+
+\begin{proofsentence}{A set is not open}
+The point \slot{$(0,0)$} is in $D$, because $g=0$ there. But every disc around it contains points like
+\slot{$(0,-\varepsilon)$} where $g\slot{$=-2\varepsilon$}<0$. So no disc around it fits in $D$: $D$ is not open.
+\usage Pick any point \emph{on the boundary curve} and step slightly to the wrong side.
+\end{proofsentence}
+
+\begin{proofsentence}{A function is differentiable (the $C^1$ theorem)}
+On the open set $U=\{\slot{$2y-x^2$}>0\}$, the partial derivatives $f_x=\slot{$\frac{-x}{\sqrt{2y-x^2}}$}$ and
+$f_y=\slot{$\frac{1}{\sqrt{2y-x^2}}$}$ are continuous (the denominator is never $0$ on $U$).
+By the $C^1$ theorem, $f$ is differentiable at every point of $U$.
+\end{proofsentence}
+
+\begin{proofsentence}{Continuous at the origin (squeeze)}
+For $(x,y)\ne(0,0)$:\quad $|f(x,y)-0|=\slot{$|x|\cdot\frac{y^2}{x^2+y^2}$}\le\slot{$|x|$}\longrightarrow0$.
+So $\displaystyle\lim_{(x,y)\to(0,0)}f(x,y)=0=f(0,0)$, and $f$ is continuous at the origin.
+\usage The two inequalities you need 90\% of the time: \ $\frac{y^2}{x^2+y^2}\le1$ \ and \ $|x|\le\sqrt{x^2+y^2}$.
+\end{proofsentence}
+
+\begin{proofsentence}{Not continuous at the origin (two paths)}
+Along the path \slot{$y=0$}, $f\to\slot{$0$}$. Along the path \slot{$y=x$}, $f\to\slot{$\frac12$}$.
+Two paths give two different limits, so $f$ has no limit at the origin: it is not continuous there.
+{\sffamily\bfseries\scriptsize\color{coralD}EXAMPLE\enspace}The highlighted values are for $f=\frac{xy}{x^2+y^2}$. Not needed in
+the mock, but it is the partner of Proof 4. Try lines $y=mx$ first, then a parabola like $y=x^2$.
+\end{proofsentence}
+
+\begin{proofsentence}{Not differentiable at the origin}
+We have $f(0,0)=0$ and $\grad f(0,0)=(0,0)$. If $f$ were differentiable at $O$, then
+$\displaystyle\varepsilon(h,k)=\frac{f(h,k)}{\sqrt{h^2+k^2}}\to0$. But along $h=k=t>0$:
+$\varepsilon(t,t)=\slot{$\frac{t^3}{(2t^2)^{3/2}}=\frac{1}{2\sqrt2}$}\ne0$. So $f$ is not differentiable at the origin.
+\usage If $\grad f(0,0)$ is not $(0,0)$, subtract it: $\varepsilon=\frac{f(h,k)-f(0,0)-\grad f(0,0)\cdot(h,k)}{\sqrt{h^2+k^2}}$.
+\end{proofsentence}
+
+\begin{proofsentence}{A partial derivative is not continuous, so not $C^1$}
+On the \slot{$y$-axis}, $f_x(\slot{$0,y$})=\slot{$1$}$, which does not tend to $f_x(0,0)=\slot{$0$}$.
+So $f_x$ is not continuous at the origin, and $f$ is not of class $C^1$.
+\end{proofsentence}
+
+\begin{proofsentence}{Zero derivative means constant}
+$F'(r)=0$ for every $r$ in the \textbf{interval} $(0,+\infty)$, so $F$ is constant: $F(r)=\slot{$A$}$.
+\usage Used twice in Problem 3, with $F=r\varphi'(r)$ and then $F=\varphi(r)-A\ln r$.
+\end{proofsentence}

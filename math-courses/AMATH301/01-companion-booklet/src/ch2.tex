@@ -1,0 +1,684 @@
+% ============================== CHAPTER 2 ============================
+\clearpage
+\setlecture{Lecture II}\renewcommand{\tabname}{II}
+\chapter{The Chain Rule and the Gradient}\label{ch:chain}
+
+A drone flies through a room where the temperature varies from point to point. The
+thermometer on the drone records a single function of time, $T(X(t))$. How fast does that
+reading change? It depends on two things: how temperature varies in space (the gradient
+of $T$) and how fast and in which direction the drone moves (its velocity). The chain
+rule says exactly how to combine them. From it we will get, almost for free, tangent
+planes, directional derivatives, the meaning of the gradient, and the conservation of
+energy.
+
+\section{The chain rule}
+
+\subsection{Composition along a curve}
+
+Let $f$ be defined on an open set $U$ and let $t\mapsto X(t)$ be a curve with $X(t)\in U$
+for every $t$. Then we can form the one-variable function
+\[ (f\circ X)(t)=f(X(t)). \]
+
+\begin{example}{a first composition}
+Let $f(x,y)=e^x\sin(xy)$ and $X(t)=(t^2,t^3)$. Then $xy=t^5$ and
+\[ f(X(t))=e^{t^2}\sin(t^5). \]
+Of course we could differentiate this directly with first-year rules. The question is
+whether we can get the answer from $\grad f$ and $X'(t)$ alone, without substituting
+first. We will come back to this example after the theorem.
+\end{example}
+
+\subsection{The dependency picture}
+
+\begin{intuition}
+Change travels along paths. When $t$ moves, $x$ moves (at rate $dx/dt$) and $y$ moves
+(at rate $dy/dt$). Each of these pushes $f$ (at rates $\partial f/\partial x$ and
+$\partial f/\partial y$). Multiply the rates along each path from $t$ to $f$, then add
+the paths.
+\end{intuition}
+
+\begin{center}
+\begin{tikzpicture}[
+  v/.style={circle, draw=plum, line width=1pt, fill=plumtint, minimum size=0.95cm, font=\small},
+  e/.style={-{Stealth[length=2.4mm]}, line width=1.1pt},
+  lb/.style={font=\scriptsize, fill=white, inner sep=1.5pt}]
+  \draw[bpgrid, step=0.5] (-0.8,-1.8) grid (8.3,1.8);
+  \node[v] (t) at (0,0) {$t$};
+  \node[v] (x) at (3.5,1.1) {$x(t)$};
+  \node[v] (y) at (3.5,-1.1) {$y(t)$};
+  \node[v, draw=coral, fill=coraltint] (f) at (7.2,0) {$f$};
+  \draw[e, cyanbp] (t) -- node[lb, above left]{$\dfrac{dx}{dt}$} (x);
+  \draw[e, cyanbp] (t) -- node[lb, below left]{$\dfrac{dy}{dt}$} (y);
+  \draw[e, coral] (x) -- node[lb, above right]{$\dfrac{\partial f}{\partial x}$} (f);
+  \draw[e, coral] (y) -- node[lb, below right]{$\dfrac{\partial f}{\partial y}$} (f);
+\end{tikzpicture}
+
+\[
+\frac{df}{dt}=\underbrace{\pd fx\frac{dx}{dt}}_{\text{upper path}}+\underbrace{\pd fy\frac{dy}{dt}}_{\text{lower path}}
+\]
+\end{center}
+
+\begin{theorem}[label=thm:chain]{Chain rule}
+Let $f$ be differentiable on an open set $U\subset\R^n$, and let $X:I\to\R^n$ be a
+differentiable curve with $X(t)\in U$ for all $t\in I$. Then $t\mapsto f(X(t))$ is
+differentiable and
+\[
+\boxed{\;\frac{d}{dt}f(X(t))=\grad f(X(t))\cdot X'(t)\;}
+\]
+In components, if $X(t)=(x_1(t),\dots,x_n(t))$,
+\[
+\frac{d}{dt}f(X(t))=\sum_{i=1}^n\pd f{x_i}(X(t))\,\frac{dx_i}{dt},
+\]
+and in two variables
+\[
+\frac{df}{dt}=\pd fx\frac{dx}{dt}+\pd fy\frac{dy}{dt}.
+\]
+\end{theorem}
+
+The vector form is the clean conceptual statement; the component form is what you use
+to compute.
+
+\begin{example}{back to $e^{x}\sin(xy)$ along $(t^2,t^3)$}
+\textbf{Step 1: gradient.} $\pd fx=e^x\sin(xy)+e^xy\cos(xy)$ and $\pd fy=e^xx\cos(xy)$.
+
+\textbf{Step 2: velocity.} $X'(t)=(2t,\,3t^2)$.
+
+\textbf{Step 3: chain rule, then substitute $x=t^2$, $y=t^3$, $xy=t^5$.}
+\begin{align*}
+\frac{d}{dt}f(X(t))&=\big(e^{t^2}\sin t^5+e^{t^2}t^3\cos t^5\big)\,2t+e^{t^2}t^2\cos t^5\cdot 3t^2\\
+&=2t\,e^{t^2}\sin t^5+5t^4e^{t^2}\cos t^5 .
+\end{align*}
+\textbf{Check.} Differentiating $e^{t^2}\sin(t^5)$ directly with the product rule gives
+$2te^{t^2}\sin t^5+e^{t^2}\cdot5t^4\cos t^5$. Same answer.
+\end{example}
+
+\subsection{Partial derivatives of a composite function}
+
+Very often the inner functions depend on \emph{two} variables:
+\[ x=\varphi(t,u),\quad y=\psi(t,u),\qquad g(t,u)=f(\varphi(t,u),\psi(t,u)). \]
+To get $\partial g/\partial t$, freeze $u$: then $t\mapsto(\varphi,\psi)$ is a curve and
+the chain rule applies. So
+\[
+\boxed{\;\pd gt=\pd fx\pd xt+\pd fy\pd yt,\qquad \pd gu=\pd fx\pd xu+\pd fy\pd yu.\;}
+\]
+
+\begin{center}
+\begin{tikzpicture}[
+  v/.style={circle, draw=plum, line width=1pt, fill=plumtint, minimum size=0.85cm, font=\small},
+  e/.style={-{Stealth[length=2.2mm]}, line width=1pt}]
+  \node[v] (t) at (0,0.9) {$t$};
+  \node[v] (u) at (0,-0.9) {$u$};
+  \node[v] (x) at (3,0.9) {$x$};
+  \node[v] (y) at (3,-0.9) {$y$};
+  \node[v, draw=coral, fill=coraltint] (f) at (6,0) {$g$};
+  \draw[e, cyanbp] (t) -- (x); \draw[e, cyanbp] (t) -- (y);
+  \draw[e, cyanbp!40] (u) -- (x); \draw[e, cyanbp!40] (u) -- (y);
+  \draw[e, coral] (x) -- (f); \draw[e, coral] (y) -- (f);
+  \node[font=\scriptsize, text=navy, align=left, anchor=west] at (6.6,0)
+    {for $\partial g/\partial t$:\\ follow the dark paths\\ starting at $t$};
+\end{tikzpicture}
+\end{center}
+
+\subsection{Proof of the chain rule}
+
+\begin{intuition}
+Differentiability says $f$ changes like its linear part $\grad f\cdot K$ when the input
+changes by a small vector $K$. Along the curve, the input changes by
+$K=X(t+h)-X(t)\approx hX'(t)$. So $f$ changes by about $\grad f\cdot hX'(t)$. Divide by
+$h$ and the error term disappears in the limit.
+\end{intuition}
+
+\begin{proof}
+\textbf{Step 1: expand the increment of $f$.} Fix $t$ and set $K=K(h)=X(t+h)-X(t)$.
+Since $f$ is differentiable at $X(t)$,
+\[ f(X(t)+K)-f(X(t))=\grad f(X(t))\cdot K+\norm K\,g(K),\qquad g(K)\to0\text{ as }K\to O, \]
+where we set $g(O)=0$ (this handles the values of $h$ for which $K=O$).
+
+\textbf{Step 2: divide by $h$.} Since $X(t)+K=X(t+h)$,
+\begin{align*}
+\frac{f(X(t+h))-f(X(t))}{h}&=\grad f(X(t))\cdot\frac{X(t+h)-X(t)}{h}\\
+&\quad\pm\ \norm{\frac{X(t+h)-X(t)}{h}}\,g(K).
+\end{align*}
+The sign is $+$ if $h>0$ and $-$ if $h<0$, because $\norm K/h=\pm\norm{K/h}$.
+
+\textbf{Step 3: let $h\to0$.} The curve is differentiable, so
+$\frac{X(t+h)-X(t)}{h}\to X'(t)$; in particular its norm stays bounded. The curve is
+also continuous, so $K\to O$ and hence $g(K)\to0$. The last term is (bounded)$\times$(tends
+to $0$), so it tends to $0$. Therefore
+\[ \frac{d}{dt}f(X(t))=\grad f(X(t))\cdot X'(t). \]
+\end{proof}
+
+\subsection{Worked examples}
+
+\begin{example}{polar coordinates}
+Let $f(x,y)=x^2+2xy$ with $x=r\cos\theta$, $y=r\sin\theta$, and $g(r,\theta)=f(r\cos\theta,r\sin\theta)$.
+Find $\partial g/\partial\theta$.
+
+\textbf{Step 1.} $\pd fx=2x+2y$, $\pd fy=2x$, $\pd x\theta=-r\sin\theta$, $\pd y\theta=r\cos\theta$.
+
+\textbf{Step 2.}
+\[ \pd g\theta=(2x+2y)(-r\sin\theta)+2x(r\cos\theta). \]
+\textbf{Step 3: substitute and simplify.}
+\begin{align*}
+\pd g\theta&=-2r^2\cos\theta\sin\theta-2r^2\sin^2\theta+2r^2\cos^2\theta
+ = r^2\big(2\cos2\theta-\sin2\theta\big).
+\end{align*}
+\textbf{Check.} $g=r^2\cos^2\theta+r^2\sin2\theta$, so directly
+$\pd g\theta=-r^2\sin2\theta+2r^2\cos2\theta$. Same.
+\end{example}
+
+\begin{example}{a three-variable composition}
+Let $w=f(x,y,z)=e^{xy}\cos z$ with $x=tu$, $y=\sin(tu)$, $z=u^2$. Find $\partial w/\partial u$.
+
+Three paths from $u$ to $w$:
+\[ \pd wu=\pd fx\pd xu+\pd fy\pd yu+\pd fz\pd zu . \]
+With $\pd fx=ye^{xy}\cos z$, $\pd fy=xe^{xy}\cos z$, $\pd fz=-e^{xy}\sin z$ and
+$\pd xu=t$, $\pd yu=t\cos(tu)$, $\pd zu=2u$:
+\[
+\pd wu=ye^{xy}(\cos z)\,t+xe^{xy}(\cos z)\cos(tu)\,t-e^{xy}(\sin z)\,2u .
+\]
+Substituting $x=tu$, $y=\sin(tu)$, $z=u^2$:
+\begin{align*}
+\pd wu&=t\sin(tu)\,e^{tu\sin(tu)}\cos(u^2)+t^2u\,e^{tu\sin(tu)}\cos(u^2)\cos(tu)\\
+&\quad-2u\,e^{tu\sin(tu)}\sin(u^2).
+\end{align*}
+\end{example}
+
+\begin{example}{be careful with variable names}
+Let $u=f(x^2-y,\,xy)$ where $f$ is an unknown differentiable function. Find
+$\partial u/\partial x$ and $\partial u/\partial y$.
+
+The letters $x,y$ are already the outer variables, so we must not call the slots of $f$
+by those names. Introduce
+\[ s=x^2-y,\qquad t=xy . \]
+Then $\pd sx=2x$, $\pd tx=y$, $\pd sy=-1$, $\pd ty=x$, and
+\begin{align*}
+\pd ux&=\pd fs\,2x+\pd ft\,y=2x\,D_1f(s,t)+y\,D_2f(s,t),\\
+\pd uy&=-\pd fs+x\pd ft=-D_1f(s,t)+x\,D_2f(s,t).
+\end{align*}
+
+\textbf{Going backwards.} Writing $u=g(x,y)$, we can solve these two equations for the
+partials of $f$. Multiply the second by $2x$ and add it to the first:
+\[
+\pd gx+2x\pd gy=(y+2x^2)\pd ft\quad\Longrightarrow\quad
+\pd ft=\frac{1}{y+2x^2}\left(\pd gx+2x\pd gy\right).
+\]
+\end{example}
+
+\begin{trap}
+When the outer variables already use the letters $x,y$, writing $\partial f/\partial x$
+for ``the derivative of $f$ in its first slot'' is ambiguous. Use $D_1f$, $D_2f$, or give
+the slots new names ($s,t$) as above.
+\end{trap}
+
+\begin{example}{a scalar inner function}
+Let $f(x,y,z)=g(x^2-3zy+xz)$ with $g$ a differentiable function of one variable. With
+$h(x,y,z)=x^2-3zy+xz$, the one-variable chain rule gives
+\[
+\pd fx=g'(h(x,y,z))\pd hx=g'(x^2-3zy+xz)\,(2x+z).
+\]
+Similarly $\pd fy=g'(h)\,(-3z)$ and $\pd fz=g'(h)\,(x-3y)$. In vector form:
+$\grad f=g'(h)\,\grad h$.
+\end{example}
+
+\begin{example}{$D_1f$, $D_2f$ notation}
+Let $g(t,x,y)=f(t^2x,\,ty)$. Then
+\[
+\pd gt=D_1f(t^2x,ty)\cdot 2tx+D_2f(t^2x,ty)\cdot y .
+\]
+Here $x$ is an outer variable, so ``$\partial f/\partial x$'' would be ambiguous.
+\end{example}
+
+\begin{example}{temperature along a flight path}
+The temperature field is $T(x,y)=20+2x-y^2$ and a drone follows $X(t)=(t,t^2)$. Is the
+drone warming up or cooling down at $t=1$?
+
+$\grad T(x,y)=(2,-2y)$ and $X'(t)=(1,2t)$. At $t=1$ the drone is at $X(1)=(1,1)$, so
+\[
+\frac{d}{dt}T(X(t))\Big|_{t=1}=\grad T(1,1)\cdot X'(1)=(2,-2)\cdot(1,2)=2-4=-2 .
+\]
+The reading drops at $2$ degrees per unit time: the drone is flying into colder air.
+\end{example}
+
+\begin{reallife}{backpropagation}
+Training a neural network means computing the derivative of a loss with respect to
+millions of weights, through many layers of composed functions. Backpropagation is
+nothing but the chain rule applied along the dependency graph, from the output back to
+the inputs, exactly like the path diagrams above.
+\end{reallife}
+
+\subsection{A first geometric consequence}
+
+\begin{example}{a path of constant temperature}
+Let $f:\R^3\to\R$ be a temperature and $t\mapsto B(t)$ the path of a particle that
+always stays at the same temperature: $f(B(t))=c$. Differentiating the constant,
+\[ \grad f(B(t))\cdot B'(t)=0 . \]
+So the gradient is perpendicular to the velocity of every constant-temperature path.
+\end{example}
+
+\section{Tangent planes}
+
+\subsection{Level surfaces and the gradient}
+
+Let $f$ be differentiable and $c$ a constant. Consider the level surface
+\[ f(X)=c,\qquad\text{with }\grad f(X)\neq O . \]
+If a differentiable curve $X(t)$ lies on the surface, then $f(X(t))=c$ for all $t$, and
+by the chain rule
+\[ \grad f(X(t))\cdot X'(t)=0 . \]
+Every tangent direction $X'(t)$ of the surface is perpendicular to the gradient.
+
+\begin{keyidea}
+\textbf{The gradient is perpendicular to level curves and level surfaces.} It crosses them
+at right angles, like the steepest path down a hill crosses the contour lines.
+\end{keyidea}
+
+\begin{center}
+\begin{tikzpicture}
+\begin{axis}[bp, width=7.4cm, height=6.2cm, xmin=-0.2, xmax=3.6, ymin=-0.2, ymax=3.0,
+   xtick=\empty, ytick=\empty, xlabel=$x$, ylabel=$y$]
+  \foreach \c in {1.5,3,4.5}
+    {\edef\tmp{\noexpand\addplot[plum!70, domain=0.25:3.5, samples=60] {\c/x};}\tmp}
+  \addplot[plum, line width=1.6pt, domain=0.6:3.5, samples=60] {3/x};
+  \addplot[cyanbp, dashed, line width=1pt, domain=0.6:3.0] {-1.3333*(x-1.5)+2};
+  \draw[vec] (axis cs:1.5,2) -- (axis cs:2.3,2.6) node[right, font=\small]{$\nabla f(P)$};
+  \node[dot] at (axis cs:1.5,2) {};
+  \node[font=\small, below left, text=plumdark] at (axis cs:1.5,2) {$P$};
+  \node[font=\scriptsize, text=cyanbp, anchor=west] at (axis cs:2.4,0.3) {tangent};
+  \node[font=\scriptsize, text=plum, fill=white, inner sep=1pt] at (axis cs:3.2,1.25) {$f=c$};
+\end{axis}
+\end{tikzpicture}
+
+{\small\color{navy} Level curves of $f(x,y)=xy$. At $P$ the gradient $(y,x)$ is
+perpendicular to the tangent of the level curve through $P$.}
+\end{center}
+
+\subsection{Definition and examples}
+
+\begin{definition}{Tangent plane}
+Let $P$ be a point on the level surface $f(X)=c$, with $\grad f(P)\neq O$. The
+\emph{tangent plane} to the surface at $P$ is the plane through $P$ perpendicular to
+$N=\grad f(P)$:
+\[
+ \boxed{\,X\cdot N=P\cdot N\,}\qquad\text{equivalently}\qquad (X-P)\cdot\grad f(P)=0 .
+\]
+In the plane ($n=2$) the same equation gives the \emph{tangent line} to a level curve.
+\end{definition}
+
+\begin{recipe}
+To find the tangent plane to a surface at $P$:
+\begin{enumerate}
+  \item Write the surface as a level set $f(x,y,z)=c$ (move everything to one side).
+  \item Compute $N=\grad f(P)$.
+  \item Write $N\cdot(X-P)=0$ and simplify.
+\end{enumerate}
+\end{recipe}
+
+\begin{example}{tangent plane to a sphere}
+Find the tangent plane to $x^2+y^2+z^2=3$ at $P=(1,1,1)$.
+
+$f=x^2+y^2+z^2$, $\grad f=(2x,2y,2z)$, $N=\grad f(P)=(2,2,2)$. Then $X\cdot N=P\cdot N$
+reads $2x+2y+2z=6$, that is
+\[ x+y+z=3 . \]
+As expected, the normal $(1,1,1)$ points along the radius: tangent planes to a sphere are
+perpendicular to the radius.
+\end{example}
+
+\begin{example}{tangent line to a level curve}
+Find the tangent line to $x^2y+y^3=10$ at $P=(1,2)$.
+
+Check that $P$ is on the curve: $1\cdot2+8=10$. With $f=x^2y+y^3$,
+$\grad f=(2xy,\;x^2+3y^2)$, so $N=\grad f(1,2)=(4,13)$. The tangent line is
+$4x+13y=4\cdot1+13\cdot2$, that is
+\[ 4x+13y=30 . \]
+\end{example}
+
+\begin{center}
+\begin{tikzpicture}
+\begin{axis}[bp, width=7.6cm, height=6.6cm, xmin=-3.6, xmax=3.6, ymin=-0.3, ymax=3.3,
+   xtick={-3,-2,-1,1,2,3}, ytick={1,2,3}, xlabel=$x$, ylabel=$y$]
+  \addplot[plum, line width=1.5pt, domain=0.6:2.154, samples=80] ({sqrt(max(0,(10-x^3)/x))},{x});
+  \addplot[plum, line width=1.5pt, domain=0.6:2.154, samples=80] ({-sqrt(max(0,(10-x^3)/x))},{x});
+  \addplot[cyanbp, dashed, line width=1pt, domain=-1.6:3.5] {(30-4*x)/13};
+  \draw[vec] (axis cs:1,2) -- (axis cs:1.28,2.91) node[right, font=\small]{$(4,13)$};
+  \node[dot] at (axis cs:1,2) {};
+  \node[font=\small, below left, text=plumdark] at (axis cs:1,2) {$P$};
+  \node[font=\scriptsize, text=plum, fill=white, inner sep=1pt] at (axis cs:-2.5,1.4) {$x^2y+y^3=10$};
+  \node[font=\scriptsize, text=cyanbp, fill=white, inner sep=1pt] at (axis cs:2.7,1.65) {$4x+13y=30$};
+\end{axis}
+\end{tikzpicture}
+\end{center}
+
+\subsection{Surfaces given as graphs}
+
+A graph $z=g(x,y)$ can always be written as a level surface:
+\[ f(x,y,z)=g(x,y)-z=0,\qquad \grad f=\big(g_x,\;g_y,\;-1\big). \]
+The tangent plane at $P=(a,b,g(a,b))$ is $g_x(a,b)(x-a)+g_y(a,b)(y-b)-(z-g(a,b))=0$, that is
+\[
+\boxed{\,z=g(a,b)+g_x(a,b)(x-a)+g_y(a,b)(y-b)\,}
+\]
+This is exactly the linear part from the definition of differentiability (Chapter 1).
+
+\begin{example}{tangent plane to a paraboloid}
+For $z=x^2+y^2$: $f=x^2+y^2-z$, $\grad f=(2x,2y,-1)$. At $P=(1,2,5)$,
+$\grad f(P)=(2,4,-1)$, and $X\cdot N=P\cdot N$ gives
+\[ 2x+4y-z=2+8-5=5 . \]
+At $P=(1,1,2)$ the same method gives $2x+2y-z=2$, i.e. $z=2x+2y-2$ (picture below).
+\end{example}
+
+\begin{center}
+\begin{tikzpicture}
+\begin{axis}[bp3d, width=10cm, height=8.4cm, xlabel=$x$, ylabel=$y$, zlabel=$z$,
+   xmin=-0.5, xmax=2.4, ymin=-0.5, ymax=2.4, zmin=-1, zmax=8.5, view={-48}{20}]
+  \addplot3[plumsurf, domain=0:2, y domain=0:2, samples=16, opacity=0.85, fill opacity=0.85] {x^2+y^2};
+  \addplot3[surf, shader=flat, draw=cyanbp, fill=cyanbp, fill opacity=0.3, draw opacity=0.8,
+     domain=0.35:1.65, y domain=0.35:1.65, samples=5] {2*x+2*y-2};
+  \addplot3[-{Stealth[length=2.5mm]}, coral, line width=1.3pt] coordinates {(1,1,2) (1.6,1.6,1.7)};
+  \addplot3[only marks, mark=*, mark size=2.6pt, coral] coordinates {(1,1,2)};
+  \node[font=\scriptsize, text=coraldark, anchor=west] at (axis cs:1.6,1.6,1.4) {$N=(2,2,-1)$};
+  \node[font=\scriptsize, text=cyanbp, anchor=east] at (axis cs:0.35,0.35,-0.6) {$z=2x+2y-2$};
+\end{axis}
+\end{tikzpicture}
+\end{center}
+
+\begin{extra}
+\textbf{Linear approximation in action.} Estimate $\sqrt{3.02^2+3.97^2}$ without a calculator.
+Take $g(x,y)=\sqrt{x^2+y^2}$ near $(3,4)$: $g(3,4)=5$, $\grad g=\left(\frac xg,\frac yg\right)=\left(\frac35,\frac45\right)$,
+and $H=(0.02,-0.03)$. Then
+\[
+g(3.02,3.97)\approx5+\tfrac35(0.02)+\tfrac45(-0.03)=5+0.012-0.024=4.988 .
+\]
+The true value is $4.98811\ldots$, correct to four digits.
+\end{extra}
+
+\section{Directional derivatives}
+
+\begin{intuition}
+Partial derivatives give slopes due east and due north. But you can walk in any direction.
+The slope in the direction of a unit vector $A$ is obtained by walking along the straight
+line $P+tA$ and differentiating at $t=0$. The chain rule computes it immediately.
+\end{intuition}
+
+Let $P$ be a point and $A$ a \emph{unit} vector, $\norm A=1$. The line through $P$ in
+direction $A$ is $X(t)=P+tA$, with $X'(t)=A$. By the chain rule,
+$\frac{d}{dt}f(P+tA)=\grad f(P+tA)\cdot A$.
+
+\begin{definition}{Directional derivative}
+The \emph{directional derivative} of $f$ at $P$ in the direction of the unit vector $A$ is
+\[
+\boxed{\,D_Af(P)=\frac{d}{dt}f(P+tA)\Big|_{t=0}=\grad f(P)\cdot A\,}
+\]
+It is the rate of change of $f$ at $P$ along the straight line through $P$ in direction $A$.
+\end{definition}
+
+\mnote{For $A=E_1=(1,0,\dots,0)$, $D_Af=D_1f$. Partial derivatives are directional
+derivatives along the axes.}
+
+\begin{trap}
+\textbf{Normalise first.} If the direction is given by a non-unit vector $B$, use
+$A=B/\norm B$. Forgetting this multiplies the answer by $\norm B$, and it is the most
+common error on this topic.
+\end{trap}
+
+\begin{example}{a directional derivative}
+Let $f(x,y)=x^2+y^3$, $P=(-1,3)$ and direction $B=(1,2)$.
+
+\textbf{Step 1: normalise.} $\norm B=\sqrt5$, so $A=\frac{1}{\sqrt5}(1,2)$.
+
+\textbf{Step 2: gradient.} $\grad f=(2x,3y^2)$, so $\grad f(P)=(-2,27)$.
+
+\textbf{Step 3: dot product.}
+\[ D_Af(P)=(-2,27)\cdot\tfrac{1}{\sqrt5}(1,2)=\frac{-2+54}{\sqrt5}=\frac{52}{\sqrt5}. \]
+\end{example}
+
+\subsection{Geometry: the gradient is the direction of steepest ascent}
+
+For a unit vector $A$, let $\theta$ be the angle between $A$ and $\grad f(P)$. Then
+\[ D_Af(P)=\grad f(P)\cdot A=\norm{\grad f(P)}\,\norm A\cos\theta=\norm{\grad f(P)}\cos\theta . \]
+
+\begin{center}
+\begin{tikzpicture}[scale=1.0]
+  \draw[bpgrid, step=0.5] (-2.6,-1.6) grid (3.6,2.6);
+  \draw[vec] (0,0) -- (3,1.5) node[right, font=\small]{$\nabla f(P)$};
+  \draw[vecc] (0,0) -- (0.6,1.4) node[above, font=\small]{$A$};
+  \draw[navy, line width=0.6pt] (26.57:0.7) arc (26.57:66.8:0.7);
+  \node[font=\small, text=navy] at (47:0.95) {$\theta$};
+  \draw[navy, dashed] (0.6,1.4) -- (1.16,0.58);
+  \draw[line width=2.5pt, cyanbp!45] (0,0) -- (1.16,0.58);
+  \node[font=\scriptsize, text=cyanbp, rotate=26.57] at (0.62,0.08) {$D_Af(P)$ (scaled)};
+  \node[dot] at (0,0) {};
+  \node[font=\small, below left] at (0,0) {$P$};
+  \draw[plum!60, dashed, line width=1pt] (-2.2,1.1) -- (2.2,-1.1) node[right, font=\scriptsize, text=plum]{level curve};
+\end{tikzpicture}
+\end{center}
+
+\begin{itemize}
+  \item $\theta=0$ ($A$ along $\grad f$): $D_Af=\norm{\grad f}$, the \textbf{maximal increase}.
+  \item $\theta=\pi/2$ ($A$ along the level curve): $D_Af=0$, no first-order change.
+  \item $\theta=\pi$ ($A$ against $\grad f$): $D_Af=-\norm{\grad f}$, the \textbf{maximal decrease}.
+\end{itemize}
+
+\begin{theorem}{Meaning of the gradient}
+Assume $\grad f(P)\neq O$. For every unit vector $A$,
+\[ -\norm{\grad f(P)}\le D_Af(P)\le\norm{\grad f(P)} . \]
+The maximum is attained exactly for $A=\dfrac{\grad f(P)}{\norm{\grad f(P)}}$ and the
+minimum for the opposite vector. So the gradient points in the direction of maximal
+increase of $f$, and its length is that maximal rate.
+\end{theorem}
+
+\begin{proof}
+From $D_Af(P)=\norm{\grad f(P)}\cos\theta$ and $-1\le\cos\theta\le1$ we get the two
+inequalities. Equality on the right holds if and only if $\cos\theta=1$, i.e. $\theta=0$,
+i.e. $A$ is the unit vector in the direction of $\grad f(P)$. In that case indeed
+\[ D_Af(P)=\grad f(P)\cdot\frac{\grad f(P)}{\norm{\grad f(P)}}=\frac{\norm{\grad f(P)}^2}{\norm{\grad f(P)}}=\norm{\grad f(P)} . \]
+Equality on the left holds iff $\theta=\pi$, i.e. $A=-\grad f(P)/\norm{\grad f(P)}$.
+\end{proof}
+
+\begin{example}{which way up the hill?}
+A hill has height $h(x,y)=100-x^2-2y^2$. A hiker stands at $P=(2,1)$.
+
+\textbf{Steepest ascent.} $\grad h=(-2x,-4y)$, so $\grad h(P)=(-4,-4)$, with
+$\norm{\grad h(P)}=4\sqrt2$. The best direction is
+\[ A_{\max}=\frac{1}{\sqrt2}(-1,-1),\qquad D_{A_{\max}}h(P)=4\sqrt2\approx5.66 . \]
+\textbf{Walking east.} With $E=(1,0)$: $D_Eh(P)=(-4,-4)\cdot(1,0)=-4$. Going east is
+downhill.
+
+\textbf{Walking along the contour.} Directions perpendicular to $(-1,-1)$, e.g.
+$\frac{1}{\sqrt2}(1,-1)$, give $D_Ah(P)=0$: the hiker stays at the same height to first order.
+\end{example}
+
+\begin{center}
+\begin{tikzpicture}
+\begin{axis}[bp, width=7.6cm, height=6.4cm, xmin=-3.2, xmax=3.2, ymin=-2.3, ymax=2.3,
+   xtick={-2,2}, ytick={-1,1}, xlabel=$x$, ylabel=$y$, axis equal image]
+  \foreach \c in {1,2,3,4,5,6,7,8} {
+    \edef\tmp{\noexpand\addplot[plum!\the\numexpr 30+8*\c\relax!coral, domain=0:360, samples=80]
+      ({sqrt(\c)*cos(x)},{sqrt(\c/2)*sin(x)});}\tmp }
+  \node[dot] at (axis cs:2,1) {};
+  \draw[vec] (axis cs:2,1) -- (axis cs:1.2,0.2);
+  \node[font=\scriptsize, text=coraldark, anchor=east, fill=white, inner sep=1pt] at (axis cs:1.15,0.15) {steepest};
+  \draw[vecc] (axis cs:2,1) -- (axis cs:2.9,1);
+  \node[font=\scriptsize, text=cyanbp, anchor=south] at (axis cs:2.75,1.05) {east};
+\end{axis}
+\end{tikzpicture}
+
+{\small\color{navy} Contours of $100-x^2-2y^2$ (ellipses). The steepest direction at $P$ is
+perpendicular to the contour through $P$.}
+\end{center}
+
+\begin{reallife}{gradient descent}
+To minimise a cost function $C(w_1,\dots,w_n)$, move a small step \emph{against} the
+gradient: $w\leftarrow w-\eta\,\grad C(w)$. By the theorem above, $-\grad C$ is the
+direction in which $C$ decreases fastest. This one line is how almost every machine
+learning model is trained. A heat-seeking robot does the opposite: it climbs $+\grad T$.
+\end{reallife}
+
+\section{The conservation law}
+
+\begin{definition}{Vector field}
+A \emph{vector field} on an open set $U$ associates to each point $X\in U$ a vector
+$F(X)$ of the same dimension. If $f$ is differentiable, $X\mapsto\grad f(X)$ is a vector
+field (the \emph{gradient field} of $f$).
+\end{definition}
+
+\begin{definition}{Conservative field}
+A vector field $F$ is \emph{conservative} if there is a differentiable function $\Phi$,
+called a \emph{potential}, with
+\[ F=-\grad\Phi . \]
+\end{definition}
+
+The minus sign is a physics convention: forces push from high potential energy to low, that
+is, downhill on $\Phi$.
+
+\subsection{From Newton's law to energy}
+
+\begin{intuition}
+Kinetic energy grows when the force pushes you along your motion, and the force pushes
+you downhill on $\Phi$. Whatever kinetic energy you gain, you lose in potential energy.
+The chain rule is the bookkeeping that makes this exact.
+\end{intuition}
+
+\begin{theorem}{Conservation of mechanical energy}
+A particle of mass $m$ moves along $X(t)$ under a conservative force $F=-\grad\Phi$,
+following Newton's law $mX''(t)=F(X(t))$. Then
+\[
+\underbrace{\tfrac12m\norm{X'(t)}^2}_{\text{kinetic energy}}+\underbrace{\Phi(X(t))}_{\text{potential energy}}=\text{constant}.
+\]
+\end{theorem}
+
+\begin{proof}
+\textbf{Step 1.} Newton's law with $F=-\grad\Phi$ reads $mX''+\grad\Phi(X)=O$.
+
+\textbf{Step 2.} Take the dot product with the velocity $X'$:
+\[ mX'\cdot X''+\grad\Phi(X)\cdot X'=0 . \]
+\textbf{Step 3: recognise two derivatives.} Since $\norm{X'}^2=X'\cdot X'$, the product
+rule for dot products gives
+\[ \frac{d}{dt}\left(\tfrac12m\norm{X'(t)}^2\right)=\tfrac12m\,(2X'\cdot X'')=mX'\cdot X'' . \]
+By the chain rule, $\frac{d}{dt}\Phi(X(t))=\grad\Phi(X(t))\cdot X'(t)$.
+
+\textbf{Step 4.} So Step 2 says
+$\frac{d}{dt}\left(\tfrac12m\norm{X'}^2+\Phi(X)\right)=0$, and a function with zero
+derivative on an interval is constant.
+\end{proof}
+
+\subsection{The spring}
+
+\begin{example}{mass-spring oscillator}
+For a spring, $F(x)=-kx=-\frac{d}{dx}\left(\tfrac12kx^2\right)$, so $\Phi(x)=\tfrac12kx^2$.
+Newton's law is $m\ddot x+kx=0$. Multiply by $\dot x$:
+\[ m\dot x\ddot x+kx\dot x=\frac{d}{dt}\left(\tfrac12m\dot x^2+\tfrac12kx^2\right)=0, \]
+hence $\tfrac12m\dot x^2+\tfrac12kx^2=E$ is constant. At the turning points $\pm x_{\max}$
+the speed is zero, so $E=\tfrac12kx_{\max}^2$, and the maximum speed (at $x=0$) is
+$\dot x_{\max}=x_{\max}\sqrt{k/m}$.
+\end{example}
+
+\begin{center}
+\begin{tikzpicture}
+\begin{axis}[bp, width=8cm, height=5.6cm, xmin=-2.6, xmax=2.6, ymin=-0.3, ymax=3.4,
+   xtick={-2,2}, xticklabels={$-x_{\max}$,$x_{\max}$}, ytick=\empty,
+   xlabel=$x$, ylabel={energy}]
+  \addplot[name path=phi, plum, line width=1.5pt, domain=-2.45:2.45, samples=60] {0.5*x^2};
+  \addplot[name path=E, coral, line width=1.2pt, domain=-2:2] {2};
+  \addplot[cyanbp, fill opacity=0.25, fill=cyanbp, draw=none] fill between[of=E and phi, soft clip={domain=-2:2}];
+  \draw[navy, dashed, line width=0.7pt] (axis cs:-2,0) -- (axis cs:-2,2);
+  \draw[navy, dashed, line width=0.7pt] (axis cs:2,0) -- (axis cs:2,2);
+  \node[font=\scriptsize, text=coraldark, anchor=south] at (axis cs:0,2.05) {total energy $E$};
+  \node[font=\scriptsize, text=cyanbp] at (axis cs:0,1.1) {kinetic};
+  \node[font=\scriptsize, text=plum, anchor=west] at (axis cs:1.6,2.9) {$\Phi=\tfrac12kx^2$};
+\end{axis}
+\end{tikzpicture}
+
+{\small\color{navy} The gap between the line $E$ and the curve $\Phi$ is the kinetic
+energy. It vanishes at the turning points.}
+\end{center}
+
+\subsection{Inverse-square forces}
+
+Consider a force directed along the position vector, with magnitude inversely
+proportional to the square of the distance $r=\norm X$:
+\[ F(X)=\frac{C}{\norm X^2}\,\frac{X}{\norm X}=C\,\frac{X}{r^3}. \]
+
+\textbf{Finding a potential.} First compute $\grad(1/r)$. Since
+$r=(x^2+y^2+z^2)^{1/2}$,
+\[
+\pd{}{x}\left(\frac1r\right)=-\frac12(x^2+y^2+z^2)^{-3/2}\cdot2x=-\frac{x}{r^3},
+\qquad\text{so}\qquad \grad\left(\frac1r\right)=-\frac{X}{r^3}.
+\]
+Therefore, with $\Phi(X)=\dfrac{C}{r}$,
+\[ -\grad\Phi=-C\grad\left(\frac1r\right)=C\frac{X}{r^3}=F . \]
+So $F$ is conservative with potential $\Phi=C/r$.
+
+\begin{trap}
+\textbf{Check the sign by computing $-\grad\Phi$.} For gravity the force points
+\emph{towards} the origin, so $C=-GMm<0$ and $\Phi=-\dfrac{GMm}{r}$, the familiar formula.
+This is the ``$\Phi=-C/r$'' you may see written with $C>0$ standing for the strength of an
+attractive force, $F=-C X/r^3$. Both statements agree once the sign of the force is fixed.
+\end{trap}
+
+\begin{reallife}{escape velocity}
+Energy conservation with $\Phi=-GMm/r$ gives the escape velocity from a planet of radius
+$R$: starting with speed $v$ and arriving at $r=\infty$ with speed $0$ requires
+$\tfrac12mv^2-\frac{GMm}{R}=0$, so $v=\sqrt{2GM/R}$. For the Earth this is about
+$11.2$ km/s, computed with no differential equation solved at all.
+\end{reallife}
+
+\section{Summary}
+
+\begin{keyidea}
+\begin{itemize}
+  \item Chain rule: $\dfrac{d}{dt}f(X(t))=\grad f(X(t))\cdot X'(t)$; add one term per path in the dependency graph.
+  \item The gradient is perpendicular to level curves and surfaces.
+  \item Tangent plane to $f=c$ at $P$: $(X-P)\cdot\grad f(P)=0$; for a graph, $z=g+g_x(x-a)+g_y(y-b)$.
+  \item Directional derivative: $D_Af(P)=\grad f(P)\cdot A$ with $\norm A=1$.
+  \item $\grad f$ points to steepest ascent; its length is the steepest slope.
+  \item Conservative forces $F=-\grad\Phi$ conserve kinetic plus potential energy.
+\end{itemize}
+\end{keyidea}
+
+\section{Exam-style questions}
+
+\begin{exercise}[1]
+Let $f(x,y)=x^2y-y^3$ and $X(t)=(\cos t,\sin t)$. Compute $\frac{d}{dt}f(X(t))$ using the
+chain rule, then check by substituting first.
+\end{exercise}
+
+\begin{exercise}[1]
+Find the tangent plane to the surface $z=xe^{y}$ at the point $(2,0,2)$.
+\end{exercise}
+
+\begin{exercise}[2]
+Let $f(x,y,z)=xy+yz+zx$. Find the directional derivative of $f$ at $P=(1,-1,2)$ in the
+direction of $B=(2,1,-2)$. In which direction does $f$ increase fastest at $P$, and what
+is the maximal rate?
+\end{exercise}
+
+\begin{exercise}[2]
+Let $z=f(x,y)$ with $x=r\cos\theta$, $y=r\sin\theta$. Show that
+\[
+\left(\pd fx\right)^2+\left(\pd fy\right)^2=\left(\pd zr\right)^2+\frac{1}{r^2}\left(\pd z\theta\right)^2 .
+\]
+\end{exercise}
+
+\begin{exercise}[2]
+Find all points on the surface $x^2+2y^2+3z^2=12$ where the tangent plane is parallel to
+the plane $x+4y+6z=0$.
+\end{exercise}
+
+\begin{exercise}[2]
+Let $u=f(x-y,\,y-z,\,z-x)$ where $f$ is differentiable. Show that
+$\pd ux+\pd uy+\pd uz=0$.
+\end{exercise}
+
+\begin{exercise}[3]
+The temperature in space is $T(x,y,z)=e^{-x^2-2y^2-3z^2}$. A bee at $P=(1,1,1)$ wants to
+cool down as fast as possible. In which direction should it fly? If it flies with velocity
+$X'=(1,0,0)$ instead, at what rate does the temperature it feels change?
+\end{exercise}
+
+\begin{exercise}[3]
+A particle of mass $m=2$ moves in the plane under the force $F(x,y)=(-2x,\,-8y)$.
+\begin{enumerate}[label=(\alph*)]
+  \item Find a potential $\Phi$ with $F=-\grad\Phi$.
+  \item The particle starts at $(1,0)$ with velocity $(0,3)$. Use conservation of energy
+  to find its speed whenever it passes through the point $(0,1)$.
+  \item Explain why the particle can never reach the point $(0,2)$.
+\end{enumerate}
+\end{exercise}

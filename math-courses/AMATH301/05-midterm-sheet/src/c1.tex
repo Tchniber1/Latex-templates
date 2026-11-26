@@ -1,0 +1,180 @@
+% ============================== PROBLEM 1 ============================
+\settab{PROBLEM 1}{2}
+\renewcommand{\chapribbontext}{Problem 1 \;·\; 8 pts}
+\chapter[Problem 1: One Function, Seven Questions]{One Function,\\ Seven Questions}\label{ch:p1}
+
+\begin{examnote}[title={The mock}]
+$f(x,y)=\sqrt{2y-x^2}$ on its natural domain $D$, and $P=(1,1)$.
+\end{examnote}
+
+\begin{idea}
+The whole problem is about \textbf{one number you compute once}: the gradient
+$\grad f(P)=(f_x(P),f_y(P))$. Questions 3, 4, 5, 6 and 7 all use it. So compute it carefully, box it,
+and reuse it everywhere. Here $\grad f(P)=(-1,1)$.
+\end{idea}
+
+% -------------------------------------------------------------------
+\section{Q1. Domain: open or closed?}
+
+\begin{idea}
+The domain is where the formula makes sense. A square root needs what is inside to be $\ge0$.
+\textbf{Closed} means the set contains its edge; \textbf{open} means no point sits on the edge.
+\end{idea}
+
+\begin{recipe}
+\begin{enumerate}
+  \item Condition: $2y-x^2\ge0$, so $y\ge\frac{x^2}2$. Draw the parabola \textbf{solid} (it is included).
+  \item $\ge$ gives closed: \seeproof{1}. \quad A point on the edge gives not open: \seeproof{2}.
+\end{enumerate}
+\end{recipe}
+
+\begin{writethis}
+$D=\{(x,y): y\ge\frac{x^2}2\}$: the region on and above the parabola $y=\frac{x^2}2$.
+$g=2y-x^2$ is continuous and $D=\{g\ge0\}$, so $D$ is \textbf{closed}.
+$(0,0)\in D$, but $(0,-\varepsilon)\notin D$ for every $\varepsilon>0$, so $D$ is \textbf{not open}.
+\end{writethis}
+
+% -------------------------------------------------------------------
+\section{Q2. Level sets}
+
+\begin{idea}
+A level set is where $f$ equals a fixed number $c$: like a contour line on a map. A square root is
+never negative, so negative heights never happen.
+\end{idea}
+
+\begin{recipe}
+Three cases: $c<0$ (empty), $c=0$ (inside $=0$), $c>0$ (square both sides, then solve for $y$).
+\end{recipe}
+
+\noindent\begin{minipage}[c]{0.5\linewidth}
+\begin{writethis}
+Since $f\ge0$: \ if $c<0$, $C_c=\varnothing$. \ If $c=0$: $2y-x^2=0$, the parabola $y=\frac{x^2}2$.
+If $c>0$: $\sqrt{2y-x^2}=c\iff2y-x^2=c^2\iff y=\frac{x^2}2+\frac{c^2}2$: the same parabola, shifted
+up by $\frac{c^2}2$.
+\end{writethis}
+\end{minipage}\hfill
+\begin{minipage}[c]{0.47\linewidth}\centering
+
+\begin{tikzpicture}
+\begin{axis}[bp, width=6.3cm, height=5.9cm, xmin=-3.1, xmax=3.1, ymin=-0.7, ymax=4.8,
+   xlabel=$x$, ylabel=$y$, xtick={-2,-1,1,2}, ytick={1,2,3,4}, axis equal image]
+  \addplot[name path=par, tealDD, line width=1.6pt, domain=-3.03:3.03, samples=90] {x^2/2};
+  \path[name path=top] (axis cs:-3.03,4.8) -- (axis cs:3.03,4.8);
+  \addplot[aqua, fill opacity=0.2] fill between[of=par and top];
+  \addplot[coral, line width=1.1pt, domain=-3:3, samples=80] {x^2/2+0.5};
+  \addplot[tealD!70, line width=1.1pt, domain=-3:3, samples=80] {x^2/2+2};
+  \node[font=\scriptsize, text=tealDD, fill=white, inner sep=1pt, anchor=west] at (axis cs:2.1,1.55) {$c=0$, the edge};
+  \node[font=\scriptsize, text=coralD, fill=white, inner sep=1pt, anchor=south] at (axis cs:0,0.55) {$c=1$};
+  \node[font=\scriptsize, text=tealD, fill=white, inner sep=1pt, anchor=south] at (axis cs:0,2.05) {$c=2$};
+  \node[dot] at (axis cs:1,1) {};
+  \node[font=\scriptsize, text=coralD, anchor=north west] at (axis cs:1.03,0.97) {$P$};
+  \node[font=\small, text=tealDD] at (axis cs:-1.6,3.9) {$D$};
+\end{axis}
+\end{tikzpicture}
+\figcap{The domain $D$ (shaded, edge included) and two level curves. $P$ sits on the level curve $c=1$.}
+
+\end{minipage}
+
+
+% -------------------------------------------------------------------
+\section{Q3. Differentiable, gradient, linear approximation}
+
+\begin{idea}
+To show a function is differentiable, you never use the definition: you show the partial derivatives
+are continuous on an open set (the $C^1$ theorem). We stay away from the edge $2y-x^2=0$ because the
+square root has a vertical slope at $0$.
+\end{idea}
+
+
+
+\begin{writethis}
+\seeproof{3} Use $(\sqrt g)'=\frac{g'}{2\sqrt g}$. On the open set $U=\{2y-x^2>0\}$: \ $f_x=\dfrac{-x}{\sqrt{2y-x^2}}$, \ $f_y=\dfrac{1}{\sqrt{2y-x^2}}$, continuous
+(denominator $\ne0$), so $f$ is differentiable on $U$ by the $C^1$ theorem.
+
+$P\in U$ since $2-1=1>0$. \quad $f(P)=1$, \quad $\boxed{\grad f(P)=(-1,1)}$, \quad $L(x,y)=1-(x-1)+(y-1)=1-x+y$.
+\end{writethis}
+
+% -------------------------------------------------------------------
+\section{Q4. Tangent plane and normal line}
+
+The tangent plane is just $z=L(x,y)$ from Q3, and its normal vector is always $(f_x,f_y,-1)$.
+
+\begin{writethis}
+Tangent plane at $Q=(1,1,1)$: \ $z=1-(x-1)+(y-1)$, \ i.e. \ $\boxed{x-y+z=1}$.
+
+Normal vector $(f_x,f_y,-1)=(-1,1,-1)$, or $(1,-1,1)$. Normal line: $(x,y,z)=(1,1,1)+s(1,-1,1)$, $s\in\R$.
+\end{writethis}
+
+\begin{watch}\watchout The normal has $-1$ in the last place, not $+1$. And the line has three coordinates.\end{watch}
+
+% -------------------------------------------------------------------
+\section{Q5. The chain rule along a curve}
+
+\begin{idea}
+Moving along a curve $X(t)$, the height changes at rate ``slope $\cdot$ velocity'':
+$\frac{d}{dt}f(X(t))=\grad f(X(t))\cdot X'(t)$. The inequality is asked first only to check that the
+curve stays in $U$, where $f$ is differentiable.
+\end{idea}
+
+
+
+\begin{writethis}
+$2(1-t)-(1+t)^2=1-4t-t^2=5-(t+2)^2$, which is $>0$ when $|t+2|<\sqrt5$, i.e. $-\sqrt5-2<t<\sqrt5-2$.
+So $X(t)\in U$, where $f$ is differentiable, and the chain rule applies.
+
+$X'(t)=(1,-1)$, $X(0)=P$: \quad $\dfrac{d}{dt}f(X(t))\Big|_{t=0}=\grad f(P)\cdot X'(0)=(-1,1)\cdot(1,-1)=\boxed{-2}$.
+\end{writethis}
+
+\begin{watch}\watchout Completing the square: $-(t^2+4t)+1=-\big((t+2)^2-4\big)+1=5-(t+2)^2$.\end{watch}
+
+% -------------------------------------------------------------------
+\section{Q6. Directional derivative}
+
+\begin{idea}
+$D_uf(P)=\grad f(P)\cdot u$ with $u$ of length $1$. An answer of $0$ means you walk along the level curve.
+\end{idea}
+
+\begin{writethis}
+$u=\frac{(1,1)}{\sqrt2}$, so $D_uf(P)=\frac{(-1)(1)+(1)(1)}{\sqrt2}=\boxed{0}$.
+
+Meaning: the level curve through $P$ is $y=\frac{x^2+1}2$; its slope at $x=1$ is $1$, so its tangent
+direction is $(1,1)$. The direction $u$ is tangent to the level curve, and $\grad f(P)=(-1,1)$ is
+perpendicular to it.
+\end{writethis}
+
+% -------------------------------------------------------------------
+\section{Q7. Steepest increase and decrease}
+
+\begin{idea}
+The gradient points the steepest way up, its opposite the steepest way down; rates $\pm\norm{\grad f}$.
+\end{idea}
+
+\noindent\begin{minipage}[c]{0.5\linewidth}
+\begin{writethis}
+$\norm{\grad f(P)}=\sqrt{1+1}=\sqrt2$.
+\\ Greatest increase: $u=\frac{(-1,\,1)}{\sqrt2}$, rate $\sqrt2$.
+\\ Greatest decrease: $u=\frac{(1,\,-1)}{\sqrt2}$, rate $-\sqrt2$.
+\end{writethis}
+\end{minipage}\hfill
+\begin{minipage}[c]{0.47\linewidth}\centering
+
+\begin{tikzpicture}
+\begin{axis}[bp, width=5.8cm, height=5.8cm, xmin=-0.3, xmax=2.4, ymin=-0.2, ymax=2.5,
+   xlabel=$x$, ylabel=$y$, xtick={1,2}, ytick={1,2}, axis equal image]
+  \addplot[coralD, line width=1.4pt, domain=-0.3:2.0, samples=60] {(x^2+1)/2};
+  \addplot[tealDD!60, line width=1pt, domain=-0.3:2.2, samples=60] {x^2/2};
+  \draw[vecc] (axis cs:1,1) -- (axis cs:1.65,1.65);
+  \draw[vec] (axis cs:1,1) -- (axis cs:0.35,1.65);
+  \draw[vec, dashed] (axis cs:1,1) -- (axis cs:1.65,0.35);
+  \node[dot] at (axis cs:1,1) {};
+  \node[font=\scriptsize, text=tealD, anchor=west] at (axis cs:1.67,1.67) {Q6: $(1,1)$, rate $0$};
+  \node[font=\scriptsize, text=coralD, anchor=east] at (axis cs:0.33,1.72) {up: $\grad f$};
+  \node[font=\scriptsize, text=coralD, anchor=north west] at (axis cs:1.6,0.38) {down};
+  \node[font=\scriptsize, text=coralD, anchor=south east, fill=white, inner sep=1pt] at (axis cs:0.25,0.55) {$c=1$};
+\end{axis}
+\end{tikzpicture}
+\figcap{At $P$: the gradient points uphill, perpendicular to the level curve; $(1,1)$ runs along the
+level curve (rate $0$); the opposite of the gradient is the steepest way down.}
+
+\end{minipage}
+

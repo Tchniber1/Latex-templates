@@ -1,0 +1,82 @@
+% ============================== FORMULA SHEET ========================
+\settab{FORMULAS}{10}
+\chapter{Formula Sheet}\label{ch:formulas}
+
+The exam is closed book: everything on these pages is to \textbf{memorise}. Nothing is given.
+
+\newtcolorbox{fsheet}[1]{enhanced, unbreakable, arc=1.5mm, colback=mist, colframe=sky, boxrule=0.6pt,
+  left=2.5mm, right=2mm, top=1.5mm, bottom=1.5mm, fontupper=\footnotesize\raggedright,
+  title={#1}, fonttitle=\sffamily\bfseries\scriptsize, colbacktitle=tealD, coltitle=white,
+  toptitle=0.6mm, bottomtitle=0.6mm}
+\begin{tcbraster}[raster columns=2, raster equal height=rows, raster column skip=3mm, raster row skip=3mm]
+\begin{fsheet}{1. Domains, sets}
+$\sqrt u$: $u\ge0$; \ $u/v$: $v\ne0$; \ $\log u$: $u>0$; \ $\arcsin u$: $|u|\le1$.\\
+Open: every $P\in U$ has a ball $\norm{X-P}<a$ in $U$.\\
+$\{g>0\},\{g\ne0\}$ open; $\{g\ge0\},\{g=0\}$ closed ($g$ continuous).\\
+Level set $\{f=c\}$; close curves $=$ steep.
+\end{fsheet}
+\begin{fsheet}{2. Differentiability}
+$D_if(X)=\lim_{h\to0}\frac{f(X+hE_i)-f(X)}h$, \ $\grad f=(D_1f,\dots,D_nf)$.\\
+$f(X+H)-f(X)=\grad f(X)\cdot H+\norm H g(H)$, $g\to0$.\\
+$C^1\Rightarrow$ differentiable $\Rightarrow$ continuous, partials exist.\\
+Toolbox: $|h|,|k|\le\norm H$; $2|hk|\le h^2+k^2$; $4x^2y^2\le(x^2+y^2)^2$.\\
+Counterexample: $\frac{xy}{x^2+y^2}$ (partials, no continuity).
+\end{fsheet}
+\begin{fsheet}{3. Chain rule, tangents}
+$\frac{d}{dt}f(X(t))=\grad f(X(t))\cdot X'(t)$.\\
+$g_t=f_xx_t+f_yy_t$, $g_u=f_xx_u+f_yy_u$.\\
+Plane to $F=c$: $\grad F(P)\cdot(X-P)=0$; normal line $P+s\grad F(P)$.\\
+Graph: $z=g+g_x(x-a)+g_y(y-b)$.
+\end{fsheet}
+\begin{fsheet}{4. Gradient, energy}
+$D_Af=\grad f\cdot A$, $\norm A=1$ (normalise!).\\
+$D_Af=\norm{\grad f}\cos\theta$; max along $\grad f$, rate $\norm{\grad f}$.\\
+$F=-\grad\Phi$: $\tfrac12m\norm{X'}^2+\Phi(X)$ constant.\\
+$\grad q(r)=q'(r)\frac Xr$; $\grad\frac1r=-\frac X{r^3}$. Euler: $X\cdot\grad f=mf$.
+\end{fsheet}
+\begin{fsheet}{5. Higher derivatives}
+Schwarz: $D_1D_2f=D_2D_1f$ if continuous.\\
+Operators multiply like polynomials.\\
+$D_1^rD_2^s(x^iy^j)(0)=i!\,j!$ iff $(r,s)=(i,j)$, else $0$.\\
+Polar Laplacian: $g_{rr}+\frac1rg_r+\frac1{r^2}g_{\theta\theta}$.
+\end{fsheet}
+\begin{fsheet}{6. Taylor}
+$f(P+H)=\sum_{s<r}\frac{(H\cdot\grad)^sf(P)}{s!}+\frac{(H\cdot\grad)^rf(P+\tau H)}{r!}$.\\
+$T_2=f+f_xh+f_yk+\frac12(f_{xx}h^2+2f_{xy}hk+f_{yy}k^2)$.\\
+At $O$: $c_{ij}=\frac{D_1^iD_2^jf(0)}{i!\,j!}$.\\
+$e^u,\ \sin u=u-\frac{u^3}6,\ \cos u=1-\frac{u^2}2+\frac{u^4}{24},\ \log(1+u)=u-\frac{u^2}2+\frac{u^3}3$, $(1+u)^{-1}=1-u+u^2$, $\sqrt{1+u}=1+\frac u2-\frac{u^2}8$.
+\end{fsheet}
+\begin{fsheet}{7. Extrema}
+Critical: $\grad f(P)=O$ (interior extremum $\Rightarrow$ critical).\\
+$q=\frac12(Ax^2+2Bxy+Cy^2)$, $\delta=AC-B^2$:\\
+$\delta>0,A>0$ min; $\delta>0,A<0$ max; $\delta<0$ saddle; $\delta=0$ ?\\
+$ax^2+bxy+cy^2$: same test with $4ac-b^2$.\\
+Closed $+$ bounded $+$ continuous $\Rightarrow$ max, min. Interior, boundary, compare.
+\end{fsheet}
+\begin{fsheet}{8. Lagrange}
+On $g=0$ with $\grad g\ne O$: $\grad f=\lambda\grad g$, $g=0$.\\
+Eliminate $\lambda$; split cases; never divide by $0$; compare values.\\
+Can: $h=2r$. Box $x+2y+3z=18$: $xyz\le36$.
+\end{fsheet}
+\begin{fsheet}{9. Mappings}
+$F(P+H)=F(P)+DF(P)H+o(H)$; $DF(P)H=J_F(P)H$.\\
+$J_F=(\partial f_i/\partial x_j)$, rows $=$ outputs.\\
+$J_{G\circ F}(P)=J_G(F(P))J_F(P)$.\\
+$df=\sum f_{x_i}dx_i$; $dx=J_F\,du$; polar $\det=r$.
+\end{fsheet}
+\begin{fsheet}{10. Inverse, implicit}
+$\det J_F(P)\ne0\Rightarrow$ local inverse, $J_{F^{-1}}(F(P))=J_F(P)^{-1}$.\\
+$f(a,b)=c$, $f_y(a,b)\ne0\Rightarrow y=\varphi(x)$, $\varphi'=-\frac{f_x}{f_y}$.\\
+Sensitivity $x'(\mu)=-\frac{F_\mu}{F_x}$; eigenvalue $\lambda'=-\frac{P_t}{P_\lambda}$; quantile $q'=\frac1{f(q)}$.
+\end{fsheet}
+\begin{fsheet}{11. Integrals (annexe)}
+Fubini: $\iint_A f=\int_a^b\int_{g_1(x)}^{g_2(x)}f\dd y\dd x$.\\
+$dA=r\dd r\dd\theta$; $dV=r\dd z\dd r\dd\theta$; $dV=\rho^2\sin\varphi\dd\rho\dd\varphi\dd\theta$.\\
+$\bar x=\frac1m\iint xf$, $m=\iint f$. \ $\int e^{-x^2}=\sqrt\pi$.
+\end{fsheet}
+\begin{fsheet}{12. Change of variables (annexe)}
+Area $=|\det(A,B)|$, volume $=|\det(A,B,C)|$; tetrahedron $\frac16|\det|$.\\
+$\iint_{G(R)}f=\iint_R(f\circ G)|\Delta_G|$.\\
+Ellipse $\pi ab$; ellipsoid $\frac43\pi abc$.
+\end{fsheet}
+\end{tcbraster}

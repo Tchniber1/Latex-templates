@@ -1,0 +1,13 @@
+\documentclass[tikz,border=1pt]{standalone}
+\definecolor{cA}{HTML}{64CADE}\definecolor{cC}{HTML}{95E1F1}\definecolor{kA}{HTML}{F19381}\definecolor{kB}{HTML}{FFB1A1}
+\begin{document}
+\begin{tikzpicture}
+  \foreach \c in {0.4,1,1.8} {
+    \draw[cC, line width=2.4pt] plot[domain=-1.1:1.1, samples=40] ({sqrt(\c)*cosh(\x)},{sqrt(\c)*sinh(\x)});
+    \draw[cC, line width=2.4pt] plot[domain=-1.1:1.1, samples=40] ({-sqrt(\c)*cosh(\x)},{sqrt(\c)*sinh(\x)});
+    \draw[kB, line width=2.4pt] plot[domain=-1.1:1.1, samples=40] ({sqrt(\c)*sinh(\x)},{sqrt(\c)*cosh(\x)});
+    \draw[kB, line width=2.4pt] plot[domain=-1.1:1.1, samples=40] ({sqrt(\c)*sinh(\x)},{-sqrt(\c)*cosh(\x)});}
+  \draw[white, line width=1.6pt, dashed] (-2.2,-2.2) -- (2.2,2.2); \draw[white, line width=1.6pt, dashed] (-2.2,2.2) -- (2.2,-2.2);
+  \fill[white] (0,0) circle (5pt); \fill[kA] (0,0) circle (3.4pt);
+\end{tikzpicture}
+\end{document}

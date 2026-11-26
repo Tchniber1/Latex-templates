@@ -1,0 +1,273 @@
+% =====================================================================
+%  AMATH301 Revision Guide : style layer on top of beautybook.cls
+%  Palette chosen by Taha: #64CADE #6DD2E7 #95E1F1 #F19381 #FFB1A1
+%  Darker shades of the same hues are used for text and headings.
+% =====================================================================
+
+% ---------- Palette ---------------------------------------------------
+\definecolor{aqua}{HTML}{64CADE}     % main fill, frames
+\definecolor{sky}{HTML}{6DD2E7}      % second fill
+\definecolor{ice}{HTML}{95E1F1}      % light fill, outer margin
+\definecolor{coral}{HTML}{F19381}    % accent fill
+\definecolor{blush}{HTML}{FFB1A1}    % light accent fill
+\definecolor{tealD}{HTML}{1F7F92}    % text shade of aqua (headings, labels)
+\definecolor{tealDD}{HTML}{145F6E}   % cover, strongest teal
+\definecolor{coralD}{HTML}{C95A46}   % text shade of coral
+\definecolor{ink}{HTML}{222222}
+\definecolor{mist}{HTML}{F4FBFD}     % very light ice for backgrounds
+\definecolor{gridc}{HTML}{CDEFF6}    % plot grid
+\definecolor{gridl}{HTML}{E6F7FB}
+
+% names used by figure code reused from the AMATH301 booklet
+\colorlet{plum}{tealD}\colorlet{plumdark}{tealDD}\colorlet{plummid}{tealD!80}
+\colorlet{plumtint}{mist}\colorlet{lavgrey}{gridc}\colorlet{coraldark}{coralD}
+\colorlet{peach}{blush}\colorlet{navy}{tealDD}\colorlet{cyanbp}{aqua}
+\colorlet{gridbp}{gridc}\colorlet{gridbplight}{gridl}\colorlet{inkgrey}{ink}
+\colorlet{coraltint}{blush!18}\colorlet{cyantint}{ice!22}\colorlet{navytint}{ice!12}
+
+% template colours
+\colorlet{outermarginfgcolor}{tealD}
+\colorlet{outermarginbgcolor}{ice}
+\colorlet{framegolden}{tealD}
+\colorlet{framegray}{ice!50}
+\colorlet{captioncolor}{tealD}
+\color{ink}
+
+% ---------- Fonts -----------------------------------------------------
+\usepackage{mathpazo}
+\usepackage[no-math]{fontspec}
+\setmainfont{TeX Gyre Pagella}
+\setsansfont{Montserrat}[Path=fonts/, Extension=.ttf,
+  UprightFont=*-Regular, BoldFont=*-Bold, ItalicFont=*-Italic,
+  BoldItalicFont=*-BoldItalic, FontFace={sb}{n}{*-SemiBold}, FontFace={m}{n}{*-Medium}]
+\usepackage{microtype}
+\linespread{1.07}
+\emergencystretch=3em \tolerance=1800 \hbadness=10000
+
+% ---------- Page geometry: room for margin notes before the strip ----
+\geometry{inner=2.1cm, outer=4.7cm, top=2.3cm, bottom=2.4cm,
+  marginparwidth=2.6cm, marginparsep=0.45cm, headheight=40pt, headsep=14pt}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{5pt plus 1pt}
+\hypersetup{linkcolor=tealD, anchorcolor=tealD, urlcolor=tealD, citecolor=tealD}
+
+% ---------- Maths ------------------------------------------------------
+\usepackage{mathtools}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\norm}[1]{\left\lVert #1\right\rVert}
+\newcommand{\abs}[1]{\left\lvert #1\right\rvert}
+\renewcommand{\pd}[2]{\frac{\partial #1}{\partial #2}}
+\newcommand{\pdd}[2]{\frac{\partial^2 #1}{\partial #2^2}}
+\newcommand{\pdm}[3]{\frac{\partial^2 #1}{\partial #2\,\partial #3}}
+\newcommand{\grad}{\nabla}
+\newcommand{\Dom}{\operatorname{Dom}}
+\newcommand{\tr}{{}^{t}}
+\newcommand{\dd}{\,\mathrm{d}}
+
+% ---------- Plots --------------------------------------------------------
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.18}
+\usepgfplotslibrary{fillbetween,groupplots,colormaps}
+\usetikzlibrary{arrows.meta,calc,positioning,backgrounds,3d,matrix}
+\pgfplotsset{
+  colormap={guidemap}{rgb255=(31,127,146) rgb255=(100,202,222) rgb255=(149,225,241)
+                      rgb255=(255,177,161) rgb255=(241,147,129) rgb255=(201,90,70)},
+  bp/.style={axis lines=middle,
+    axis line style={tealDD, line width=0.7pt, -{Stealth[length=2.2mm]}},
+    grid=both, major grid style={gridc, line width=0.35pt},
+    minor grid style={gridl, line width=0.25pt}, minor tick num=1,
+    tick style={tealDD}, ticklabel style={font=\scriptsize, text=tealDD},
+    xlabel style={font=\small, text=tealDD, anchor=west},
+    ylabel style={font=\small, text=tealDD, anchor=south},
+    every axis plot/.append style={line width=1.15pt}, clip mode=individual},
+  bp3d/.style={view={-35}{28}, axis lines=center,
+    axis line style={tealDD, line width=0.6pt, -{Stealth[length=2mm]}},
+    grid=major, major grid style={gridc, line width=0.3pt}, ticks=none,
+    xlabel style={font=\small, text=tealDD}, ylabel style={font=\small, text=tealDD},
+    zlabel style={font=\small, text=tealDD}, colormap name=guidemap, clip=false},
+  gsurf/.style={surf, shader=faceted, faceted color=white!55!tealD,
+    line width=0.12pt, opacity=0.93, fill opacity=0.93},
+  plumsurf/.style={gsurf},
+}
+\tikzset{
+  vec/.style={-{Stealth[length=2.6mm]}, coralD, line width=1.3pt},
+  vecc/.style={-{Stealth[length=2.4mm]}, tealD, line width=1.2pt},
+  dot/.style={circle, fill=coral, draw=white, line width=0.6pt, inner sep=1.7pt},
+  pdot/.style={circle, fill=tealD, draw=white, line width=0.6pt, inner sep=1.6pt},
+  odot/.style={circle, fill=white, draw=tealD, line width=0.9pt, inner sep=1.5pt},
+  bpgrid/.style={gridc, line width=0.3pt},
+}
+\newcommand{\figcap}[1]{\par{\small\color{tealDD}\itshape #1}\par}
+
+% ---------- Theorem boxes (template style, new colours) --------------
+\mynewtheorem{
+  defi={\textbf{Definition}}[chapter]{interior style={left color=ice!30,right color=ice!8}, borderline west={1.5mm}{0mm}{aqua}},
+  thm={\textbf{Theorem}}[chapter]{interior style={left color=blush!28,right color=blush!8}, borderline west={1.5mm}{0mm}{coral}},
+  prop={\textbf{Proposition}}[chapter]{interior style={left color=ice!26,right color=blush!8}, borderline west={1.5mm}{0mm}{sky}},
+  exam={\textbf{Example}}[chapter]{interior style={left color=mist,right color=white}, borderline west={1.5mm}{0mm}{tealD}},
+}
+\renewcommand{\qedsymbol}{\color{coral}$\blacksquare$}
+
+% ---------- Teaching boxes ------------------------------------------------
+\tcbset{gbox/.style={enhanced, breakable, arc=1.5mm, outer arc=1.5mm, boxrule=0pt,
+  left=3.2mm, right=3mm, top=2mm, bottom=2.2mm, before skip=9pt, after skip=9pt,
+  fonttitle=\sffamily\bfseries\small, title filled=false,
+  attach title to upper={\enspace}, parbox=false}}
+
+\newtcolorbox{intuition}[1][]{gbox, colback=ice!28, borderline west={1.3mm}{0mm}{sky},
+  coltitle=tealD, title={Intuition}, unbreakable, #1}
+\newtcolorbox{method}[1][]{gbox, colback=white, colframe=tealD, boxrule=0.7pt,
+  colbacktitle=tealD, coltitle=white, attach title to upper={}, detach title,
+  before upper={\tcbtitle\par\smallskip}, title={\tikz[baseline=(n.base)]\node[fill=tealD,text=white,
+  rounded corners=1.2mm,inner xsep=5pt,inner ysep=2.5pt,font=\sffamily\bfseries\small](n){Method};}, #1}
+\newtcolorbox{trap}[1][]{gbox, colback=blush!20, borderline west={1.3mm}{0mm}{coralD},
+  coltitle=coralD, title={Trap}, unbreakable, #1}
+\newtcolorbox{reallife}[1][]{gbox, colback=sky!10, borderline west={1.3mm}{0mm}{aqua},
+  coltitle=tealD, title={Real life}, unbreakable, #1}
+\newtcolorbox{remember}[1][]{gbox, colback=white, colframe=aqua, boxrule=0.8pt,
+  coltitle=tealD, title={Remember}, #1}
+\newtcolorbox{examnote}[1][]{gbox, colback=mist, colframe=coral, boxrule=0.6pt,
+  coltitle=coralD, title={Exam note}, #1}
+
+% TD problems: statement, hint, solution
+\let\solution\relax\let\endsolution\relax
+\newcounter{prob}[chapter]
+\renewcommand{\theprob}{\thechapter.\arabic{prob}}
+\newtcolorbox{problem}[2][]{enhanced, breakable, arc=1.5mm, outer arc=1.5mm,
+  colback=mist, colframe=sky, boxrule=0.6pt, left=3.2mm, right=3mm, top=7.5mm, bottom=2.4mm,
+  before skip=14pt, after skip=6pt, parbox=false,
+  overlay unbroken and first={\node[anchor=west, fill=tealD, text=white, rounded corners=1.3mm,
+    inner xsep=6pt, inner ysep=3pt, font=\sffamily\bfseries\small]
+    at ([xshift=3mm,yshift=-1mm]frame.north west) {Problem \theprob};
+    \node[anchor=east, fill=blush!70, text=coralD!90!black, rounded corners=1.3mm,
+    inner xsep=6pt, inner ysep=3pt, font=\sffamily\bfseries\scriptsize]
+    at ([xshift=-3mm,yshift=-1mm]frame.north east) {#2};},
+  code={\refstepcounter{prob}}, #1}
+\newtcolorbox{hint}[1][]{gbox, colback=blush!14, borderline west={1mm}{0mm}{blush},
+  coltitle=coralD, title={Hint}, fontupper=\small, before skip=4pt, after skip=6pt, #1}
+\newenvironment{solution}[1][Solution]{\par\smallskip\noindent
+  {\sffamily\bfseries\small\color{tealD}#1.}\enspace}{\par\medskip}
+
+% Booklet compatibility (reused chunks)
+\newenvironment{keyidea}{\begin{remember}}{\end{remember}}
+\newenvironment{extra}{\begin{reallife}[title={Beyond the slides}]}{\end{reallife}}
+\newenvironment{recipe}{\begin{method}}{\end{method}}
+
+% ---------- Margin notes ----------------------------------------------------
+\usepackage{marginnote}
+\newcommand{\mnote}[1]{\marginpar{\raggedright\sffamily\scriptsize\color{tealD}%
+  \tikz[baseline=-0.6ex]\fill[coral] (0,0) circle (1.5pt);\ #1}}
+\setlength{\marginparpush}{6pt}
+
+% ---------- Thumb tabs ---------------------------------------------------------
+\usepackage{eso-pic}
+\newcommand{\tabname}{}
+\newcounter{tabpos}
+\newcommand{\settab}[2]{\clearpage\renewcommand{\tabname}{#1}\setcounter{tabpos}{#2}}
+\AddToShipoutPictureFG{%
+  \ifnum\value{tabpos}>0
+  \begin{tikzpicture}[remember picture,overlay]
+    \pgfmathsetmacro{\ty}{1.0+1.9*\value{tabpos}}
+    \ifodd\value{page}
+      \fill[tealD, rounded corners=1.2mm] ([yshift=\ty cm, xshift=0.3cm]current page.south east)
+         rectangle ++(-1.25,1.7);
+      \node[text=white, font=\sffamily\bfseries\fontsize{5.6}{6}\selectfont, rotate=90]
+         at ([yshift=\ty cm+0.85cm, xshift=-0.5cm]current page.south east) {\tabname};
+      \fill[coral] ([yshift=\ty cm, xshift=-0.95cm]current page.south east) rectangle ++(-0.09,1.7);
+    \else
+      \fill[tealD, rounded corners=1.2mm] ([yshift=\ty cm, xshift=-0.3cm]current page.south west)
+         rectangle ++(1.25,1.7);
+      \node[text=white, font=\sffamily\bfseries\fontsize{5.6}{6}\selectfont, rotate=90]
+         at ([yshift=\ty cm+0.85cm, xshift=0.5cm]current page.south west) {\tabname};
+      \fill[coral] ([yshift=\ty cm, xshift=0.95cm]current page.south west) rectangle ++(0.09,1.7);
+    \fi
+  \end{tikzpicture}%
+  \fi}
+
+% ---------- Lists, tables -----------------------------------------------------
+\setlist{itemsep=2pt, topsep=3pt}
+\setlist[itemize]{label={\color{coral}\small$\bullet$}, leftmargin=1.3em}
+\setlist[enumerate]{label={\color{tealD}\sffamily\bfseries\small\arabic*.}, leftmargin=1.7em}
+\usepackage{booktabs,tabularx,array,multicol,needspace}
+\newcolumntype{Y}{>{\raggedright\arraybackslash}X}
+\renewcommand{\arraystretch}{1.25}
+
+% keep box titles with content
+\newcommand{\boxneedspace}{\par\needspace{4\baselineskip}}
+\AtBeginDocument{%
+  \BeforeBeginEnvironment{problem}{\boxneedspace}%
+  \BeforeBeginEnvironment{method}{\boxneedspace}%
+  \BeforeBeginEnvironment{intuition}{\boxneedspace}%
+  \BeforeBeginEnvironment{trap}{\boxneedspace}}
+
+% fix the class: no blank page after a part
+\makeatletter
+\renewcommand\@endpart{\vfil\newpage\if@tempswa\twocolumn\fi}
+\renewcommand\makecover{\thispagestyle{empty}\aivcover}
+\makeatother
+
+% ---------- Quick check tables --------------------------------------------------
+\newenvironment{quickcheck}{%
+  \par\medskip\noindent{\small Cover the right-hand columns, decide true or false, then check.}\par\smallskip
+  \noindent\small\renewcommand{\arraystretch}{1.25}%
+  \tabularx{\linewidth}{@{}>{\raggedright\arraybackslash}p{0.47\linewidth}c Y@{}}\toprule
+  \textsf{\textbf{\color{tealDD}Statement}} & \textsf{\textbf{\color{tealDD}T/F}} & \textsf{\textbf{\color{tealDD}Why}}\\ \midrule}
+  {\bottomrule\endtabularx\par\medskip}
+\newcommand{\qT}{\textsf{\textbf{\color{tealD}T}}}
+\newcommand{\qF}{\textsf{\textbf{\color{coralD}F}}}
+
+\newtcolorbox{proofbox}[1]{gbox, colback=white, colframe=sky, boxrule=0.7pt,
+  attach title to upper={}, detach title, before upper={\tcbtitle\par\smallskip},
+  title={\tikz[baseline=(n.base)]\node[fill=coral,text=white,rounded corners=1.2mm,inner xsep=5pt,
+  inner ysep=2.5pt,font=\sffamily\bfseries\small](n){Proof};\enspace{\sffamily\bfseries\small\color{tealDD}#1}}}
+\BeforeBeginEnvironment{proofbox}{\boxneedspace}
+
+% =====================================================================
+%  Additions for the Mock Exam, Explained booklet
+% =====================================================================
+\newcommand{\pillbox}[2]{\tikz[baseline=(n.base)]\node[fill=#1,text=white,rounded corners=1.2mm,
+  inner xsep=5pt,inner ysep=2.5pt,font=\sffamily\bfseries\small](n){#2};}
+
+% the exam question, word for word
+\newcounter{qu}[chapter]
+\renewcommand{\thequ}{\thechapter.\arabic{qu}}
+\newtcolorbox{question}[2][]{enhanced, breakable, arc=1.5mm, outer arc=1.5mm,
+  colback=mist, colframe=sky, boxrule=0.6pt, left=3.2mm, right=3mm, top=7.5mm, bottom=2.4mm,
+  before skip=16pt, after skip=8pt, parbox=false,
+  overlay unbroken and first={\node[anchor=west, fill=tealD, text=white, rounded corners=1.3mm,
+    inner xsep=6pt, inner ysep=3pt, font=\sffamily\bfseries\small]
+    at ([xshift=3mm,yshift=-1mm]frame.north west) {Question \thequ};
+    \node[anchor=east, fill=blush!70, text=coralD!90!black, rounded corners=1.3mm,
+    inner xsep=6pt, inner ysep=3pt, font=\sffamily\bfseries\scriptsize]
+    at ([xshift=-3mm,yshift=-1mm]frame.north east) {#2};},
+  code={\refstepcounter{qu}}, #1}
+
+% the idea being tested
+\newtcolorbox{lesson}[1][]{gbox, colback=ice!22, borderline west={1.3mm}{0mm}{aqua},
+  attach title to upper={}, detach title, before upper={\tcbtitle\par\smallskip},
+  title={\pillbox{aqua}{The lesson behind it}}, #1}
+
+% what to think first
+\newtcolorbox{howto}[1][]{gbox, colback=white, colframe=tealD, boxrule=0.7pt,
+  attach title to upper={}, detach title, before upper={\tcbtitle\par\smallskip},
+  title={\pillbox{tealD}{How to start}}, unbreakable, #1}
+
+% what you write on the copy
+\newtcolorbox{answer}[1][]{gbox, colback=white, colframe=aqua, boxrule=0.8pt,
+  borderline west={1.6mm}{0mm}{tealD},
+  attach title to upper={}, detach title, before upper={\tcbtitle\par\smallskip},
+  title={\pillbox{coral}{Model answer}}, #1}
+
+\AtBeginDocument{%
+  \BeforeBeginEnvironment{question}{\boxneedspace}%
+  \BeforeBeginEnvironment{lesson}{\boxneedspace}%
+  \BeforeBeginEnvironment{howto}{\boxneedspace}%
+  \BeforeBeginEnvironment{answer}{\boxneedspace}}
+
+\renewcommand{\chapribbontext}{Problem\ \thechapter}
+\newcommand{\partbanner}[1]{\par\bigskip\noindent\begin{tikzpicture}
+  \fill[tealD, rounded corners=1.5mm] (0,0) rectangle (\linewidth,0.85);
+  \fill[coral] (0,0) rectangle (0.18,0.85);
+  \node[anchor=west, text=white, font=\sffamily\bfseries\normalsize] at (0.45,0.425) {#1};
+\end{tikzpicture}\par\medskip}
+\raggedbottom

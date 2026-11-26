@@ -1,0 +1,113 @@
+% ============================== PROBLEM 3 ============================
+\settab{PROBLEM 3}{4}
+\renewcommand{\chapribbontext}{Problem 3 \;·\; 5 pts}
+\chapter[Problem 3: Radial Functions]{Radial Functions}\label{ch:p3}
+
+\begin{examnote}[title={The mock}]
+On $\Omega=\R^2\setminus\{(0,0)\}$, let $r=\sqrt{x^2+y^2}$ and $u(x,y)=\varphi(r)$. Harmonic means
+$\Delta u=u_{xx}+u_{yy}=0$.
+\end{examnote}
+
+\begin{idea}
+A \textbf{radial} function only depends on the distance $r$ to the origin (ripples around a stone).
+Part A turns $u_{xx}+u_{yy}$ into $\varphi''+\frac1r\varphi'$; Part B solves it. After Q1 every answer is 2 or 3 lines.
+\end{idea}
+
+\begin{remember}[title={The only two things to memorise}]
+\[
+  r_x=\frac xr,\quad r_y=\frac yr \qquad\qquad \Delta u=\varphi''(r)+\frac1r\,\varphi'(r)
+\]
+\end{remember}
+
+% -------------------------------------------------------------------
+\section{Q1. First and second derivatives}
+
+
+
+\begin{recipe}
+$u$ depends on $x$ only through $r$: derivative of $\varphi$ times derivative of $r$.
+\begin{enumerate}
+  \item $u_x=\varphi'(r)\cdot r_x=\varphi'(r)\frac xr$.
+  \item Side line: $\frac{\partial}{\partial x}\Big(\frac xr\Big)=\frac{r-x\cdot\frac xr}{r^2}=\frac{r^2-x^2}{r^3}=\frac{y^2}{r^3}$.
+  \item Product rule on $\varphi'(r)\cdot\frac xr$: \ (derivative of first)$\cdot$second $+$ first$\cdot$(derivative of second).
+\end{enumerate}
+\end{recipe}
+
+\begin{writethis}
+$r_x=\frac xr$, $r_y=\frac yr$. \ Chain rule: \ $u_x=\varphi'(r)\dfrac xr$, \ $u_y=\varphi'(r)\dfrac yr$.
+
+Since $\frac{\partial}{\partial x}\big(\frac xr\big)=\frac{y^2}{r^3}$ and $\frac{\partial}{\partial x}\big[\varphi'(r)\big]=\varphi''(r)\frac xr$:
+\[
+  u_{xx}=\varphi''(r)\frac xr\cdot\frac xr+\varphi'(r)\frac{y^2}{r^3}=\varphi''(r)\frac{x^2}{r^2}+\varphi'(r)\frac{y^2}{r^3}.
+\]
+Swapping $x$ and $y$: \ $u_{yy}=\varphi''(r)\dfrac{y^2}{r^2}+\varphi'(r)\dfrac{x^2}{r^3}$.
+\end{writethis}
+
+\begin{watch}\watchout The derivative of $\varphi'(r)$ in $x$ is $\varphi''(r)\cdot\frac xr$, not just $\varphi''(r)$.\end{watch}
+
+% -------------------------------------------------------------------
+\section{Q2. The Laplacian}
+
+\begin{writethis}
+Add, and use $x^2+y^2=r^2$: \
+$\Delta u=\varphi''\dfrac{x^2+y^2}{r^2}+\varphi'\dfrac{x^2+y^2}{r^3}=\varphi''(r)+\dfrac1r\varphi'(r).$
+\end{writethis}
+
+% -------------------------------------------------------------------
+\section{Q3. The logarithm}
+
+\begin{writethis}
+$v=\ln r$, so $\varphi(r)=\ln r$, \ $\varphi'=\frac1r$, \ $\varphi''=-\frac1{r^2}$. \
+$\Delta v=-\frac1{r^2}+\frac1r\cdot\frac1r=0$: harmonic on $\Omega$.
+
+Limit: as $(x,y)\to(0,0)$, $r\to0^+$ and $\ln r\to-\infty$. So $\lim v=-\infty$ (no finite limit).
+\end{writethis}
+
+% -------------------------------------------------------------------
+\section{Q4 and Q5. Find every radial harmonic function}
+
+\begin{idea}
+Multiply $\varphi''+\frac1r\varphi'=0$ by $r$: you get $(r\varphi')'=0$ (product rule). Zero derivative means constant. Twice: $A$, then $B$.
+\end{idea}
+
+\begin{writethis}
+\textbf{Q4.} $u$ harmonic, so $\varphi''(r)+\frac1r\varphi'(r)=0$ for every $r>0$. Then
+\[
+  \big(r\varphi'(r)\big)'=\varphi'(r)+r\varphi''(r)=r\Big(\varphi''+\tfrac1r\varphi'\Big)=0 .
+\]
+\seeproof{8} Zero derivative on the interval $(0,+\infty)$, so $r\varphi'(r)=A$, a constant.
+
+\textbf{Q5.} $\big(\varphi(r)-A\ln r\big)'=\varphi'(r)-\frac Ar=\frac{r\varphi'(r)-A}{r}=0$, so
+$\varphi(r)-A\ln r=B$. Hence
+\[
+  \boxed{\,u(x,y)=A\ln\sqrt{x^2+y^2}+B\,}.
+\]
+\end{writethis}
+
+% -------------------------------------------------------------------
+\section{Q6. When is the limit at the origin finite?}
+
+\noindent\begin{minipage}[c]{0.47\linewidth}
+\begin{writethis}
+As $(x,y)\to(0,0)$, $r\to0^+$ and $\ln r\to-\infty$, so $u=A\ln r+B$ tends to: \
+$-\infty$ if $A>0$; \ $+\infty$ if $A<0$; \ $B$ if $A=0$.
+The limit is finite \textbf{if and only if $A=0$} (any $B$, not $A=B=0$), and then it equals $B$.
+\end{writethis}
+\end{minipage}\hfill
+\begin{minipage}[c]{0.5\linewidth}\centering
+
+\begin{tikzpicture}
+\begin{axis}[bp, width=6.6cm, height=4.8cm, xmin=0, xmax=3.3, ymin=-2.6, ymax=4.2,
+   xlabel=$r$, ylabel={$u$}, xtick={1,2,3}, ytick={-2,-1,1,2,3}]
+  \addplot[tealD, line width=1.4pt, domain=0.04:3.2, samples=120] {ln(x)+1};
+  \addplot[coralD, line width=1.4pt, domain=0.04:3.2, samples=120] {-ln(x)+1};
+  \addplot[tealDD, line width=1.4pt, dashed, domain=0:3.2] {1};
+  \node[font=\scriptsize, text=tealD, anchor=west] at (axis cs:2.2,2.05) {$A=1$: $-\infty$ at $0$};
+  \node[font=\scriptsize, text=coralD, anchor=west] at (axis cs:1.9,-0.45) {$A=-1$: $+\infty$ at $0$};
+  \node[font=\scriptsize, text=tealDD, anchor=south west] at (axis cs:2.2,1.02) {$A=0$};
+\end{axis}
+\end{tikzpicture}
+\figcap{$u=A\ln r+B$ with $B=1$. Only $A=0$ arrives at the centre with a finite value.}
+
+\end{minipage}
+
